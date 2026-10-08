@@ -1,0 +1,83 @@
+{
+  "config": {
+    "seed": 0,
+    "scenarios": 40,
+    "years": 5,
+    "optimizer_samples": 40,
+    "district": {
+      "n_junctions": 24,
+      "n_habitations": 14,
+      "n_structures": 10
+    },
+    "budget_crore": 0.6,
+    "crew_days": 400.0,
+    "cvar_alpha": 0.1
+  },
+  "n_habitations": 14,
+  "n_assets": 10,
+  "policies": [
+    {
+      "policy": "additive_milp",
+      "mean_person_days": 151724.92224725237,
+      "mean_spend_crore": 11.877300000000002,
+      "person_days_per_crore": 12774.361365567287,
+      "cvar_person_days": 260715.54772206128
+    },
+    {
+      "policy": "network_aware",
+      "mean_person_days": 151628.60981607749,
+      "mean_spend_crore": 11.787600000000003,
+      "person_days_per_crore": 12863.399658630888,
+      "cvar_person_days": 260715.54772206128
+    },
+    {
+      "policy": "random",
+      "mean_person_days": 217199.43247182426,
+      "mean_spend_crore": 12.894800000000004,
+      "person_days_per_crore": 16843.95511925925,
+      "cvar_person_days": 347808.0080333161
+    },
+    {
+      "policy": "benefit_cost",
+      "mean_person_days": 217199.43247182426,
+      "mean_spend_crore": 12.894800000000004,
+      "person_days_per_crore": 16843.95511925925,
+      "cvar_person_days": 347808.0080333161
+    },
+    {
+      "policy": "worst_first",
+      "mean_person_days": 204436.1846611832,
+      "mean_spend_crore": 11.621650000000002,
+      "person_days_per_crore": 17590.977585900724,
+      "cvar_person_days": 337656.165829589
+    },
+    {
+      "policy": "criticality_weighted",
+      "mean_person_days": 204436.1846611832,
+      "mean_spend_crore": 11.621650000000002,
+      "person_days_per_crore": 17590.977585900724,
+      "cvar_person_days": 337656.165829589
+    },
+    {
+      "policy": "siloed",
+      "mean_person_days": 240224.99370128923,
+      "mean_spend_crore": 11.665000000000003,
+      "person_days_per_crore": 20593.65569663859,
+      "cvar_person_days": 368844.33898882946
+    },
+    {
+      "policy": "do_nothing",
+      "mean_person_days": 257791.81115968418,
+      "mean_spend_crore": 12.061800000000002,
+      "person_days_per_crore": 21372.58213199391,
+      "cvar_person_days": 398511.8540832172
+    }
+  ],
+  "comparison_worst_first_vs_network_aware": {
+    "metric": "person_days (worst_first - network_aware), positive = proposed better",
+    "mean": 52807.57484510568,
+    "ci_lo": 41031.332583636264,
+    "ci_hi": 64767.69571257472
+  },
+  "elapsed_seconds": 52.03584098815918
+}

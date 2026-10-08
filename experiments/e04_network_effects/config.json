@@ -1,0 +1,14 @@
+{
+  "seed": 0,
+  "redundancies": [1, 2, 3, 4],
+  "n_corridors": 3,
+  "scenarios": 30,
+  "years": 4,
+  "optimizer_samples": 30,
+  "rain_log_ratio": 0.9,
+  "rain_log_sigma": 0.15,
+  "initial_condition": 2,
+  "budget_crore": 0.4,
+  "crew_days": 1000.0,
+  "cvar_alpha": 0.1
+}

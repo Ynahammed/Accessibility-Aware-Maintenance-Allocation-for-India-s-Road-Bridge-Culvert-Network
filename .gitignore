@@ -1,0 +1,16 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+cache/
+.freebuff/
+demo/server.log
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db

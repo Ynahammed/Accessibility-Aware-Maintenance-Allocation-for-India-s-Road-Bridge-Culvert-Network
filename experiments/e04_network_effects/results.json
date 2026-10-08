@@ -1,0 +1,168 @@
+{
+  "config": {
+    "seed": 0,
+    "redundancies": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "n_corridors": 3,
+    "scenarios": 30,
+    "years": 4,
+    "optimizer_samples": 30,
+    "rain_log_ratio": 0.9,
+    "rain_log_sigma": 0.15,
+    "initial_condition": 2,
+    "budget_crore": 0.4,
+    "crew_days": 1000.0,
+    "cvar_alpha": 0.1
+  },
+  "by_redundancy": [
+    {
+      "redundancy": 1,
+      "n_assets": 3,
+      "policies": {
+        "do_nothing": {
+          "mean_person_days": 26005.333333333332,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 25555.555555555555,
+          "cvar": 35573.333333333336
+        },
+        "worst_first": {
+          "mean_person_days": 19381.333333333332,
+          "mean_planned_crore": 0.31200000000000006,
+          "person_days_per_crore": 18106.626806178374,
+          "cvar": 31893.333333333332
+        },
+        "benefit_cost": {
+          "mean_person_days": 24901.333333333332,
+          "mean_planned_crore": 0.24000000000000002,
+          "person_days_per_crore": 20505.05050505051,
+          "cvar": 35573.333333333336
+        },
+        "additive_milp": {
+          "mean_person_days": 19381.333333333332,
+          "mean_planned_crore": 1.6000000000000005,
+          "person_days_per_crore": 8218.000904568067,
+          "cvar": 31893.333333333332
+        },
+        "network_aware": {
+          "mean_person_days": 19381.333333333332,
+          "mean_planned_crore": 1.6000000000000005,
+          "person_days_per_crore": 8218.000904568067,
+          "cvar": 31893.333333333332
+        }
+      }
+    },
+    {
+      "redundancy": 2,
+      "n_assets": 6,
+      "policies": {
+        "do_nothing": {
+          "mean_person_days": 15578.666666666666,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 7709.158089205591,
+          "cvar": 24533.333333333332
+        },
+        "worst_first": {
+          "mean_person_days": 8709.333333333334,
+          "mean_planned_crore": 0.5613333333333334,
+          "person_days_per_crore": 4059.664387818519,
+          "cvar": 14720.0
+        },
+        "benefit_cost": {
+          "mean_person_days": 15578.666666666666,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 7709.158089205591,
+          "cvar": 24533.333333333332
+        },
+        "additive_milp": {
+          "mean_person_days": 15578.666666666666,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 7709.158089205591,
+          "cvar": 24533.333333333332
+        },
+        "network_aware": {
+          "mean_person_days": 10794.666666666666,
+          "mean_planned_crore": 1.5226666666666666,
+          "person_days_per_crore": 3340.485228585574,
+          "cvar": 18400.0
+        }
+      }
+    },
+    {
+      "redundancy": 3,
+      "n_assets": 9,
+      "policies": {
+        "do_nothing": {
+          "mean_person_days": 10304.0,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 3307.652799178221,
+          "cvar": 17173.333333333332
+        },
+        "worst_first": {
+          "mean_person_days": 6501.333333333333,
+          "mean_planned_crore": 0.652666666666667,
+          "person_days_per_crore": 1986.0698138568684,
+          "cvar": 12266.666666666666
+        },
+        "benefit_cost": {
+          "mean_person_days": 10304.0,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 3307.652799178221,
+          "cvar": 17173.333333333332
+        },
+        "additive_milp": {
+          "mean_person_days": 10304.0,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 3307.652799178221,
+          "cvar": 17173.333333333332
+        },
+        "network_aware": {
+          "mean_person_days": 7850.666666666667,
+          "mean_planned_crore": 0.8386666666666667,
+          "person_days_per_crore": 2094.926350245498,
+          "cvar": 13493.333333333334
+        }
+      }
+    },
+    {
+      "redundancy": 4,
+      "n_assets": 12,
+      "policies": {
+        "do_nothing": {
+          "mean_person_days": 8709.333333333334,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 2066.565426474309,
+          "cvar": 17173.333333333332
+        },
+        "worst_first": {
+          "mean_person_days": 4293.333333333333,
+          "mean_planned_crore": 0.7533333333333336,
+          "person_days_per_crore": 993.8885116365202,
+          "cvar": 11040.0
+        },
+        "benefit_cost": {
+          "mean_person_days": 8709.333333333334,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 2066.565426474309,
+          "cvar": 17173.333333333332
+        },
+        "additive_milp": {
+          "mean_person_days": 8709.333333333334,
+          "mean_planned_crore": 0.0,
+          "person_days_per_crore": 2066.565426474309,
+          "cvar": 17173.333333333332
+        },
+        "network_aware": {
+          "mean_person_days": 6133.333333333333,
+          "mean_planned_crore": 0.40200000000000014,
+          "person_days_per_crore": 1369.9038089281985,
+          "cvar": 15946.666666666666
+        }
+      }
+    }
+  ],
+  "elapsed_seconds": 28.006340980529785
+}

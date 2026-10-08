@@ -1,0 +1,52 @@
+{
+  "config": {
+    "train_max": 2020,
+    "validate_min": 2021,
+    "test_min": 2022,
+    "age_class_width": 10,
+    "n_age_classes": 9,
+    "seed": 0
+  },
+  "n_panel_rows": 582014,
+  "n_pairs": 480753,
+  "train_pairs": 287121,
+  "test_pairs": 97098,
+  "years": [
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "test_years": [
+    2022
+  ],
+  "state_distribution_train": {
+    "Good": 144941,
+    "Fair": 133329,
+    "Poor": 8425,
+    "Severe": 426
+  },
+  "models": [
+    {
+      "model": "M0_markov",
+      "log_loss": 0.1635979629520321,
+      "rps": 0.035340380401928086,
+      "accuracy": 0.9648087499227584
+    },
+    {
+      "model": "M1_gbm",
+      "log_loss": 0.17718945207929912,
+      "rps": 0.03656648304836808,
+      "accuracy": 0.964355599497415
+    },
+    {
+      "model": "climatology",
+      "log_loss": 0.8107334860639469,
+      "rps": 0.2791605466707905,
+      "accuracy": 0.4707820964386496
+    }
+  ],
+  "elapsed_seconds": 304.7189483642578
+}

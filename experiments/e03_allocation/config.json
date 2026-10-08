@@ -1,0 +1,14 @@
+{
+  "seed": 0,
+  "scenarios": 40,
+  "years": 5,
+  "optimizer_samples": 40,
+  "district": {
+    "n_junctions": 24,
+    "n_habitations": 14,
+    "n_structures": 10
+  },
+  "budget_crore": 0.6,
+  "crew_days": 400.0,
+  "cvar_alpha": 0.1
+}

@@ -1,0 +1,825 @@
+Untitled
+
+Implementation Plan: Accessibility-Aware
+Maintenance Allocation for India's Road­
+Bridge­Culvert Network
+
+ Oct 8, 2026 · @navdhd
+This is a 24-week plan to test whether allocating a fixed  maintenance budget by loss of
+access to health and school services protects more people per rupee than condition-
+based ranking, with go/no-go at week 8.
+
+1. Project definition
+
+The project asks one question: does consequence-aware allocation beat the condition-
+based ranking that agencies actually use, and does the answer survive uncertainty in
+deterioration and repair effectiveness?
+
+   Research question. Does allocating a fixed  budget by loss of access to essential
+   services (health, schools) under monsoon-extreme hazards protect more people per
+   rupee than condition-based and benefit-cost ranking, and how robust is that answer
+   to uncertainty in deterioration and repair effectiveness?
+
+Contributions to claim
+ 1. An accessibility-loss consequence model for Indian road­bridge­culvert networks,
+
+    built from open PMGSY, OpenStreetMap and IMD data.
+ 2. A robust  allocation method (expected loss plus tail risk, rolling horizon) with regret
+
+    analysis over uncertain assumptions.
+ 3. A reproducible benchmark: method validated on real labelled bridge histories (US NBI),
+
+    deployed on Indian network data with stated assumptions.
+Scope decisions
+
+    Asset classes: roads, bridges and culverts only. No water, lighting or buildings.
+    Study regions: one or two districts with different monsoon regimes, chosen after the
+    week-1 feasibility check.
+    Currency and costs: , from state PWD Schedule of Rates where obtainable.
+    Human authority: the system recommends; an engineer decides. No autonomous
+    execution.
+What you can and cannot claim
+
+                                                                                                                                                                                                                                            Page 1 of 19
+Untitled
+
+Claim                            Status                 Condition
+Deterioration forecasts beat     Supported by real
+Markov baselines                 data                   Validated on NBI, walk-forward
+Accessibility-aware allocation   Supported in a         by inspection year
+beats condition ranking          simulator
+                                                        Simulator validated component
+Savings in  or lives for a real  Not claimable          by component; conclusions
+district                                                shown under perturbed
+Multimodal prediction beats      Only if Indian labels  assumptions
+single-source                    are obtained
+                                                        Needs real Indian condition and
+                                                        failure records
+
+                                                        Otherwise drop this research
+                                                        question
+
+2. Architecture
+
+Open data feeds four models; a simulator and an optimizer turn them into a plan that an
+engineer approves.
+
+system architecture · 4 data sources, 3 model stages, 1 decision
+
+The two highlighted boxes are the project's own contributions: the accessibility-loss
+consequence and the robust optimizer. The dashed source is the data you must request;
+everything else is open.
+
+                                                                                                                                                                                                                                           Page 2 of 19
+Untitled
+
+3. Data plan
+
+Three of four layers have open Indian data; the fourth, asset condition and failure, is the
+bottleneck and needs a request that should start in week 1.
+
+Layer            Source                  Access          Used for           Status
+
+Rural road       PMGSY Rural             Open,           Graph,             Checked;
+network,         Connectivity            Government      population         quality
+habitations,     datasets                Open Data       served, health     varies by
+facilities                               License         and school         state
+                                                         locations
+
+Road network,    OpenStreetMap           Open, ODbL      Highways, bridge   To verify
+structure tags   (Geofabrik India        attribution     and culvert tags,  tag
+                 extract, OSMnx)                         graph              coverage
+                                                         connectivity       per district
+
+Rainfall hazard  IMD gridded             Open download   Extreme-value      Checked
+                 rainfall, 0.25°, 1901­  from IMD Pune   fits, return-
+                 present via imdlib                      period scenarios
+
+Bridge and       IBMS (MoRTH) or         No public       Calibration of     Request
+culvert          state PWD records       download        deterioration;     needed
+condition                                found           real condition
+(India)                                                  ratings
+
+Bridge           FHWA National           Open            Method             Checked
+condition        Bridge Inventory,                       validation with
+histories (US)   annual files                            real inspection
+                                                         histories
+
+Unit costs       State PWD               Usually on PWD   repair costs per  To verify
+                 Schedule of Rates       or e-           intervention
+                                         procurement
+                                         sites
+
+Population       Gridded population Open                 Habitation         To verify
+(fallback)       raster                                  population if the
+                                                         PMGSY layer
+                                                         lacks it
+
+Data rules
+
+    Raw files are immutable under data/raw/ and versioned with DVC; every derived
+    table records its source, date and licence.
+
+                                                                                    Page 3 of 19
+Untitled
+
+    Attribution is kept for GODL (PMGSY) and ODbL (OpenStreetMap); IMD terms are
+    checked before any redistribution.
+    Every table in the paper states whether its numbers come from real data, a fitted
+    model or an assumption.
+
+Assumptions register (a living table)
+
+Assumption                      Why needed                How varied
+                                No Indian failure labels
+Fragility: failure probability                            Parametric family with
+given condition and rainfall    Climate, load and         literature-set priors; sweep
+intensity                       maintenance differ        slope and threshold
+                                Not observable in
+Deterioration acceleration for  historical data           Multiplier range, reported as a
+Indian conditions vs NBI                                  sensitivity axis
+
+Repair effectiveness                                      Range per intervention type;
+(condition reset, risk                                    regret reported
+reduction)
+                                No repair-time records    Distribution by structure type;
+Outage duration after failure   Policy choice             sweep mean
+
+Facility weights (health vs                               Pareto front and rank-stability
+school)                                                   tests
+
+4. Stack and repository
+
+The stack is Python for everything analytical and a thin FastAPI and React layer on top;
+nothing here needs a GPU.
+
+Concern         Choice
+
+Language and env Python 3.11, uv or conda, ruff , pytest
+
+Geospatial      GeoPandas, Shapely, pyproj, rasterio, xarray,
+                OSMnx
+
+Graph           python-igraph (fast shortest paths), NetworkX for
+                prototypes
+
+Rainfall        imdlib (Python) for IMD gridded data
+
+Extreme values  SciPy genextreme (GEV), L-moments check
+
+                                                                   Page 4 of 19
+Untitled
+
+Concern            Choice
+Deterioration
+                   scikit-learn, LightGBM, lifelines (survival),
+Uncertainty        hand-written Markov estimator
+                   Conformal prediction (MAPIE or your own, to show
+Optimization       you understand it)
+Storage
+                   OR-Tools (SCIP or CP-SAT) or Pyomo with HiGHS
+Tracking
+API and UI         Parquet and DuckDB for analysis; PostGIS only if
+Packaging          the dashboard needs it
+
+                   MLflow for experiments, DVC for data versions
+                   FastAPI; React + Vite with MapLibre GL
+
+                   Docker Compose, GitHub Actions for tests
+
+Repository layout
+
+road-resilience-allocation/
+
+ data/             raw/ interim/ processed/ (DVC-tracked)
+
+ src/rra/
+
+  ingest/          pmgsy.py osm.py imd.py nbi.py ibms.py
+
+  network/         build.py snap.py attach_assets.py
+
+  hazard/          gev_fit.py scenarios.py
+
+  consequence/     accessibility.py population.py
+
+  deterioration/ markov.py gbm.py survival.py conformal.py
+
+  fragility/       fragility.py
+
+  cost/            sor.py interventions.py
+
+  simulator/       state.py step.py policies.py
+
+  optimize/        milp.py local_search.py cvar.py rolling.py
+
+  evaluate/        metrics.py stats.py ablation.py regret.py
+
+  workflow/        dag.py report.py narrate.py
+
+ experiments/      e01_deterioration/ ... e08_ablation/
+
+ api/              FastAPI app
+
+ web/              React + MapLibre dashboard
+
+ notebooks/        exploration only, never the source of results
+
+ tests/            unit, property, regression
+
+ docs/             assumptions.md, data_cards/, paper/
+
+ Dockerfile docker-compose.yml dvc.yaml mlflow/
+
+ README.md
+
+Engineering rules
+
+    Every experiment is a script with a config file and a fixed seed; notebooks never
+    produce a number that goes in the paper.
+
+                                                                                       Page 5 of 19
+Untitled
+
+    Common random numbers: all policies are evaluated on the same scenario draws, so
+    differences are paired.
+    Tests use small hand-made networks where the right answer is known (see section
+    5.3).
+
+5. Module specifications
+
+Seven modules feed each other in a fixed order: network, hazard, consequence,
+deterioration, fragility and cost, simulator, optimizer. Each has inputs, method, outputs
+and tests.
+
+5.1 Network build
+
+Goal: a routable graph per study district with habitations, facilities and structures
+attached.
+ 1. Load district boundary; clip PMGSY road centerlines, habitations and facility points.
+ 2. Pull OSM highways for the same area; prefer PMGSY geometry for rural roads and OSM
+
+    for state and national highways.
+ 3. Snap and planarize (tolerance is a parameter, start near 25 m), then build an igraph
+
+    graph with length, road class and free-flow speed by class (speeds are an assumption
+    in the register).
+ 4. Attach each habitation and facility to its nearest node within a distance cap; log those
+    beyond it.
+ 5. Attach structures from OSM bridge and culvert tags, and from IBMS records if you
+    obtain them; split edges at structure locations.
+ 6. QA report: connected components, share of habitations connected, orphan facilities,
+    tag coverage.
+Output: network.parquet , graph.graphml , qa_report.md . Exit test: more than 95% of
+habitations reach at least one health facility in the intact network, or the district is
+rejected.
+
+5.2 Hazard model
+
+Goal: rainfall scenarios with known return periods for every road segment.
+    Download IMD rainfall with imdlib ; compute annual maxima of 1-day and 5-day rainfall
+    per 0.25° cell.
+    Fit a GEV per cell, pooling neighbouring cells where records are short; check fit with a
+    goodness-of-fit test and QQ plots.
+    Report return levels for 2, 5, 10, 25, 50 and 100 years.
+
+                                                                                                                                                                                                                                            Page 6 of 19
+Untitled
+
+    Scenarios: (a) resample historical monsoon years as spatial fields, which keeps real
+    spatial correlation; (b) stress events scaled to a chosen return level.
+    Optional: test for a trend in the GEV location parameter and report it as a sensitivity,
+    not a forecast.
+Output: hazard_scenarios.zarr with N scenarios by cell. Tests: return levels increase
+with period; fitted tails stay finite.
+
+5.3 Accessibility-loss consequence
+
+Goal: the person-days of access lost if an asset, or a set of assets, fails. This replaces
+traffic-volume criticality.
+For a failure set F, travel time to the nearest facility of type k changes for each habitation
+h. With population P_h, facility weight w_k and a cap T_k on acceptable travel time:
+
+  L(F)=\sum_{h\in H}\sum_{k\in K} P_h\,w_k\Big[\phi\big(\tau_k^{F}(h)\big)-
+  \phi\big(\tau_k^{0}(h)\big)\Big],\qquad
+  \phi(\tau)=\min\!\big(\tau/T_k,\,1\big)
+
+Here  is travel time on the intact network and  with all assets in F removed; an
+unreachable facility counts as the cap. Societal cost of an event is C(F) = D × L(F), with D
+the outage duration in days.
+
+    Non-additivity is the point. Two parallel routes each cost zero alone and a lot together,
+    so L(F) is computed on the whole set, never summed per asset.
+    Speed-up: run multi-source Dijkstra from facilities on the reversed graph, and only
+    recompute for habitations whose shortest-path tree uses a failed edge.
+    Population: use the PMGSY habitation population if present, otherwise a gridded
+    population raster allocated to the nearest habitation.
+    Weights w_k and caps T_k are policy choices; report results over a grid and show rank
+    stability.
+Tests (hand-built toy graphs): a single bridge on the only route gives loss equal to cut-off
+population; parallel routes give zero individually and positive jointly; loss is non-negative
+and monotone as more assets are added to F.
+
+5.4 Deterioration model
+
+Goal: a distribution over future condition for each structure, with calibrated uncertainty.
+Validated on NBI, then transferred.
+
+                                                                                                                                                                                                                                            Page 7 of 19
+Untitled
+
+    Target: overall condition from the deck, superstructure, substructure and culvert
+    ratings (check the coding guide for the exact rule), collapsed to four states: Good, Fair,
+    Poor, Severe. Second target: time to Poor.
+    Models: (M0) age-class Markov chain, the agency-style baseline; (M1) gradient
+    boosting for next-year state; (M2) discrete-time survival hazard for time to Poor.
+    Features from NBI itself: age, structure type and material, span and width, traffic,
+    state or region. Add weather only if time allows.
+    Split by inspection year, never random: train on early years, validate on the middle,
+    test on the latest; plus a held-out-state test. Adjust year ranges to what you download.
+    Metrics: log-loss and ranked probability score for state forecasts, concordance index
+    for time to Poor, calibration of P(Poor within 5 years), and conformal coverage by group.
+    Uncertainty: split-conformal intervals on time to Poor (class-conditional by structure
+    type), plus bootstrap uncertainty on Markov transition rows.
+Transfer to India. Map IBMS rating definitions onto the four states once you have them.
+Apply an acceleration multiplier  to hazard rates, justified from published Indian studies
+and swept as a sensitivity axis. If IBMS or PWD data arrive, recalibrate on a held-out slice
+and report coverage before and after.
+
+5.5 Fragility, outage and cost
+
+    Fragility: probability that asset a fails in a monsoon event, given condition c and rainfall
+    ratio R to its local reference level:
+
+  \Pr(\text{fail}_a\mid
+  c,R)=\sigma\!\big(\beta_0+\beta_1\,g(c)+\beta_2\log(R/R^{\mathrm{ref}}_a)\big
+  )
+
+Parameters per structure type (culvert, minor bridge, major bridge, road segment) are
+assumptions with literature-informed ranges; you vary them rather than claim them.
+
+    Outage duration D: a distribution by structure type, also in the assumptions register.
+    Interventions: none, minor repair, major repair or replacement. Each has a  cost from
+    the state Schedule of Rates, a labour requirement, and an effect on condition and on
+    fragility.
+    Emergency premium: a failed asset costs more to restore than a planned repair; the
+    multiplier is a swept parameter.
+
+5.6 Policy simulator
+
+Goal: compare policies on the same futures.
+
+                                                                                                                                                                                                                                            Page 8 of 19
+Untitled
+
+One simulated year does the following: apply the policy's interventions within budget;
+deteriorate each structure using the fitted model; draw a monsoon scenario; draw failures
+with common random numbers; compute L(F), outage cost and emergency repair cost; log
+everything.
+
+    Run 5-year horizons over 500 to 1,000 scenarios; reuse the same random draws for
+    every policy so comparisons are paired.
+    Validation, component by component: deterioration against held-out NBI years; GEV
+    fit against observed rainfall; accessibility loss against toy cases. No component is
+    validated by the simulator's own output.
+    Output: per policy, distributions of person-days of access lost and  spent, plus a tail
+    metric (CVaR).
+
+5.7 Optimizer
+
+Goal: choose interventions that minimize expected societal loss plus tail risk under a
+budget and crew capacity.
+With common random numbers, whether asset a fails in scenario  under option j is a
+fixed binary f, so the additive version is a linear program with binary decisions x:
+
+  \min_{x}\ \frac{1}
+  {|\Omega|}\sum_{\omega}\ell_\omega(x)+\lambda\Big(\eta+\frac{1}{(1-
+  \alpha)|\Omega|}\sum_{\omega}z_\omega\Big)
+
+  \text{s.t.}\quad z_\omega\ge \ell_\omega(x)-\eta,\ \ z_\omega\ge 0,\quad
+  \sum_{a,j}c_{aj}\,x_{aj}\le B,\quad \sum_{a,j}u_{aj}\,x_{aj}\le W,\quad
+  \sum_j x_{aj}\le 1
+
+Here  is the scenario loss, c the  cost, u the labour need, B the budget and W the crew
+capacity.
+
+    Additive MILP (baseline): _(x) = sum of C_a times the failure indicator. Solves
+    exactly with OR-Tools or HiGHS.
+    Network-aware search: because real loss is non-additive, start from the MILP solution
+    and improve with swap-based local search on the sample-average objective, evaluating
+    L(F) per scenario on sets. Tune on 200 scenarios; report on 1,000 fresh ones.
+    Rolling horizon: re-solve every year with updated conditions; compare with one-shot
+    5-year plans.
+    Quality check: on small instances, report the gap between local search and the exact
+    solution of a linearized model. No optimality guarantee is claimed for the full problem.
+    Constraints to include: annual budget, crew-days, a minimum protected access for
+    health facilities (as a stated constraint), and optional fairness across blocks.
+
+                                                                                                                                                                                                                                            Page 9 of 19
+Untitled
+
+Property tests: more budget never raises optimal loss; zero budget reproduces the do-
+nothing policy; results are reproducible under a fixed seed.
+
+6. Evaluation protocol
+
+The primary metric is person-days of access to health and school services lost per  crore
+spent, over a 5-year horizon, paired across policies on identical scenarios.
+Policies compared
+
+Policy                What it does                           Why it is included
+Do nothing
+Random                No interventions                       Floor
+Worst-first
+Benefit-cost ranking  Random structures within budget        Sanity check
+                      Lowest condition first                 Common agency practice
+Criticality-weighted
+                      Risk reduction per , additive, no      Standard decision-support
+Siloed budgets        network                                method
+
+Additive MILP         Condition times a socio-economic       Stands in for the IBMS
+                      rating proxy                           rating idea
+                      Fixed budget split per asset class,    Tests the unified-allocation
+                      then best within class                 claim
+
+                      Exact on the additive model            Optimization without
+                                                             network effects
+Network-aware search Local search on set-based loss
+                                                             Proposed method
+Network-aware +       Proposed method with tail risk and
+CVaR + rolling        re-planning                            Full system
+
+Experiments
+
+ID Question           Comparison                             Primary measure
+
+E1 Do ML models beat agency- M0 vs M1 vs M2 on NBI           Log-loss,
+         style deterioration models?                         concordance,
+                                                             calibration
+E2 Do conformal intervals hold? Static vs recalibrated, by
+                                                      group  Coverage vs target
+
+                                                             Page 10 of 19
+Untitled
+
+ID Question                         Comparison                      Primary measure
+
+E3 Does accessibility-aware         Worst-first vs benefit-cost     Person-days lost per
+         allocation beat condition  vs proposed                      crore
+         ranking?
+
+E4 Do network effects matter? Additive MILP vs network-             Loss at equal budget
+                                                      aware search
+
+E5 Does unified beat siloed?        Siloed vs unified, across       Loss at equal total
+                                    budgets                         budget
+
+E6 Does uncertainty help?           Point vs interval-aware vs      Mean and CVaR loss
+                                    CVaR
+
+E7 Does re-planning help?           One-shot vs rolling horizon,    Loss and budget use
+                                    under extreme-rain
+                                    scenarios
+
+E8 How robust are conclusions? Vary assumptions in the              Win rate and regret
+                                                      register
+
+Ablation: remove one component at a time from the full system (network effects,
+uncertainty, CVaR, rolling horizon, rainfall hazard, facility weighting) and report the
+marginal change in the primary metric.
+
+Statistics
+
+    Same scenario draws for every policy; report paired differences with bootstrap
+    confidence intervals, resampling scenarios and, for cross-region claims, resampling
+    regions.
+    At least 5 seeds for stochastic searches; report medians and ranges.
+    Pre-register the cost and weight settings before running E3 to E8; report any later
+    change.
+    Tune on one scenario set, report on a fresh one.
+
+Robustness and regret. For each policy, report the fraction of sampled assumption sets in
+which it wins, and its regret: the loss gap to the best policy under that assumption set.
+The headline claim is a policy that is near-best across the whole range, not one that wins
+under a single setting.
+
+Hypotheses
+
+    H1: Accessibility-aware allocation protects more access per  than condition-based
+    ranking across rainfall scenarios.
+
+                                                                    Page 11 of 19
+Untitled
+
+    H2: The advantage survives perturbation of deterioration and repair-effectiveness
+    assumptions (low regret).
+    H3: Interval- and CVaR-aware allocation lowers tail loss compared with point-estimate
+    allocation.
+    H4: Unified allocation across asset classes beats per-class budgets at tight budgets.
+    H5: Conclusions hold in a second district with a different monsoon regime.
+Expect H4 to look weak at generous budgets. Report where each hypothesis fails; those
+results are part of the contribution.
+
+7. Schedule
+
+The plan runs 24 weeks in six four-week sprints, with a go/no-go at the end of week 8, a
+scope review at week 16 and a results freeze at week 22.
+
+24-week schedule · 11 workstreams, 3 gates
+
+Start week 1 when you choose; every date below is relative to it.
+
+                                                                                                                                                                                                                                          Page 12 of 19
+Untitled
+
+Sprint              Weeks Deliverables                     Exit criterion
+
+1. Foundation and   1­4    Repository and                  One district's consequence
+                           environment; data requests      map reproduces from raw
+feasibility                sent; one district graph with   data with one command
+                           facilities; IMD extraction;
+                           accessibility-loss prototype
+                           checked on toy graphs;
+                           literature table started
+
+2. Deterioration and 5­8   NBI ETL and cross-year          Go/no-go: district passes
+hazard                     joins; Markov, boosting and     network QA; E1 runs with
+                           survival baselines; walk-       honest baselines; data-
+                           forward validation (E1);        fallback decision made
+                           GEV fits and rainfall
+                           scenarios; first mapping of
+                           Indian ratings
+
+3. Uncertainty and  9­12   Conformal intervals and         Do-nothing, worst-first and
+simulator                  coverage (E2); fragility,       benefit-cost policies run
+                           outage and  cost tables;        end to end with confidence
+                           simulator with baseline         intervals
+                           policies; paired-scenario
+                           harness
+
+4. Optimizer        13­16  Additive MILP; network-         Scope review: the method
+                           aware local search; CVaR;       beats a baseline in some
+                           rolling horizon; first results  regime, or the framing shifts
+                           for E3 to E5                    to "when does allocation by
+                                                           access help"
+
+5. Experiments and  17­20  E3 to E8, ablation, second      Every result regenerates
+robustness                 district, regret analysis,      from a config file; draft
+                           statistics                      results table
+
+6. Product and      21­24  Results freeze at week 22;      One-command
+write-up                   dashboard and API;              reproduction works; demo
+                           orchestrator with narration     runs offline
+                           check; Docker; paper draft;
+                           demo rehearsal
+
+Cut order if behind (the last item is never cut):
+1. Orchestrator polish and LLM narration.
+2. Dashboard views beyond the map and the budget slider.
+
+                                                                           Page 13 of 19
+Untitled
+
+3. The second district; keep H5 as future work.
+4. The survival model M2.
+5. Rolling-horizon re-planning (keep one-shot).
+6. Never cut: network-aware consequence, paired evaluation, the assumptions register,
+
+   and honest baselines.
+
+8. Product layer: orchestrator, API and dashboard
+
+The workflow is a deterministic pipeline of tested functions; a language model only turns
+finished numbers into readable text, which keeps every figure traceable.
+
+Orchestrator
+
+    A small DAG runner in workflow/dag.py : each node is a pure function with typed
+    inputs and outputs, logged to MLflow.
+    A request such as "what should we repair this year with  X crore?" maps to a fixed
+    plan: load district, load scenarios, forecast condition, compute consequence, optimize,
+    report.
+    LLM role: narration only. It receives a JSON of results and writes the summary. A check
+    rejects any number in the text that is not in the JSON.
+    Human authority: each recommendation lists its assumptions, its uncertainty interval,
+    and a one-click "inspect first" flag for structures where the prediction is uncertain.
+
+Evaluating the workflow (small, honest)
+
+    30 to 50 test requests with expected plans: check correct tool sequence and failure
+    handling.
+    Numeric faithfulness: share of figures in generated text that match the result JSON.
+    Drop any claim comparing "multi-agent vs single-agent" unless you can run it fairly.
+
+API (FastAPI)
+
+Endpoint                    Returns
+
+GET /districts              Available study districts and data status
+
+GET /districts/{id}/assets  Structures with condition forecast and interval
+
+GET /districts/{id}/consequence Accessibility loss per asset, with scenario range
+
+POST /optimize              Recommended interventions for a budget, horizon
+                            and risk setting
+
+POST /simulate              Policy comparison on a scenario set
+
+                                                                       Page 14 of 19
+Untitled
+
+Endpoint                      Returns
+                              The assumptions register in force
+GET /assumptions
+
+Dashboard (React + MapLibre)
+
+1. Map view: roads and structures coloured by accessibility loss; habitations cut off in a
+    chosen failure scenario.
+
+2. Budget slider: side-by-side plans (condition-based vs proposed) with expected and
+    tail loss.
+
+3. Asset card: why this asset ranks here, with condition forecast, interval, consequence
+    and cost.
+
+4. Rainfall scenario switcher: 10-, 25- and 100-year events and the re-planned
+    recommendation.
+
+5. Assumptions panel: change a parameter and see rankings move.
+
+Quality gates: unit and property tests in CI, a data-card per dataset, MLflow run IDs on
+every dashboard number, and a README that reproduces the headline result from raw
+data in one command.
+
+9. Risks and mitigations
+
+The biggest risks are data access and the temptation to present simulator results as field
+evidence; both are handled by planning for the no-data case from day one.
+
+Risk                    Likelihood Impact  Mitigation             Trigger
+IBMS or PWD condition
+data not obtained       High  High         Frame as methodology   No reply by
+                                           with NBI-validated     week 6
+OSM bridge and culvert                     deterioration and
+tags too sparse                            assumption sweeps;
+                                           keep sending requests
+
+                        Medium High        Compare tag counts to  Coverage
+                                           expected structure     low in week 2
+                                           density; fall back to
+                                           inferring crossings
+                                           where roads meet
+                                           water bodies, or use
+                                           PMGSY structures if
+                                           present
+
+                                                                           Page 15 of 19
+Untitled
+
+Risk                     Likelihood Impact Mitigation               Trigger
+PMGSY quality uneven
+across states            Medium  Medium  Choose districts with      QA exit test
+                                         complete road and          fails
+Habitation population                    habitation layers;
+missing                                  document QA
+
+Simulator conclusions    Medium  Medium  Gridded population         Week 2
+are circular                             fallback; sensitivity to
+                                         allocation method
+Consequence weights
+look arbitrary           Medium High     Validate each              Reviewer
+                                         component against real     objection
+Compute cost of per-                     data separately; report
+asset network                            robustness over the
+recomputation                            assumptions register
+
+Local search gives poor  High    Medium  Pareto fronts, rank-       Always
+solutions                                stability tests, pre-      present
+                                         registered defaults
+Scope creep into water,
+sensors, RL or agents    Medium  Medium  Recompute only             Runs exceed
+                                         affected habitations;      an hour
+LLM text contains                        cache; limit scenarios
+wrong numbers                            during search
+
+US-to-India transfer     Medium  Medium  Seed from MILP;            Gap above
+questioned                               compare with exact on      5% on toys
+                                         small cases; multiple
+                                         restarts
+
+                         High    High    Keep these in the          New module
+                                         stretch list; review       proposed
+                                         scope at weeks 8 and
+                                         16
+
+                         Medium  Medium  Narration only, with       Check fails
+                                         automatic number-
+                                         matching check
+
+                         High    Medium  Say it plainly; validate   Viva
+                                         method on NBI, apply
+                                         to India with sensitivity
+                                         axes
+
+                                                                             Page 16 of 19
+Untitled        Likelihood Impact  Mitigation             Trigger
+                Medium High
+  Risk                             Fixed-length sprints;  Week 20
+  Time overrun                     two-week buffer in     behind plan
+                                   month 6; cut order is
+                                   fixed (section 7)
+
+10. Week-1 checklist
+
+Week 1 has one goal: prove you can build a routable district graph with facilities and
+compute one accessibility-loss number, while the data requests go out.
+
+    Create the repository, environment and folder layout from section 4; commit a
+    README with the research question.
+    Send a data request for bridge and culvert condition records to a state PWD and to
+    MoRTH (RTI as a backup); keep a log of dates and replies.
+    Download the PMGSY datasets for two candidate districts; note state-level quality.
+    Download an OSM extract and count bridge and culvert tags in each candidate
+    district.
+    Install imdlib ; download one rainfall year and extract a district time series.
+    Build the road graph for one district and attach habitations and health facilities.
+    Compute accessibility loss for removing one edge; check it against a hand calculation.
+    Download 3 NBI years for 2 states and join structures across years.
+    Write the first version of the assumptions register (section 3) and commit it.
+    Pick the district pair, or write down what is blocking the choice.
+
+11. Paper outline and demo script
+
+The paper's argument is simple: condition-based ranking misallocates scarce budget
+because it ignores who loses access, and a network-aware, uncertainty-aware method
+does better across plausible assumptions.
+
+Paper outline
+
+1. Abstract and introduction: the maintenance-allocation problem in India, and why
+    consequence is missing from condition-based ranking.
+
+2. Related work: bridge management systems and deterioration models; accessibility
+    and network criticality; conformal prediction; robust and CVaR optimization;
+    infrastructure resilience under hazards.
+
+3. Problem formulation: network, hazard, accessibility loss, interventions, budget.
+
+                                                          Page 17 of 19
+Untitled
+
+ 4. Methods: sections 5.1 to 5.7.
+ 5. Data and validation setup: what is real, what is fitted, what is assumed.
+ 6. Results: E1 to E8 with ablation and regret.
+ 7. Limitations: no Indian failure labels unless obtained, US-to-India transfer, simulator-
+
+    based policy value, population and speed assumptions.
+ 8. Conclusion and future work: real condition data, water and drainage assets, learned
+
+    policies.
+Run a proper literature search in month 1 and write the related-work table early; do not
+claim novelty until it is done.
+Demo script (8 minutes)
+ 1. Problem (1 min): a district map; a worst-first plan repairs the lowest-rated bridge.
+ 2. Consequence (2 min): switch to accessibility loss; one "unremarkable" culvert would
+
+    cut off a block from its only health centre.
+ 3. Uncertainty (1 min): its condition forecast has a wide interval, so the system flags it for
+
+    inspection first.
+ 4. Budget (2 min): move the  slider; show proposed plan against worst-first on expected
+
+    and tail loss.
+ 5. Storm (1 min): switch to a 25-year rainfall scenario; the plan re-optimizes.
+ 6. Honesty (1 min): open the assumptions panel; show that the ranking holds across the
+
+    range.
+
+12. Sources
+
+These facts came from search results on 8 Oct 2026, not from reading each page in full;
+open them before citing anything in the paper.
+
+    PMGSY Rural Connectivity open data: road centerlines, habitations, facility points,
+    Government Open Data License.
+    OpenStreetMap wiki: PMGSY data import: dataset contents and the note that quality
+    varies by state.
+    IMDLIB documentation: downloading and reading IMD gridded rainfall and
+    temperature in Python.
+    FHWA National Bridge Inventory downloads: annual NBI files and record format.
+    Indian Bridge Management System overview: about 1.72 lakh structures inventoried,
+    mostly culverts.
+    MoRTH nationwide bridge survey, July 2026: new IBMS mobile app and agency
+    dashboard.
+
+                                                                                                                                                                                                                                          Page 18 of 19
+Untitled
+
+Figures and methods taken from memory, to verify: the exact NBI condition-state rule,
+OSMnx and Geofabrik usage, state PWD Schedule of Rates availability, and the conformal
+and CVaR formulations.
+
+                                                                                                                                                                                                                                          Page 19 of 19
+
