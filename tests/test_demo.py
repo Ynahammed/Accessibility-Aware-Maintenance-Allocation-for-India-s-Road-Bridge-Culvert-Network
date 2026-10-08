@@ -107,12 +107,16 @@ def test_load_evidence_contains_frozen_results_and_register():
     assert any(r["status"] == "blocked" for r in ev["data_matrix"])
 
 
-def test_vercel_functions_reuse_demo_http_handler():
-    from api.evidence import handler as evidence_handler
-    from api.loss import handler as loss_handler
-    from api.run import handler as run_handler
-    from demo.server import DemoHandler as vercel_demo_handler
+def test_fastapi_app_exposes_demo_routes():
+    from app import app
 
-    assert evidence_handler is vercel_demo_handler
-    assert run_handler is vercel_demo_handler
-    assert loss_handler is vercel_demo_handler
+    routes = {
+        route.path: route.methods
+        for route in app.routes
+        if hasattr(route, "methods")
+    }
+
+    assert "/" in routes and "GET" in routes["/"]
+    assert "/api/evidence" in routes and "GET" in routes["/api/evidence"]
+    assert "/api/run" in routes and "POST" in routes["/api/run"]
+    assert "/api/loss" in routes and "POST" in routes["/api/loss"]

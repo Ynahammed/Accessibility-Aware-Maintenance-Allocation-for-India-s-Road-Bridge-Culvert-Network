@@ -53,14 +53,15 @@ renders their results.
 ## Deploy to Vercel
 
 Import the repository into Vercel with the project root set to the repository
-root. The included `vercel.json`, `requirements.txt`, and `api/` handlers
-configure Vercel to serve the demo page and run its API as Python Functions.
-No separate frontend or build command is required. Push to the connected Git
-branch or redeploy the latest commit; then open the deployment URL.
+root. Vercel discovers the root `app.py` FastAPI entrypoint and installs the
+dependencies in `requirements.txt`. The FastAPI app serves the demo page and
+implements its API routes; no rewrite configuration or separate build command
+is needed. Push to the connected Git branch or redeploy the latest commit;
+then open the deployment URL.
 
-The API handlers reuse the same code as the local demo:
+The API routes reuse the same research functions as the local demo:
 `GET /api/evidence`, `POST /api/run`, and `POST /api/loss`. `.vercelignore`
-omits local environments and raw source datasets that these handlers do not
+omits local environments and raw source datasets that the app does not
 need; the small saved experiment results and QA reports remain included.
 
 ## What the current evidence says
