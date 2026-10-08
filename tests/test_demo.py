@@ -105,3 +105,14 @@ def test_load_evidence_contains_frozen_results_and_register():
     assert len(ev["assumptions"]) == 21
     assert {a["source"] for a in ev["assumptions"].values()} <= {"real", "fitted", "assumed"}
     assert any(r["status"] == "blocked" for r in ev["data_matrix"])
+
+
+def test_vercel_functions_reuse_demo_http_handler():
+    from api.evidence import handler as evidence_handler
+    from api.loss import handler as loss_handler
+    from api.run import handler as run_handler
+    from demo.server import DemoHandler as vercel_demo_handler
+
+    assert evidence_handler is vercel_demo_handler
+    assert run_handler is vercel_demo_handler
+    assert loss_handler is vercel_demo_handler

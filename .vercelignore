@@ -1,0 +1,14 @@
+.venv/
+venv/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+cache/
+.freebuff/
+tests/
+data/raw/
+data/processed/structures.parquet
+experiments/*/run.py
+experiments/*/config.json
+plan.pdf
+plan.txt

@@ -50,6 +50,19 @@ The demo API is also available locally:
 The `POST` endpoints accept JSON. The page itself provides example inputs and
 renders their results.
 
+## Deploy to Vercel
+
+Import the repository into Vercel with the project root set to the repository
+root. The included `vercel.json`, `requirements.txt`, and `api/` handlers
+configure Vercel to serve the demo page and run its API as Python Functions.
+No separate frontend or build command is required. Push to the connected Git
+branch or redeploy the latest commit; then open the deployment URL.
+
+The API handlers reuse the same code as the local demo:
+`GET /api/evidence`, `POST /api/run`, and `POST /api/loss`. `.vercelignore`
+omits local environments and raw source datasets that these handlers do not
+need; the small saved experiment results and QA reports remain included.
+
 ## What the current evidence says
 
 The application marks evidence by provenance; the distinctions matter when
