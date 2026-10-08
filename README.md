@@ -6,6 +6,8 @@ It compares condition-first maintenance with network-aware allocation, where
 the consequence of a failure depends on which other routes and structures fail
 at the same time.
 
+**Live demo:** <https://a1ccessibility.vercel.app/>
+
 > **Research status:** This is not a production planning tool, and its
 > allocation results are not recommendations for a real Indian district.
 > India-specific rainfall, rural-road, and asset-condition inputs are not
