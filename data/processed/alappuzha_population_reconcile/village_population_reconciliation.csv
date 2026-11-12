@@ -1,0 +1,53 @@
+census_village_code,census_village_name,census_population_2011,pmgsy_points,pmgsy_population,distinct_population_values,pmgsy_share_of_village,has_coordinate
+628206,Perumbalam,9733,,,,,False
+628207,Panavally,31570,,,,,False
+628208,Thuravoor Thekku,28802,1.0,1440.0,1.0,0.04999652801888758,True
+628209,Pattanakkad,31629,,,,,False
+628210,Kadakkarappally,20487,,,,,False
+628211,Cherthala North (Part),13945,,,,,False
+628212,Cherthala South (Part),26157,,,,,False
+628213,Mararikkulam North,31322,,,,,False
+628226,Kalavoor,29808,1.0,3015.0,1.0,0.10114734299516909,True
+628227,Aryad South  (Part),0,,,,,False
+628228,Mullakkal (Part) ,497,,,,,False
+628229,Ambalappuzha,33939,,,,,False
+628230,Karumady  ,13137,2.0,6498.0,2.0,0.4946334779630053,True
+628231,Purakkad,29782,1.0,1540.0,1.0,0.05170908602511584,True
+628236,Kainakary North,8292,,,,,False
+628237,Kainakary South,15405,,,,,False
+628238,Pulinkunnu,15210,,,,,False
+628239,Kunnumma,14252,1.0,1359.0,1.0,0.09535503788941903,True
+628240,Kavalam,13089,1.0,978.0,1.0,0.07471922988769196,True
+628241,Neelamperoor,5841,,,,,False
+628242,Veliyanad,12501,,,,,False
+628243,Ramankary,10755,1.0,1001.0,1.0,0.09307298930729893,True
+628244,Champakkulam,15848,,,,,False
+628245,Nedumudi,14601,2.0,1574.0,2.0,0.10780083555920827,True
+628246,Thakazhy,15758,,,,,False
+628247,Edathua  ,21699,1.0,1569.0,1.0,0.07230747960735517,True
+628248,Muttar,9200,2.0,1262.0,2.0,0.13717391304347826,True
+628249,Thalavady ,20556,1.0,402.0,1.0,0.019556333917104495,True
+628250,Karuvatta,14755,1.0,1232.0,1.0,0.08349711962046764,True
+628251,Cheruthana,12882,1.0,1002.0,1.0,0.07778295295761528,True
+628252,Veeyapuram,11392,3.0,2419.0,3.0,0.21234199438202248,True
+628253,Pallippad,24648,,,,,False
+628254,Thrikkunnapuzha,26679,1.0,1753.0,1.0,0.0657071104614116,True
+628255,Arattupuzha,29264,1.0,254.0,1.0,0.008679606342263531,True
+628267,Ennakkad,18444,,,,,False
+628268,Pandanad (Part),11489,,,,,False
+628269,Thiruvanvandoor,12712,1.0,1204.0,1.0,0.0947136563876652,True
+628270,Chengannur  (Part),1989,,,,,False
+628271,Mulakuzha (Part) ,28390,,,,,False
+628272,Ala (Part),13665,,,,,False
+628273,Puliyoor(Part),16531,,,,,False
+628274,Cheriyanad,21885,1.0,677.0,1.0,0.030934429974868633,True
+628275,Venmony,19932,,,,,False
+628278,Thriperumthura,15226,,,,,False
+628279,Vettiyar,21393,,,,,False
+628280,Thekkekara (Part),32373,,,,,False
+628281,Perungala,14151,2.0,2216.0,1.0,0.15659670694650554,True
+628282,Chunakkara,22730,,,,,False
+628283,Noornad,25375,1.0,515.0,1.0,0.020295566502463055,True
+628284,Palamel,32512,1.0,938.0,1.0,0.028850885826771654,True
+628285,Thamarakkulam,27017,,,,,False
+628286,Vallikunnam,30394,1.0,1325.0,1.0,0.043594130420477724,True

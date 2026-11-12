@@ -3,7 +3,11 @@ import pytest
 
 from rra.optimize import milp
 from rra.optimize.cvar import cvar, value_at_risk
-from rra.optimize.local_search import local_search, selection_to_x
+from rra.optimize.local_search import (
+    local_search,
+    multi_start_local_search,
+    selection_to_x,
+)
 
 
 def test_cvar_and_var():
@@ -95,3 +99,76 @@ def test_local_search_matches_additive_optimum():
 def test_selection_to_x_is_one_hot():
     x = selection_to_x([0, 3], n_vars=4)
     assert x.tolist() == [1.0, 0.0, 0.0, 1.0]
+
+
+def _budget_trade_problem():
+    """One asset already repaired; a cheaper asset is a much better repair.
+
+    Budget 10. Asset 0's repair costs 10 and saves 1; assets 1 and 2 cost 5 and save 5
+    each. Starting from [repair0, none, none] every single move is either infeasible
+    (funding another repair needs 5 more) or worse (dropping asset 0's repair loses 1).
+    Only a two-asset trade can improve: drop asset 0, repair asset 1.
+    """
+    groups = [[0, 1], [2, 3], [4, 5]]
+    cost = np.array([0.0, 10.0, 0.0, 5.0, 0.0, 5.0])
+    loss = np.array([5.0, 4.0, 5.0, 0.0, 5.0, 0.0])
+    budget = 10.0
+
+    def objective(x):
+        return float(loss @ np.asarray(x, dtype=float))
+
+    def feasible(sel):
+        return float(cost[sel].sum()) <= budget + 1e-9
+
+    return groups, [1, 2, 4], objective, feasible
+
+
+def test_pair_moves_free_budget_for_a_better_repair():
+    groups, start, objective, feasible = _budget_trade_problem()
+    single, single_val = local_search(
+        groups, start, objective, n_vars=6, pair_moves=False, feasible=feasible
+    )
+    pair, pair_val = local_search(
+        groups, start, objective, n_vars=6, pair_moves=True, feasible=feasible
+    )
+    assert single == start and single_val == pytest.approx(14.0)  # stalled by the budget
+    assert pair == [0, 3, 5]  # drop asset 0, repair assets 1 and 2 with the freed budget
+    assert pair_val == pytest.approx(5.0)
+    assert feasible(pair)
+
+
+def test_local_search_never_returns_an_infeasible_selection():
+    groups, start, objective, feasible = _budget_trade_problem()
+    sel, _ = local_search(groups, start, objective, n_vars=6, feasible=feasible)
+    assert feasible(sel)
+    assert float(sum(1 for s in sel if s % 2 == 1)) == 2  # both 5-cost repairs funded
+
+
+def test_multi_start_keeps_the_best_feasible_start():
+    groups, start, objective, feasible = _budget_trade_problem()
+    best, val = multi_start_local_search(
+        groups, [[0, 2, 4], start], objective, n_vars=6, feasible=feasible
+    )
+    assert best == [0, 3, 5]
+    assert val == pytest.approx(5.0)
+
+
+def test_multi_start_shares_one_evaluation_memo():
+    """A repeated start must not repeat any objective evaluation."""
+    groups, start, objective, feasible = _budget_trade_problem()
+
+    def counted_runner(starts):
+        calls = {"n": 0}
+
+        def counted(x):
+            calls["n"] += 1
+            return objective(x)
+
+        multi_start_local_search(
+            groups, starts, counted, n_vars=6, pair_moves=True, feasible=feasible
+        )
+        return calls["n"]
+
+    once = counted_runner([start])
+    twice = counted_runner([start, start])
+    assert twice == once

@@ -101,6 +101,62 @@ def make_district(
     )
 
 
+def make_chain_district(
+    n_segments: int = 4,
+    redundancy: int = 2,
+    seed: int = 0,
+    population: float = 400.0,
+    segment_length_m: float = 1200.0,
+    class_speeds: dict | None = None,
+) -> District:
+    """A **series** district: habitations lie along one corridor to the facility.
+
+    Segment ``i`` joins position ``i`` to ``i+1`` with ``redundancy`` parallel routes, each
+    carrying exactly one structure. A habitation at position ``i`` is cut off when *every
+    route of any single segment* between it and the facility fails, so upstream structures
+    protect many habitations and downstream ones protect few — a criticality gradient the
+    independent-corridor testbed does not have.
+
+    At ``redundancy=1`` this is a pure series network (every structure is critical), so the
+    additive objective is sufficient; at ``redundancy>=2`` cutting a habitation off needs a
+    joint failure, so the network-aware objective should gain. That contrast is what makes
+    the chain a useful second family for the E4 factorial: a threshold that only appears in
+    corridors would be a property of the corridor generator.
+    """
+    speeds = class_speeds or build.DEFAULT_CLASS_SPEEDS_KPH
+    g = build.new_graph()
+    build.add_point(g, "F", 0.0, 0.0, "facility")
+    g.nodes["F"]["facility_type"] = "health"
+
+    positions = ["F"] + [f"P{i}" for i in range(1, n_segments + 1)]
+    habitations: dict = {}
+    for i, node in enumerate(positions[1:], start=1):
+        build.add_point(g, node, segment_length_m * i, 0.0, "habitation")
+        habitations[node] = population
+
+    structures: list = []
+    sid = 0
+    for seg in range(n_segments):
+        a, b = positions[seg], positions[seg + 1]
+        for j in range(redundancy):
+            mid = f"J{seg}_{j}"
+            build.add_point(g, mid, segment_length_m * (seg + 0.5), 40.0 * j, "junction")
+            build.add_road(g, a, mid, segment_length_m / 2.0, "rural", speeds)
+            build.add_road(g, mid, b, segment_length_m / 2.0, "rural", speeds)
+            node = split_edge(g, mid, b, 0.5, f"S{sid}", "culvert")
+            structures.append((f"S{sid}", node, "culvert"))
+            sid += 1
+
+    return District(
+        graph=g,
+        habitations=habitations,
+        facilities={"health": ["F"]},
+        structures=structures,
+        budget_crore=1.0,
+        crew_days=200.0,
+    )
+
+
 def make_redundant_district(
     n_corridors: int = 3,
     redundancy: int = 2,

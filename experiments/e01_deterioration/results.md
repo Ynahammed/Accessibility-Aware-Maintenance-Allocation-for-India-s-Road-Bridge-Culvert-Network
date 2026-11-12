@@ -1,4 +1,10 @@
-# E1 — deterioration models on real NBI data
+# E1 — ARCHIVED: US NBI deterioration (out of scope)
+
+> **This experiment is not Indian evidence.** It was fitted to US FHWA National Bridge
+> Inventory records (AL/CA/TX, 2018–2023). The project now works on Indian data only, so E1
+> is retained for provenance and is no longer loaded by the dashboard or `/api/evidence`.
+> Do not cite these numbers as evidence about Indian bridges, and do not reuse this result
+> as a validation of an India-facing deterioration model.
 
 - panel rows: 582014, structure-year pairs: 480753
 - train pairs (year <= 2020): 287121

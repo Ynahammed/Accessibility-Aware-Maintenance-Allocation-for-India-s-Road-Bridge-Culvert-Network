@@ -1,0 +1,59 @@
+{
+  "title": "Alappuzha population denominator reconciliation (Indian sources only)",
+  "sources": {
+    "census_village_pca": {
+      "file": "data/raw/census/2011/DDW_PCA3211_2011_MDDS_with_UI.xlsx",
+      "universe": "rural villages only",
+      "village_rows": 52,
+      "population": 979643
+    },
+    "census_district_official": {
+      "total": 2127789,
+      "rural": 979643,
+      "urban": 1148146,
+      "note": "ORGI Census 2011 district rural-urban distribution; urban wards are not village rows"
+    },
+    "pmgsy_habitations": {
+      "field": "TOT_POPULA",
+      "points": 1981,
+      "population": 2169418
+    }
+  },
+  "ratios": {
+    "pmgsy_over_district_total": 1.0195644398951211,
+    "pmgsy_over_rural_subtotal": 2.214498546919643,
+    "pmgsy_share_difference_from_district_total": 0.019564439895121133
+  },
+  "crosswalk_coverage": {
+    "villages": 52,
+    "villages_with_matched_pmgsy_points": 22,
+    "villages_without_match": 30,
+    "pmgsy_points_matched_to_a_village": 28,
+    "pmgsy_points_unmatched": 1953,
+    "pmgsy_population_inside_matched_villages": 34173,
+    "pmgsy_population_share_inside_matched_villages": 0.015752151037743762
+  },
+  "village_representation": {
+    "median_pmgsy_share_of_village_population": 0.07625109142265363,
+    "p10": 0.021151098434893916,
+    "p90": 0.15465442755620284,
+    "max": 0.4946334779630053
+  },
+  "located_villages": {
+    "with_coordinate": 22,
+    "without_coordinate": 30,
+    "population_without_coordinate": 541961,
+    "share_of_rural_population_without_coordinate": 0.5532229597924958,
+    "share_of_district_population_without_coordinate": 0.25470617622330033
+  },
+  "conclusions": [
+    "The PMGSY field is within about 2% of the Census 2011 district total, so it is a district-wide habitation layer, not a duplicate of the rural village PCA.",
+    "The 2.2x gap that appears when the PMGSY total is compared with 979,643 is a universe difference: that figure is the rural village subtotal, while 1,148,146 urban residents are not village rows.",
+    "The Census/PMGSY name crosswalk is the weak link, not the population totals: matched villages hold only a small fraction of PMGSY population, so village-level population attribution is unreliable even though district totals agree.",
+    "Neither source is a substitute for the other: Census gives official totals with incomplete geocoding, PMGSY gives complete district geometry with a source field of unclear vintage. They must stay separate and never be added."
+  ],
+  "caveats": [
+    "The +2% difference is consistent with a 2011 vintage field plus coverage differences, but this analysis cannot separate vintage drift from coverage.",
+    "Neither source is dated later than the Census 2011 baseline; neither reflects 2026 population."
+  ]
+}

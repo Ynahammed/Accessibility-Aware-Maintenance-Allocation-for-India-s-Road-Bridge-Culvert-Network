@@ -64,8 +64,21 @@ def effect_of(intervention: Intervention, register=None) -> InterventionEffect:
     return InterventionEffect(reset, fragility_factor)
 
 
+def effects_from_register(register) -> dict["Intervention", InterventionEffect]:
+    """Resolve every intervention's effect once, from the live register.
+
+    The simulator, optimizer and planner read these from ``SimModels`` so a measured
+    ``repair_effect_*`` actually changes plans instead of only changing a label.
+    """
+    return {opt: effect_of(opt, register) for opt in Intervention}
+
+
+def apply_effect(state: int, effect: InterventionEffect) -> int:
+    """New condition state after a resolved intervention effect (severity may decrease)."""
+    new = int(round(int(state) - effect.condition_reset))
+    return max(0, min(N_STATES - 1, new))
+
+
 def apply_condition(state: int, intervention: Intervention, register=None) -> int:
     """New condition state after an intervention (severity may decrease)."""
-    reset = effect_of(intervention, register).condition_reset
-    new = int(round(int(state) - reset))
-    return max(0, min(N_STATES - 1, new))
+    return apply_effect(state, effect_of(intervention, register))

@@ -1,0 +1,12 @@
+{
+  "office": "",
+  "application_ref": "",
+  "reply_date": "",
+  "tables": {
+    "structures": "structures.csv",
+    "inspections": "inspections.csv",
+    "closures": "closures.csv",
+    "expenditure": "expenditure.csv",
+    "sor": "sor.csv"
+  }
+}

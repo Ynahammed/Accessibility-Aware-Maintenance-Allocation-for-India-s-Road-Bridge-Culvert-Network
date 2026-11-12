@@ -12,3 +12,8 @@ experiments/*/run.py
 experiments/*/config.json
 plan.pdf
 plan.txt
+.urop_build/
+*.docx
+.github/
+Dockerfile
+.dockerignore

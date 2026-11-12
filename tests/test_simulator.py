@@ -1,6 +1,7 @@
 import numpy as np
 
 from rra.consequence.accessibility import AccessibilityModel
+from rra.cost.interventions import Intervention
 from rra.cost.sor import ScheduleOfRates
 from rra.deterioration import markov
 from rra.fragility.fragility import FragilityParams
@@ -77,6 +78,39 @@ def test_no_failures_means_no_spend():
     scen = step.make_scenarios(["A1"], years=4, n=10, rng=9)
     out = step.run(policies.DoNothingPolicy(), world, scen, models)
     assert np.all(out.spend == 0.0)
+
+
+class _AlwaysMajor:
+    """Apply a major repair every year, whatever the condition."""
+
+    name = "always_major"
+
+    def propose(self, assets, ctx):
+        return {a.asset_id: Intervention.MAJOR for a in assets}
+
+
+def test_planned_intervention_cuts_failure_probability_directly():
+    """Plan 5.5: an intervention resets condition *and* reduces fragility.
+
+    The asset starts Good, so the repair resets nothing and only the direct fragility
+    factor can act. With the transition matrix fixed at identity and the same uniforms
+    for both policies, the repaired world's failures must be a strict subset of the
+    unrepaired world's.
+    """
+    models, world = models_and_world()
+    models.fragility = FragilityParams(beta0=-2.0, beta1=1.0, beta2=1.5)
+    models.transition = np.eye(4)  # condition never moves, isolating the fragility effect
+    world.assets["A1"].condition = 0
+    scen = step.make_scenarios(["A1"], years=4, n=40, rng=5)
+
+    base = step.run(policies.DoNothingPolicy(), world, scen, models)
+    repaired = step.run(_AlwaysMajor(), world, scen, models)
+
+    failed_base = int((base.person_days > 0).sum())
+    failed_repaired = int((repaired.person_days > 0).sum())
+    assert failed_base > 10  # the setup has to fail often enough to be testable
+    assert failed_repaired < failed_base  # direct fragility cut is applied
+    assert np.all(base.person_days >= repaired.person_days)
 
 
 def test_baseline_policies_run_end_to_end():

@@ -19,7 +19,13 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from rra.consequence.accessibility import AccessibilityModel
-from rra.cost.interventions import Intervention, apply_condition
+from rra.cost.interventions import (
+    Intervention,
+    InterventionEffect,
+    apply_condition,
+    apply_effect,
+    effect_of,
+)
 from rra.cost.sor import ScheduleOfRates
 from rra.deterioration.markov import N_STATES
 from rra.fragility.fragility import FragilityParams, failure_probability
@@ -82,11 +88,18 @@ class SimModels:
     sor: ScheduleOfRates
     outage_days: dict = field(default_factory=dict)  # asset_id -> days (else by type)
     premium: float = 1.8
+    # Intervention effects resolved from the live register; empty means the built-in
+    # defaults, which is only correct when no reply has been ingested.
+    effects: dict = field(default_factory=dict)
 
     def outage(self, asset: Asset) -> float:
         return float(
             self.outage_days.get(asset.asset_id, DEFAULT_OUTAGE_DAYS.get(asset.structure_type, 30.0))
         )
+
+    def effect(self, intervention: Intervention) -> InterventionEffect:
+        """The register-resolved effect of an intervention."""
+        return self.effects.get(intervention) or effect_of(intervention)
 
 
 @dataclass
@@ -125,13 +138,19 @@ def _simulate_one(policy, world0: World, scen: ScenarioSet, models: SimModels, s
         benefit = solo_benefit(world, models)
 
     for y in range(scen.years):
+        # 0. this year's intervention effects are bought anew each year
+        for a in world.assets.values():
+            a.fragility_mult = 1.0
+
         # 1. interventions
         ctx = _context_for(world, models, benefit)
         chosen = policy.propose(list(world.assets.values()), ctx)
         for asset_id, opt in chosen.items():
             a = world.assets[asset_id]
+            effect = models.effect(opt)
             planned += models.sor.cost(a.structure_type, opt)
-            a.condition = apply_condition(a.condition, opt)  # improves before deterioration
+            a.condition = apply_effect(a.condition, effect)  # improves before deterioration
+            a.fragility_mult = effect.fragility_factor  # plan 5.5: direct risk cut
 
         # 2. deteriorate
         det = scen.det_u[s][y]
@@ -144,7 +163,10 @@ def _simulate_one(policy, world0: World, scen: ScenarioSet, models: SimModels, s
         fail_u = scen.fail_u[s][y]
         failed_assets = []
         for a in world.assets.values():
-            p = failure_probability(a.condition, float(rain[idx[a.asset_id]]), models.fragility)
+            p = (
+                failure_probability(a.condition, float(rain[idx[a.asset_id]]), models.fragility)
+                * a.fragility_mult
+            )
             if fail_u[idx[a.asset_id]] < p:
                 failed_assets.append(a)
 

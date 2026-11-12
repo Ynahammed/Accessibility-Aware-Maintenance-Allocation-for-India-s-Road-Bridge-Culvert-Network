@@ -9,16 +9,17 @@ Run on your own machine (needs internet):
 What this fetches automatically:
   1. IMD gridded daily rainfall (0.25 degree) via imdlib, year by year.
   2. An OpenStreetMap drivable road network for one district via osmnx.
-  3. US National Bridge Inventory yearly delimited files (FHWA), which are the real
-     labelled histories used to validate the deterioration models (E1/E2).
+
+The project works on Indian data only. A US FHWA National Bridge Inventory leg still exists
+below for provenance, but it is **off by default** and its output is not used as evidence;
+pass --include-nbi only to reproduce the archived US experiment.
 
 What it cannot fetch (it prints the pages instead):
   - PMGSY rural connectivity layers (roads, habitations, facilities)
   - IBMS / state PWD condition records (needs a data request)
 
 Reachability note: in a sandboxed run, imdpune.gov.in and geosadak-pmgsy.nic.in may be
-unreachable while download.geofabrik.de, overpass-api.de and fhwa.dot.gov work. The NBI
-leg is therefore the one most likely to succeed anywhere.
+unreachable while download.geofabrik.de and overpass-api.de work.
 """
 import argparse
 import sys
@@ -192,10 +193,6 @@ Manual downloads (save into {out_dir}):
     https://geosadak-pmgsy.nic.in/opendata/
     Save under {out_dir / 'pmgsy'}.
 
-  US National Bridge Inventory (only if the automatic fetch above failed)
-    https://www.fhwa.dot.gov/bridge/nbi/ascii.cfm
-    Record format: https://www.fhwa.dot.gov/bridge/nbi/format.cfm
-
   Indian bridge/culvert condition (IBMS or state PWD)
     No public download found. Send a data request to the state PWD / MoRTH.
 """
@@ -212,7 +209,8 @@ def main():
     parser.add_argument("--out", type=Path, default=Path("data/raw"))
     parser.add_argument("--skip-imd", action="store_true")
     parser.add_argument("--skip-osm", action="store_true")
-    parser.add_argument("--skip-nbi", action="store_true")
+    parser.add_argument("--include-nbi", action="store_true",
+                        help="also fetch US FHWA NBI files (archived US work; not Indian evidence)")
     parser.add_argument("--nbi-states", nargs="+", default=NBI_DEFAULT_STATES)
     parser.add_argument("--nbi-start", type=int, default=2016)
     parser.add_argument("--nbi-end", type=int, default=2023)
@@ -255,7 +253,8 @@ def main():
                 download_osm_features(bbox, args.out, args.overpass_url, args.osm_timeout)
             except Exception as exc:  # noqa: BLE001
                 print(f"OSM features failed: {exc}")
-    if not args.skip_nbi:
+    if args.include_nbi:
+        print("NOTE: NBI is US data. It is archived provenance only and is not served as evidence.")
         download_nbi(args.nbi_states, range(args.nbi_start, args.nbi_end + 1), args.out)
     print_manual_steps(args.out)
 

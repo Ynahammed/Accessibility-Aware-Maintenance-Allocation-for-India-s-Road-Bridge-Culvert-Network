@@ -30,28 +30,28 @@
           "cvar": 35573.333333333336
         },
         "worst_first": {
-          "mean_person_days": 19381.333333333332,
-          "mean_planned_crore": 0.31200000000000006,
-          "person_days_per_crore": 18106.626806178374,
-          "cvar": 31893.333333333332
+          "mean_person_days": 15824.0,
+          "mean_planned_crore": 0.34866666666666674,
+          "person_days_per_crore": 16349.359415897507,
+          "cvar": 28213.333333333332
         },
         "benefit_cost": {
-          "mean_person_days": 24901.333333333332,
+          "mean_person_days": 21466.666666666668,
           "mean_planned_crore": 0.24000000000000002,
-          "person_days_per_crore": 20505.05050505051,
-          "cvar": 35573.333333333336
+          "person_days_per_crore": 19876.54320987654,
+          "cvar": 30666.666666666668
         },
         "additive_milp": {
-          "mean_person_days": 19381.333333333332,
+          "mean_person_days": 7237.333333333333,
           "mean_planned_crore": 1.6000000000000005,
-          "person_days_per_crore": 8218.000904568067,
-          "cvar": 31893.333333333332
+          "person_days_per_crore": 3843.103936561881,
+          "cvar": 15946.666666666666
         },
         "network_aware": {
-          "mean_person_days": 19381.333333333332,
+          "mean_person_days": 7237.333333333333,
           "mean_planned_crore": 1.6000000000000005,
-          "person_days_per_crore": 8218.000904568067,
-          "cvar": 31893.333333333332
+          "person_days_per_crore": 3843.103936561881,
+          "cvar": 15946.666666666666
         }
       }
     },
@@ -66,10 +66,10 @@
           "cvar": 24533.333333333332
         },
         "worst_first": {
-          "mean_person_days": 8709.333333333334,
-          "mean_planned_crore": 0.5613333333333334,
-          "person_days_per_crore": 4059.664387818519,
-          "cvar": 14720.0
+          "mean_person_days": 5642.666666666667,
+          "mean_planned_crore": 0.6093333333333335,
+          "person_days_per_crore": 2946.664809915053,
+          "cvar": 11040.0
         },
         "benefit_cost": {
           "mean_person_days": 15578.666666666666,
@@ -84,10 +84,10 @@
           "cvar": 24533.333333333332
         },
         "network_aware": {
-          "mean_person_days": 10794.666666666666,
-          "mean_planned_crore": 1.5226666666666666,
-          "person_days_per_crore": 3340.485228585574,
-          "cvar": 18400.0
+          "mean_person_days": 2821.3333333333335,
+          "mean_planned_crore": 1.3873333333333333,
+          "person_days_per_crore": 1209.3501743155969,
+          "cvar": 8586.666666666666
         }
       }
     },
@@ -102,10 +102,10 @@
           "cvar": 17173.333333333332
         },
         "worst_first": {
-          "mean_person_days": 6501.333333333333,
-          "mean_planned_crore": 0.652666666666667,
-          "person_days_per_crore": 1986.0698138568684,
-          "cvar": 12266.666666666666
+          "mean_person_days": 4906.666666666667,
+          "mean_planned_crore": 0.7240000000000001,
+          "person_days_per_crore": 1615.3103327188123,
+          "cvar": 11040.0
         },
         "benefit_cost": {
           "mean_person_days": 10304.0,
@@ -120,10 +120,10 @@
           "cvar": 17173.333333333332
         },
         "network_aware": {
-          "mean_person_days": 7850.666666666667,
-          "mean_planned_crore": 0.8386666666666667,
-          "person_days_per_crore": 2094.926350245498,
-          "cvar": 13493.333333333334
+          "mean_person_days": 3557.3333333333335,
+          "mean_planned_crore": 1.4246666666666665,
+          "person_days_per_crore": 935.9761445360459,
+          "cvar": 7360.0
         }
       }
     },
@@ -138,10 +138,10 @@
           "cvar": 17173.333333333332
         },
         "worst_first": {
-          "mean_person_days": 4293.333333333333,
-          "mean_planned_crore": 0.7533333333333336,
-          "person_days_per_crore": 993.8885116365202,
-          "cvar": 11040.0
+          "mean_person_days": 2821.3333333333335,
+          "mean_planned_crore": 0.8706666666666667,
+          "person_days_per_crore": 701.0801139752166,
+          "cvar": 7360.0
         },
         "benefit_cost": {
           "mean_person_days": 8709.333333333334,
@@ -156,13 +156,13 @@
           "cvar": 17173.333333333332
         },
         "network_aware": {
-          "mean_person_days": 6133.333333333333,
-          "mean_planned_crore": 0.40200000000000014,
-          "person_days_per_crore": 1369.9038089281985,
-          "cvar": 15946.666666666666
+          "mean_person_days": 2453.3333333333335,
+          "mean_planned_crore": 1.4553333333333327,
+          "person_days_per_crore": 489.4788646218507,
+          "cvar": 8586.666666666666
         }
       }
     }
   ],
-  "elapsed_seconds": 28.006340980529785
+  "elapsed_seconds": 184.30868577957153
 }

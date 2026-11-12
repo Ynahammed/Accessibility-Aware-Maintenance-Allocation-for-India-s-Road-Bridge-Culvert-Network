@@ -83,8 +83,7 @@ def main() -> None:
         f"({cov['n_bridges']} bridge, {cov['n_culverts']} culvert)",
     ]
     if water is None:
-        lines.append("- water layer: **missing** -> crossing inference skipped "
-                     "(Overpass feature fetch blocked here; retry on a network with access)")
+        lines.append("- water layer: absent from the selected --osm directory; crossing inference was not run for this build")
     else:
         lines.append(f"- inferred road-over-water crossings: {len(inferred)}")
         lines.append(f"- total structure candidates: {len(tagged) + len(inferred)}")
@@ -95,13 +94,13 @@ def main() -> None:
         f"- health facilities: {len(fac['health'])}, schools: {len(fac['school'])}",
     ]
     if not habitations or not fac["health"]:
-        lines.append("- **accessibility loss cannot be computed yet**: needs both habitation and "
-                     "health-facility layers (PMGSY is blocked here; OSM feature fetch also failed)")
+        lines.append("- selected --osm directory lacks one or both OSM habitation/health layers; this does not imply those sources are unavailable elsewhere")
     lines += [
         "",
-        "This is the plan's week-1 exit test in progress: one command that reconstructs a "
-        "district's network from raw data. The road graph reproduces; the structure and "
-        "habitation layers depend on the blocked sources.",
+        f"This report describes only the layers present in `{args.osm}`. It does not establish "
+        "district-wide source unavailability or verify bridge/culvert assets. The separate "
+        "Alappuzha district join, where available, is documented in "
+        "`data/processed/alappuzha_network_join/README.md`.",
         "",
     ]
     text = "\n".join(lines)

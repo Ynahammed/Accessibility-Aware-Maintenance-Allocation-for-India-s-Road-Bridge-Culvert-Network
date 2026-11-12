@@ -2,6 +2,7 @@
 
 Auto-generated from `src/rra/assumptions.py` — do not edit by hand.
 Every entry is an **assumed** or **fitted** quantity that is *varied*, not claimed.
+Measured values from a PWD/RTI reply are applied by `scripts/ingest_pwd_reply.py` and recorded separately in `docs/assumptions_measured.md`.
 
 | Parameter | Unit | Range | Default | Source | Why needed | How varied |
 |---|---|---|---|---|---|---|
@@ -9,7 +10,7 @@ Every entry is an **assumed** or **fitted** quantity that is *varied*, not claim
 | `fragility_beta1` | logit per condition step | 0.3–3 | 1.2 | assumed | Condition drives failure probability. | Swept slope; threshold behaviour tested. |
 | `fragility_beta2` | logit per log rain ratio | 0.5–4 | 2 | assumed | Rainfall loading above the local reference level. | Swept slope. |
 | `fragility_rain_ref_level` | return period (years) | 2–10 | 5 | assumed | Reference rainfall event defining R=1. | Swept; stress scenarios use fixed return levels. |
-| `deterioration_acceleration` | multiplier | 1–3 | 1.5 | assumed | Indian climate/load/maintenance differ from NBI conditions. | Multiplier on hazard rates; reported as a sensitivity axis. |
+| `deterioration_acceleration` | multiplier | 1–3 | 1.5 | assumed | Deterioration rate under Indian monsoon, load and maintenance conditions is not observable from any available register. | Multiplier on hazard rates; reported as a sensitivity axis. |
 | `repair_effect_minor` | condition-step reset | 0–1 | 0.5 | assumed | Minor repair effect on condition. | Range per intervention type; regret reported. |
 | `repair_effect_major` | condition-step reset | 1–3 | 2 | assumed | Major repair effect on condition. | Range per intervention type; regret reported. |
 | `repair_effect_replace` | condition-step reset | 3–4 | 4 | assumed | Replacement resets to Good. | Effectively full reset. |

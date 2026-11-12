@@ -6,13 +6,63 @@ The demo must never drift from the research code it wraps: these tests call the 
 
 from __future__ import annotations
 
+import json
 import sys
+import threading
+import urllib.request
+from http.server import ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "demo"))
 
 import server as demo  # noqa: E402
+
+
+def test_assumptions_payload_is_identical_on_both_transports():
+    """The stdlib demo server must not 404 where FastAPI answers."""
+    from fastapi.testclient import TestClient
+
+    from rra.api import app
+
+    served = TestClient(app).get("/api/assumptions")
+    assert served.status_code == 200
+    payload = served.json()
+    # demo/server.py re-exports the handler's own builder, so the objects are equal
+    assert demo.assumptions_payload() == payload
+    assert payload["ok"] is True
+    assert len(payload["parameters"]) == 21
+    assert payload["source"]["source"] in {"default", "pwd_rti"}
+    assert "| Parameter |" in payload["register_markdown"]
+
+
+def test_stdlib_http_route_answers_where_fastapi_does(monkeypatch):
+    """Exercise the real socket route, not just the shared payload builder.
+
+    The stdlib handler is what ``python demo/server.py`` runs, so a missing branch in
+    ``_handle`` would 404 in the browser while the FastAPI test above still passed.
+    """
+    from fastapi.testclient import TestClient
+
+    from rra.api import app
+
+    expected = TestClient(app).get("/api/assumptions").json()
+    monkeypatch.setattr(demo.DemoHandler, "log_message", lambda *a, **k: None)
+    httpd = ThreadingHTTPServer(("127.0.0.1", 0), demo.DemoHandler)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    try:
+        base = f"http://127.0.0.1:{httpd.server_address[1]}"
+        for path in ("/api/assumptions", "/api/assumptions/"):
+            with urllib.request.urlopen(base + path, timeout=10) as response:
+                assert response.status == 200
+                body = json.loads(response.read().decode("utf-8"))
+            assert body == expected
+            assert body["source"]["source"] in {"default", "pwd_rti"}
+            assert {"source", "parameters", "fingerprint"} <= set(body["source"])
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
 
 
 def test_normalize_clamps_bad_input():
@@ -96,9 +146,11 @@ def test_loss_rejects_unknown_structure():
 def test_load_evidence_contains_frozen_results_and_register():
     ev = demo.load_evidence()
     assert ev["ok"] is True
-    assert ev["e1_deterioration"]["n_panel_rows"] > 500_000  # real NBI scale
-    models = {m["model"] for m in ev["e1_deterioration"]["models"]}
-    assert {"M0_markov", "M1_gbm", "climatology"} <= models
+    # The active evidence base is Indian only; US NBI results are archived, not served.
+    assert "e1_deterioration" not in ev
+    assert ev["flood_exposure"]["hazard"]["scenarios"]
+    assert len(ev["flood_exposure"]["hazard"]["scenarios"]) == 12
+    assert ev["access_baseline"]["population_views"]
     assert ev["e3_allocation"]["policies"]
     assert ev["e4_network_effects"]["by_redundancy"]
     assert "benefit_cost" in ev["e8_robustness"]["win_rate"]

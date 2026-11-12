@@ -1,0 +1,53 @@
+﻿census_village_name,census_village_code,census_subdistrict_code,residence,census_population_2011,pmgsy_habitation_point_count,match_status,population_interpretation
+Perumbalam,628206,05673,Rural,9733,0,unmatched_census_village,no PMGSY habitation-name match found
+Panavally,628207,05673,Rural,31570,0,unmatched_census_village,no PMGSY habitation-name match found
+Thuravoor Thekku,628208,05673,Rural,28802,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Pattanakkad,628209,05673,Rural,31629,0,unmatched_census_village,no PMGSY habitation-name match found
+Kadakkarappally,628210,05673,Rural,20487,0,unmatched_census_village,no PMGSY habitation-name match found
+Cherthala North (Part),628211,05673,Rural,13945,0,unmatched_census_village,no PMGSY habitation-name match found
+Cherthala South (Part),628212,05673,Rural,26157,0,unmatched_census_village,no PMGSY habitation-name match found
+Mararikkulam North,628213,05673,Rural,31322,0,unmatched_census_village,no PMGSY habitation-name match found
+Kalavoor,628226,05674,Rural,29808,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Aryad South  (Part),628227,05674,Rural,0,0,unmatched_census_village,no PMGSY habitation-name match found
+Mullakkal (Part) ,628228,05674,Rural,497,0,unmatched_census_village,no PMGSY habitation-name match found
+Ambalappuzha,628229,05674,Rural,33939,0,unmatched_census_village,no PMGSY habitation-name match found
+Karumady  ,628230,05674,Rural,13137,2,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Purakkad,628231,05674,Rural,29782,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Kainakary North,628236,05675,Rural,8292,0,unmatched_census_village,no PMGSY habitation-name match found
+Kainakary South,628237,05675,Rural,15405,0,unmatched_census_village,no PMGSY habitation-name match found
+Pulinkunnu,628238,05675,Rural,15210,0,unmatched_census_village,no PMGSY habitation-name match found
+Kunnumma,628239,05675,Rural,14252,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Kavalam,628240,05675,Rural,13089,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Neelamperoor,628241,05675,Rural,5841,0,unmatched_census_village,no PMGSY habitation-name match found
+Veliyanad,628242,05675,Rural,12501,0,unmatched_census_village,no PMGSY habitation-name match found
+Ramankary,628243,05675,Rural,10755,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Champakkulam,628244,05675,Rural,15848,0,unmatched_census_village,no PMGSY habitation-name match found
+Nedumudi,628245,05675,Rural,14601,2,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Thakazhy,628246,05675,Rural,15758,0,unmatched_census_village,no PMGSY habitation-name match found
+Edathua  ,628247,05675,Rural,21699,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Muttar,628248,05675,Rural,9200,2,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Thalavady ,628249,05675,Rural,20556,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Karuvatta,628250,05676,Rural,14755,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Cheruthana,628251,05676,Rural,12882,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Veeyapuram,628252,05676,Rural,11392,3,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Pallippad,628253,05676,Rural,24648,0,unmatched_census_village,no PMGSY habitation-name match found
+Thrikkunnapuzha,628254,05676,Rural,26679,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Arattupuzha,628255,05676,Rural,29264,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Ennakkad,628267,05677,Rural,18444,0,unmatched_census_village,no PMGSY habitation-name match found
+Pandanad (Part),628268,05677,Rural,11489,0,unmatched_census_village,no PMGSY habitation-name match found
+Thiruvanvandoor,628269,05677,Rural,12712,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Chengannur  (Part),628270,05677,Rural,1989,0,unmatched_census_village,no PMGSY habitation-name match found
+Mulakuzha (Part) ,628271,05677,Rural,28390,0,unmatched_census_village,no PMGSY habitation-name match found
+Ala (Part),628272,05677,Rural,13665,0,unmatched_census_village,no PMGSY habitation-name match found
+Puliyoor(Part),628273,05677,Rural,16531,0,unmatched_census_village,no PMGSY habitation-name match found
+Cheriyanad,628274,05677,Rural,21885,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Venmony,628275,05677,Rural,19932,0,unmatched_census_village,no PMGSY habitation-name match found
+Thriperumthura,628278,05678,Rural,15226,0,unmatched_census_village,no PMGSY habitation-name match found
+Vettiyar,628279,05678,Rural,21393,0,unmatched_census_village,no PMGSY habitation-name match found
+Thekkekara (Part),628280,05678,Rural,32373,0,unmatched_census_village,no PMGSY habitation-name match found
+Perungala,628281,05678,Rural,14151,2,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Chunakkara,628282,05678,Rural,22730,0,unmatched_census_village,no PMGSY habitation-name match found
+Noornad,628283,05678,Rural,25375,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Palamel,628284,05678,Rural,32512,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation
+Thamarakkulam,628285,05678,Rural,27017,0,unmatched_census_village,no PMGSY habitation-name match found
+Vallikunnam,628286,05678,Rural,30394,1,matched_exact_normalized_name,Census village population is a village total; do not copy/sum per habitation

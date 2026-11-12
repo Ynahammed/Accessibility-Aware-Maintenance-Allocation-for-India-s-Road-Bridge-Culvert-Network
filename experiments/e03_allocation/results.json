@@ -18,52 +18,52 @@
   "policies": [
     {
       "policy": "additive_milp",
-      "mean_person_days": 151724.92224725237,
-      "mean_spend_crore": 11.877300000000002,
-      "person_days_per_crore": 12774.361365567287,
-      "cvar_person_days": 260715.54772206128
+      "mean_person_days": 131816.4647229729,
+      "mean_spend_crore": 11.208450000000003,
+      "person_days_per_crore": 11760.454364606425,
+      "cvar_person_days": 234136.106136065
     },
     {
       "policy": "network_aware",
-      "mean_person_days": 151628.60981607749,
-      "mean_spend_crore": 11.787600000000003,
-      "person_days_per_crore": 12863.399658630888,
-      "cvar_person_days": 260715.54772206128
+      "mean_person_days": 133638.24348746164,
+      "mean_spend_crore": 11.29095,
+      "person_days_per_crore": 11835.87240112317,
+      "cvar_person_days": 247712.66934177332
     },
     {
       "policy": "random",
-      "mean_person_days": 217199.43247182426,
-      "mean_spend_crore": 12.894800000000004,
-      "person_days_per_crore": 16843.95511925925,
-      "cvar_person_days": 347808.0080333161
+      "mean_person_days": 208551.72644293355,
+      "mean_spend_crore": 12.3152,
+      "person_days_per_crore": 16934.497729873125,
+      "cvar_person_days": 317286.0648081257
     },
     {
       "policy": "benefit_cost",
-      "mean_person_days": 217199.43247182426,
-      "mean_spend_crore": 12.894800000000004,
-      "person_days_per_crore": 16843.95511925925,
-      "cvar_person_days": 347808.0080333161
+      "mean_person_days": 208551.72644293355,
+      "mean_spend_crore": 12.3152,
+      "person_days_per_crore": 16934.497729873125,
+      "cvar_person_days": 317286.0648081257
     },
     {
       "policy": "worst_first",
-      "mean_person_days": 204436.1846611832,
-      "mean_spend_crore": 11.621650000000002,
-      "person_days_per_crore": 17590.977585900724,
-      "cvar_person_days": 337656.165829589
+      "mean_person_days": 199737.9036685436,
+      "mean_spend_crore": 11.236350000000002,
+      "person_days_per_crore": 17776.048598392143,
+      "cvar_person_days": 320299.7747816293
     },
     {
       "policy": "criticality_weighted",
-      "mean_person_days": 204436.1846611832,
-      "mean_spend_crore": 11.621650000000002,
-      "person_days_per_crore": 17590.977585900724,
-      "cvar_person_days": 337656.165829589
+      "mean_person_days": 199737.9036685436,
+      "mean_spend_crore": 11.236350000000002,
+      "person_days_per_crore": 17776.048598392143,
+      "cvar_person_days": 320299.7747816293
     },
     {
       "policy": "siloed",
-      "mean_person_days": 240224.99370128923,
-      "mean_spend_crore": 11.665000000000003,
-      "person_days_per_crore": 20593.65569663859,
-      "cvar_person_days": 368844.33898882946
+      "mean_person_days": 240898.39338174654,
+      "mean_spend_crore": 11.5722,
+      "person_days_per_crore": 20816.99187550738,
+      "cvar_person_days": 370382.47399617854
     },
     {
       "policy": "do_nothing",
@@ -75,9 +75,9 @@
   ],
   "comparison_worst_first_vs_network_aware": {
     "metric": "person_days (worst_first - network_aware), positive = proposed better",
-    "mean": 52807.57484510568,
-    "ci_lo": 41031.332583636264,
-    "ci_hi": 64767.69571257472
+    "mean": 66099.66018108193,
+    "ci_lo": 53262.92972339263,
+    "ci_hi": 79653.95661212974
   },
-  "elapsed_seconds": 52.03584098815918
+  "elapsed_seconds": 23.73092007637024
 }

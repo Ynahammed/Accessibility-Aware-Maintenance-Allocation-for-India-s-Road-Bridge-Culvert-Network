@@ -55,3 +55,23 @@ def test_unknown_highway_uses_default_speed():
     g.add_node(2, x=1, y=0)
     g.add_edge(1, 2, length=100.0, highway="made_up")
     assert osm.graph_from_osm_nx(g).edges[1, 2]["speed_kph"] == 30.0
+
+
+def test_preserves_augmented_graph_metadata_and_connector_weights():
+    g = nx.MultiDiGraph()
+    g.add_node(10, x="76.3", y="9.2", kind="pmgsy", source_id="pmgsy:42", snap_dist_m="25")
+    g.add_node(11, x="76.3002", y="9.2", kind="junction")
+    g.add_edge(
+        10, 11, highway="connector", length_m="25", speed_kph="5",
+        travel_time_min="0.3", is_bridge="False", is_culvert="False",
+    )
+
+    out = osm.graph_from_osm_nx(g)
+
+    assert out.nodes[10]["kind"] == "pmgsy"
+    assert out.nodes[10]["source_id"] == "pmgsy:42"
+    assert out.nodes[10]["snap_dist_m"] == 25.0
+    assert out.edges[10, 11]["highway"] == "connector"
+    assert out.edges[10, 11]["length_m"] == 25.0
+    assert out.edges[10, 11]["speed_kph"] == 5.0
+    assert out.edges[10, 11]["travel_time_min"] == 0.3

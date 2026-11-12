@@ -96,7 +96,7 @@ DEFAULT_PARAMETERS: tuple[Parameter, ...] = (
     # --- deterioration transfer
     Parameter(
         "deterioration_acceleration", "multiplier", 1.0, 3.0, 1.5, "assumed",
-        "Indian climate/load/maintenance differ from NBI conditions.",
+        "Deterioration rate under Indian monsoon, load and maintenance conditions is not observable from any available register.",
         "Multiplier on hazard rates; reported as a sensitivity axis.",
     ),
     # --- repair effectiveness
@@ -224,12 +224,33 @@ class AssumptionRegister:
             draws.append({name: p.sample(rng) for name, p in self.parameters.items()})
         return draws
 
-    def to_markdown(self) -> str:
-        lines = [
-            "# Assumptions register",
-            "",
-            "Auto-generated from `src/rra/assumptions.py` — do not edit by hand.",
-            "Every entry is an **assumed** or **fitted** quantity that is *varied*, not claimed.",
+    def to_markdown(self, note: str | None = None, measured: bool = False) -> str:
+        """Render the register as markdown, optionally with a provenance note.
+
+        ``note`` lets a caller that has applied measured overrides say which reply the
+        values came from, and ``measured`` switches the preamble to the live-register one:
+        the file in ``docs/assumptions.md`` describes the default register, so serving its
+        "every entry is assumed" text next to measured values would contradict the table.
+        """
+        lines = ["# Assumptions register", ""]
+        if measured:
+            lines += [
+                "The register in force: rendered from `src/rra/assumptions.py` with the "
+                "validated PWD/RTI overrides named below.",
+                "The `Source` column is `assumed` (default, varied in E8), `fitted` "
+                "(computed from the reply's rows) or `real` (stated in the reply); rows the "
+                "reply does not cover remain assumptions and are varied, not claimed.",
+            ]
+        else:
+            lines += [
+                "Auto-generated from `src/rra/assumptions.py` — do not edit by hand.",
+                "Every entry is an **assumed** or **fitted** quantity that is *varied*, not claimed.",
+                "Measured values from a PWD/RTI reply are applied by `scripts/ingest_pwd_reply.py` "
+                "and recorded separately in `docs/assumptions_measured.md`.",
+            ]
+        if note:
+            lines += ["", str(note).strip()]
+        lines += [
             "",
             "| Parameter | Unit | Range | Default | Source | Why needed | How varied |",
             "|---|---|---|---|---|---|---|",

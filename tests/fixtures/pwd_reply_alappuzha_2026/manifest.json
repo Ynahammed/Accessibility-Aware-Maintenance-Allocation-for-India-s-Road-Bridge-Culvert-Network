@@ -1,0 +1,29 @@
+{
+  "office": "Executive Engineer, PWD (Bridges), Alappuzha",
+  "application_ref": "PWD/ALP/RTI/2026/123",
+  "reply_date": "2026-11-20",
+  "tables": {
+    "structures": {
+      "file": "PWD_ALP_RTI_2026_Reply.xlsx",
+      "sheet": "Structures"
+    },
+    "inspections": {
+      "file": "PWD_ALP_RTI_2026_Reply.xlsx",
+      "sheet": "Inspections"
+    },
+    "closures": {
+      "file": "PWD_ALP_RTI_2026_Reply.xlsx",
+      "sheet": "Closures"
+    },
+    "expenditure": {
+      "file": "PWD_ALP_RTI_2026_Reply.xlsx",
+      "sheet": "Expenditure"
+    },
+    "sor": {
+      "file": "PWD_ALP_RTI_2026_Reply.xlsx",
+      "sheet": "SoR"
+    }
+  },
+  "sample": true,
+  "note": "Constructed sample workbook for loader tests. It mirrors the shape of a PWD reply but is not an RTI response and none of its figures are observed data."
+}

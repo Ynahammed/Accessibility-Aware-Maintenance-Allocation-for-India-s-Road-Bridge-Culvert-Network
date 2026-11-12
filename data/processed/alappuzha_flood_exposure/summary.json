@@ -1,0 +1,3841 @@
+{
+  "title": "Alappuzha modelled flood exposure (KSDMA return-period depth)",
+  "scope": "Indian official sources only: KSDMA/CIMA flood depth rasters, PMGSY DRRP roads, district OSM roads/facilities, Census 2011 and PMGSY habitation points",
+  "hazard": {
+    "product": "KSDMA Flood Hazard Probability of Kerala, historical and RCP8.5 return periods",
+    "raster_value_unit": "centimetres of modelled flood depth (KSDMA/RMSI documentation)",
+    "raster_cell_size_degrees": [
+      0.0008333333,
+      0.0008333333
+    ],
+    "approximate_cell_size_m": 92.1,
+    "scenarios": [
+      {
+        "key": "historical_10yr",
+        "scenario": "historical",
+        "return_period_years": 10,
+        "source": "historical_10_25_50_years.zip:1. Flood Return Probability History (10, 25, 50 years)/Kerala_Flood_10_yr_Historical.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 374312
+      },
+      {
+        "key": "historical_25yr",
+        "scenario": "historical",
+        "return_period_years": 25,
+        "source": "historical_10_25_50_years.zip:1. Flood Return Probability History (10, 25, 50 years)/Kerala_Flood_25_yr_Historical.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 368474
+      },
+      {
+        "key": "historical_50yr",
+        "scenario": "historical",
+        "return_period_years": 50,
+        "source": "historical_10_25_50_years.zip:1. Flood Return Probability History (10, 25, 50 years)/Kerala_Flood_50_yr_Historical.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 364432
+      },
+      {
+        "key": "historical_100yr",
+        "scenario": "historical",
+        "return_period_years": 100,
+        "source": "historical_100_200_500_years.zip:2.Flood Return Probability History (100, 200, 500 years)/Kerala_Flood_100_yr_Historical.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 359437
+      },
+      {
+        "key": "historical_200yr",
+        "scenario": "historical",
+        "return_period_years": 200,
+        "source": "historical_100_200_500_years.zip:2.Flood Return Probability History (100, 200, 500 years)/Kerala_Flood_200_yr_Historical.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 354956
+      },
+      {
+        "key": "historical_500yr",
+        "scenario": "historical",
+        "return_period_years": 500,
+        "source": "historical_100_200_500_years.zip:2.Flood Return Probability History (100, 200, 500 years)/Kerala_Flood_500_yr_Historical.tif",
+        "sample_format": "int32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 0
+      },
+      {
+        "key": "rcp85_10yr",
+        "scenario": "rcp85",
+        "return_period_years": 10,
+        "source": "rcp85_10_25_50_years.zip:3. Flood Return Probability RCP8.5 (10, 25, 50 years)/Kerala_Flood_10_yr_RCP.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 348977
+      },
+      {
+        "key": "rcp85_25yr",
+        "scenario": "rcp85",
+        "return_period_years": 25,
+        "source": "rcp85_10_25_50_years.zip:3. Flood Return Probability RCP8.5 (10, 25, 50 years)/Kerala_Flood_25_yr_RCP.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 348977
+      },
+      {
+        "key": "rcp85_50yr",
+        "scenario": "rcp85",
+        "return_period_years": 50,
+        "source": "rcp85_10_25_50_years.zip:3. Flood Return Probability RCP8.5 (10, 25, 50 years)/Kerala_Flood_50_yr_RCP.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 332209
+      },
+      {
+        "key": "rcp85_100yr",
+        "scenario": "rcp85",
+        "return_period_years": 100,
+        "source": "rcp85_100_200_500_years.zip:4.Flood Return Probability RCP8.5 (100, 200, 500 years)/Kerala_Flood_100_yr_RCP.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 326314
+      },
+      {
+        "key": "rcp85_200yr",
+        "scenario": "rcp85",
+        "return_period_years": 200,
+        "source": "rcp85_100_200_500_years.zip:4.Flood Return Probability RCP8.5 (100, 200, 500 years)/Kerala_Flood_200_yr_RCP.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 322861
+      },
+      {
+        "key": "rcp85_500yr",
+        "scenario": "rcp85",
+        "return_period_years": 500,
+        "source": "rcp85_100_200_500_years.zip:4.Flood Return Probability RCP8.5 (100, 200, 500 years)/Kerala_Flood_500_yr_RCP.tif",
+        "sample_format": "float32",
+        "district_window_cells": 485500,
+        "negative_sentinel_cells": 316226
+      }
+    ]
+  },
+  "thresholds": {
+    "depth_bands_cm": [
+      "0-25",
+      "25-50",
+      "50-100",
+      "100-200",
+      "200+"
+    ],
+    "indicative_vehicle_depth_cm": 30.0,
+    "line_sample_spacing_m": 100.0
+  },
+  "unit_validation": {
+    "claim": "raster cell values are modelled flood depth in centimetres",
+    "corroboration": "KSDMA's own Alappuzha district map PDFs classify the same surface as 'Flood Water Level (m)' with bands <4, 4-8, 8-12 and >12 m at data/raw/ksdma/flood/alappuzha_historical.pdf and alappuzha_rcp85.pdf. Those breaks correspond to 400, 800 and 1200 in the raster's own units, and the observed district values (0 to roughly 1300) reproduce exactly those classes under a centimetre reading.",
+    "caveat": "The district PDFs cover Ambalapuzha taluk, not the whole district, and label the surface 'water level' rather than 'depth'. The scaling is corroborated; the exact datum is not documented in the raster package."
+  },
+  "district_area": {
+    "historical_10yr": {
+      "flooded_share": 0.35505645994371815,
+      "median_flooded_cm": 206.09999084472656,
+      "p95_flooded_cm": 352.79998779296875,
+      "max_cm": 945.0,
+      "share_ge_vehicle_threshold": 0.3511915363516546,
+      "district_cells": 168438
+    },
+    "historical_25yr": {
+      "flooded_share": 0.3722081715527375,
+      "median_flooded_cm": 223.0,
+      "p95_flooded_cm": 388.0,
+      "max_cm": 1050.0,
+      "share_ge_vehicle_threshold": 0.35775181372374404,
+      "district_cells": 168438
+    },
+    "historical_50yr": {
+      "flooded_share": 0.38433726356285397,
+      "median_flooded_cm": 244.0,
+      "p95_flooded_cm": 407.0,
+      "max_cm": 1074.0,
+      "share_ge_vehicle_threshold": 0.3702846151106045,
+      "district_cells": 168438
+    },
+    "historical_100yr": {
+      "flooded_share": 0.40360251249718,
+      "median_flooded_cm": 271.0,
+      "p95_flooded_cm": 432.0,
+      "max_cm": 1087.0,
+      "share_ge_vehicle_threshold": 0.39015542811004644,
+      "district_cells": 168438
+    },
+    "historical_200yr": {
+      "flooded_share": 0.4205286218074306,
+      "median_flooded_cm": 307.0,
+      "p95_flooded_cm": 468.0,
+      "max_cm": 1202.0,
+      "share_ge_vehicle_threshold": 0.4063512984005984,
+      "district_cells": 168438
+    },
+    "historical_500yr": {
+      "flooded_share": 0.43911112694285137,
+      "median_flooded_cm": 337.0,
+      "p95_flooded_cm": 501.0,
+      "max_cm": 1265.0,
+      "share_ge_vehicle_threshold": 0.42622804830263955,
+      "district_cells": 168438
+    },
+    "rcp85_10yr": {
+      "flooded_share": 0.4292558686282193,
+      "median_flooded_cm": 290.6999816894531,
+      "p95_flooded_cm": 466.1999816894531,
+      "max_cm": 1149.2999267578125,
+      "share_ge_vehicle_threshold": 0.416829931488144,
+      "district_cells": 168438
+    },
+    "rcp85_25yr": {
+      "flooded_share": 0.4292558686282193,
+      "median_flooded_cm": 323.0,
+      "p95_flooded_cm": 518.0,
+      "max_cm": 1277.0,
+      "share_ge_vehicle_threshold": 0.4185872546575001,
+      "district_cells": 168438
+    },
+    "rcp85_50yr": {
+      "flooded_share": 0.48277704555979056,
+      "median_flooded_cm": 369.0,
+      "p95_flooded_cm": 615.0,
+      "max_cm": 1487.0,
+      "share_ge_vehicle_threshold": 0.4686828387893468,
+      "district_cells": 168438
+    },
+    "rcp85_100yr": {
+      "flooded_share": 0.5017454493641578,
+      "median_flooded_cm": 395.0,
+      "p95_flooded_cm": 632.0,
+      "max_cm": 1578.0,
+      "share_ge_vehicle_threshold": 0.4876571794963132,
+      "district_cells": 168438
+    },
+    "rcp85_200yr": {
+      "flooded_share": 0.5098255738016362,
+      "median_flooded_cm": 415.0,
+      "p95_flooded_cm": 657.0,
+      "max_cm": 1655.0,
+      "share_ge_vehicle_threshold": 0.4952920362388535,
+      "district_cells": 168438
+    },
+    "rcp85_500yr": {
+      "flooded_share": 0.5325342262434842,
+      "median_flooded_cm": 435.0,
+      "p95_flooded_cm": 711.0,
+      "max_cm": 1743.0,
+      "share_ge_vehicle_threshold": 0.5181372374404826,
+      "district_cells": 168438
+    }
+  },
+  "district_area_latitude_split": {
+    "historical_10yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.20552341279024916,
+        "median_flooded_cm": 202.5
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.6273464620041788,
+        "median_flooded_cm": 211.5
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.1949579831932773,
+        "median_flooded_cm": 172.79998779296875
+      }
+    },
+    "historical_25yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.21445653012419966,
+        "median_flooded_cm": 218.5
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.6485365974038794,
+        "median_flooded_cm": 231.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.2188141923436041,
+        "median_flooded_cm": 170.0
+      }
+    },
+    "historical_50yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.22295764869243231,
+        "median_flooded_cm": 251.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.6620107595873846,
+        "median_flooded_cm": 250.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.23452380952380952,
+        "median_flooded_cm": 179.0
+      }
+    },
+    "historical_100yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.23894160302399137,
+        "median_flooded_cm": 284.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.6839412335685965,
+        "median_flooded_cm": 278.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.2549719887955182,
+        "median_flooded_cm": 189.0
+      }
+    },
+    "historical_200yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.2524724215073671,
+        "median_flooded_cm": 321.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.7067930177845779,
+        "median_flooded_cm": 319.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.26862745098039215,
+        "median_flooded_cm": 197.0
+      }
+    },
+    "historical_500yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.27239065031242765,
+        "median_flooded_cm": 348.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.7198065248506984,
+        "median_flooded_cm": 353.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.2930905695611578,
+        "median_flooded_cm": 208.0
+      }
+    },
+    "rcp85_10yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.23496104296844866,
+        "median_flooded_cm": 299.6999816894531
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.709178553213892,
+        "median_flooded_cm": 289.340087890625
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.32605042016806723,
+        "median_flooded_cm": 287.1000061035156
+      }
+    },
+    "rcp85_25yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.23496104296844866,
+        "median_flooded_cm": 333.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.709178553213892,
+        "median_flooded_cm": 321.4889831542969
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.32605042016806723,
+        "median_flooded_cm": 319.0
+      }
+    },
+    "rcp85_50yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.2628095348299005,
+        "median_flooded_cm": 376.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.7756938617705609,
+        "median_flooded_cm": 364.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.39997665732959853,
+        "median_flooded_cm": 399.0
+      }
+    },
+    "rcp85_100yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.29395973154362415,
+        "median_flooded_cm": 382.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.7843475971900038,
+        "median_flooded_cm": 393.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.4151493930905696,
+        "median_flooded_cm": 435.0
+      }
+    },
+    "rcp85_200yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.30631798194862303,
+        "median_flooded_cm": 391.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.7870786239573565,
+        "median_flooded_cm": 416.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.42434640522875816,
+        "median_flooded_cm": 459.0
+      }
+    },
+    "rcp85_500yr": {
+      "west_kayal_lt_76.40E": {
+        "cells": 64815,
+        "flooded_share": 0.3210059399830286,
+        "median_flooded_cm": 408.0
+      },
+      "central_76.40_76.52E": {
+        "cells": 60783,
+        "flooded_share": 0.7970814207919977,
+        "median_flooded_cm": 436.0
+      },
+      "east_upland_ge_76.52E": {
+        "cells": 42840,
+        "flooded_share": 0.47721755368814195,
+        "median_flooded_cm": 479.0
+      }
+    }
+  },
+  "roads": {
+    "pmgsy": {
+      "historical_10yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 468.5,
+        "at_or_above_vehicle_threshold_km": 460.92,
+        "bands_km": {
+          "0-25": 4.06,
+          "25-50": 34.13,
+          "50-100": 75.41,
+          "100-200": 177.82,
+          "200+": 177.07
+        },
+        "roads_with_any_depth": 620,
+        "roads_with_vehicle_threshold_depth": 611,
+        "any_depth_share": 0.20404480805491657,
+        "vehicle_threshold_share": 0.2007435067847858,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 181.74,
+            "vehicle_threshold_km": 178.96,
+            "any_depth_share": 0.2686872085207359
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 2.29,
+            "vehicle_threshold_km": 2.09,
+            "any_depth_share": 0.05507440624987721
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.47,
+            "vehicle_threshold_km": 2.47,
+            "any_depth_share": 0.536516510690827
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.06,
+            "vehicle_threshold_km": 0.06,
+            "any_depth_share": 0.16654601902942054
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 257.67,
+            "vehicle_threshold_km": 253.07,
+            "any_depth_share": 0.17509099769243672
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 24.27,
+            "vehicle_threshold_km": 24.27,
+            "any_depth_share": 0.2398791374405025
+          }
+        }
+      },
+      "historical_25yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 512.04,
+        "at_or_above_vehicle_threshold_km": 470.23,
+        "bands_km": {
+          "0-25": 36.97,
+          "25-50": 34.24,
+          "50-100": 71.26,
+          "100-200": 154.78,
+          "200+": 214.78
+        },
+        "roads_with_any_depth": 680,
+        "roads_with_vehicle_threshold_depth": 629,
+        "any_depth_share": 0.2230076916039263,
+        "vehicle_threshold_share": 0.2047982712735612,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 194.76,
+            "vehicle_threshold_km": 182.12,
+            "any_depth_share": 0.2879454965829184
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 2.36,
+            "vehicle_threshold_km": 2.29,
+            "any_depth_share": 0.05672715780872679
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.53,
+            "vehicle_threshold_km": 2.47,
+            "any_depth_share": 0.5500368219201442
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.18,
+            "vehicle_threshold_km": 0.06,
+            "any_depth_share": 0.4996380570882616
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 285.71,
+            "vehicle_threshold_km": 258.81,
+            "any_depth_share": 0.19414980167918522
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 26.48,
+            "vehicle_threshold_km": 24.47,
+            "any_depth_share": 0.26178239892588784
+          }
+        }
+      },
+      "historical_50yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 544.46,
+        "at_or_above_vehicle_threshold_km": 501.14,
+        "bands_km": {
+          "0-25": 38.32,
+          "25-50": 33.61,
+          "50-100": 70.19,
+          "100-200": 151.89,
+          "200+": 250.46
+        },
+        "roads_with_any_depth": 721,
+        "roads_with_vehicle_threshold_depth": 682,
+        "any_depth_share": 0.23712750521575215,
+        "vehicle_threshold_share": 0.21826043779859314,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 203.77,
+            "vehicle_threshold_km": 190.3,
+            "any_depth_share": 0.30125678053984006
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 2.43,
+            "vehicle_threshold_km": 2.36,
+            "any_depth_share": 0.058379909367576366
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.57,
+            "vehicle_threshold_km": 2.53,
+            "any_depth_share": 0.5567969775348028
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 308.27,
+            "vehicle_threshold_km": 279.57,
+            "any_depth_share": 0.20947578627707827
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 27.2,
+            "vehicle_threshold_km": 26.14,
+            "any_depth_share": 0.26882509268143767
+          }
+        }
+      },
+      "historical_100yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 589.44,
+        "at_or_above_vehicle_threshold_km": 548.95,
+        "bands_km": {
+          "0-25": 35.95,
+          "25-50": 34.79,
+          "50-100": 73.79,
+          "100-200": 146.21,
+          "200+": 298.69
+        },
+        "roads_with_any_depth": 784,
+        "roads_with_vehicle_threshold_depth": 744,
+        "any_depth_share": 0.25671754890051235,
+        "vehicle_threshold_share": 0.23908302536125178,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 217.64,
+            "vehicle_threshold_km": 205.92,
+            "any_depth_share": 0.3217695319389947
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 3.42,
+            "vehicle_threshold_km": 2.74,
+            "any_depth_share": 0.08204086039604042
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.66,
+            "vehicle_threshold_km": 2.57,
+            "any_depth_share": 0.5770774443787786
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 337.88,
+            "vehicle_threshold_km": 310.35,
+            "any_depth_share": 0.22960066899543868
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 27.6,
+            "vehicle_threshold_km": 27.14,
+            "any_depth_share": 0.2728223328049172
+          }
+        }
+      },
+      "historical_200yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 637.69,
+        "at_or_above_vehicle_threshold_km": 593.47,
+        "bands_km": {
+          "0-25": 38.05,
+          "25-50": 37.26,
+          "50-100": 74.39,
+          "100-200": 137.42,
+          "200+": 350.56
+        },
+        "roads_with_any_depth": 818,
+        "roads_with_vehicle_threshold_depth": 786,
+        "any_depth_share": 0.2777317687268725,
+        "vehicle_threshold_share": 0.25847272622486944,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 230.04,
+            "vehicle_threshold_km": 218.06,
+            "any_depth_share": 0.3400981098549714
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 3.99,
+            "vehicle_threshold_km": 3.65,
+            "any_depth_share": 0.09578530207140698
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.66,
+            "vehicle_threshold_km": 2.6,
+            "any_depth_share": 0.5770774443787786
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 371.73,
+            "vehicle_threshold_km": 341.17,
+            "any_depth_share": 0.2526007340059067
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 29.03,
+            "vehicle_threshold_km": 27.76,
+            "any_depth_share": 0.2869512496130484
+          }
+        }
+      },
+      "historical_500yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 686.45,
+        "at_or_above_vehicle_threshold_km": 642.74,
+        "bands_km": {
+          "0-25": 36.57,
+          "25-50": 39.06,
+          "50-100": 75.42,
+          "100-200": 144.95,
+          "200+": 390.44
+        },
+        "roads_with_any_depth": 885,
+        "roads_with_vehicle_threshold_depth": 846,
+        "any_depth_share": 0.29896810776797755,
+        "vehicle_threshold_share": 0.27993118448071946,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 243.04,
+            "vehicle_threshold_km": 230.96,
+            "any_depth_share": 0.3593131763328455
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 4.89,
+            "vehicle_threshold_km": 4.54,
+            "any_depth_share": 0.11727107233645151
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.72,
+            "vehicle_threshold_km": 2.6,
+            "any_depth_share": 0.5905977556080958
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 405.83,
+            "vehicle_threshold_km": 375.59,
+            "any_depth_share": 0.2757688981034942
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 29.74,
+            "vehicle_threshold_km": 28.81,
+            "any_depth_share": 0.294024821837834
+          }
+        }
+      },
+      "rcp85_10yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 693.61,
+        "at_or_above_vehicle_threshold_km": 657.41,
+        "bands_km": {
+          "0-25": 29.76,
+          "25-50": 30.19,
+          "50-100": 66.54,
+          "100-200": 149.69,
+          "200+": 417.42
+        },
+        "roads_with_any_depth": 818,
+        "roads_with_vehicle_threshold_depth": 786,
+        "any_depth_share": 0.3020864873318478,
+        "vehicle_threshold_share": 0.286320378363677,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 249.33,
+            "vehicle_threshold_km": 239.58,
+            "any_depth_share": 0.3686264471523317
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 3.58,
+            "vehicle_threshold_km": 3.23,
+            "any_depth_share": 0.08586879271830952
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.78,
+            "vehicle_threshold_km": 2.78,
+            "any_depth_share": 0.6041180668374129
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.18,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 406.11,
+            "vehicle_threshold_km": 381.56,
+            "any_depth_share": 0.2759619158644876
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 31.57,
+            "vehicle_threshold_km": 30.08,
+            "any_depth_share": 0.3120537212306437
+          }
+        }
+      },
+      "rcp85_25yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 693.61,
+        "at_or_above_vehicle_threshold_km": 661.59,
+        "bands_km": {
+          "0-25": 28.53,
+          "25-50": 25.76,
+          "50-100": 59.42,
+          "100-200": 132.57,
+          "200+": 447.33
+        },
+        "roads_with_any_depth": 818,
+        "roads_with_vehicle_threshold_depth": 793,
+        "any_depth_share": 0.3020864873318478,
+        "vehicle_threshold_share": 0.28814088486884154,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 249.33,
+            "vehicle_threshold_km": 240.66,
+            "any_depth_share": 0.3686264471523317
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 3.58,
+            "vehicle_threshold_km": 3.3,
+            "any_depth_share": 0.08586879271830952
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 2.78,
+            "vehicle_threshold_km": 2.78,
+            "any_depth_share": 0.6041180668374129
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.18,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 406.11,
+            "vehicle_threshold_km": 384.42,
+            "any_depth_share": 0.2759619158644876
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 31.57,
+            "vehicle_threshold_km": 30.24,
+            "any_depth_share": 0.3120537212306437
+          }
+        }
+      },
+      "rcp85_50yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 864.41,
+        "at_or_above_vehicle_threshold_km": 820.84,
+        "bands_km": {
+          "0-25": 37.3,
+          "25-50": 40.56,
+          "50-100": 72.95,
+          "100-200": 143.63,
+          "200+": 569.98
+        },
+        "roads_with_any_depth": 1007,
+        "roads_with_vehicle_threshold_depth": 972,
+        "any_depth_share": 0.3764746478778024,
+        "vehicle_threshold_share": 0.3574986984926312,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 295.62,
+            "vehicle_threshold_km": 282.09,
+            "any_depth_share": 0.4370587869180308
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 4.51,
+            "vehicle_threshold_km": 4.31,
+            "any_depth_share": 0.10833920681409782
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 3.07,
+            "vehicle_threshold_km": 3.02,
+            "any_depth_share": 0.6652573907434629
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 524.92,
+            "vehicle_threshold_km": 495.93,
+            "any_depth_share": 0.35669729537096506
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 36.06,
+            "vehicle_threshold_km": 35.26,
+            "any_depth_share": 0.3564065745898461
+          }
+        }
+      },
+      "rcp85_100yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 899.81,
+        "at_or_above_vehicle_threshold_km": 855.52,
+        "bands_km": {
+          "0-25": 37.77,
+          "25-50": 35.26,
+          "50-100": 77.89,
+          "100-200": 144.73,
+          "200+": 604.17
+        },
+        "roads_with_any_depth": 1049,
+        "roads_with_vehicle_threshold_depth": 1010,
+        "any_depth_share": 0.39189233454833394,
+        "vehicle_threshold_share": 0.37260280509528754,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 307.16,
+            "vehicle_threshold_km": 292.77,
+            "any_depth_share": 0.4541154399608528
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 4.93,
+            "vehicle_threshold_km": 4.79,
+            "any_depth_share": 0.1182557161671953
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 3.1,
+            "vehicle_threshold_km": 3.02,
+            "any_depth_share": 0.6720175463581216
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 548.12,
+            "vehicle_threshold_km": 519.07,
+            "any_depth_share": 0.3724601454368156
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 36.27,
+            "vehicle_threshold_km": 35.64,
+            "any_depth_share": 0.3585764749720487
+          }
+        }
+      },
+      "rcp85_200yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 918.96,
+        "at_or_above_vehicle_threshold_km": 874.01,
+        "bands_km": {
+          "0-25": 39.71,
+          "25-50": 36.27,
+          "50-100": 73.73,
+          "100-200": 143.36,
+          "200+": 625.89
+        },
+        "roads_with_any_depth": 1086,
+        "roads_with_vehicle_threshold_depth": 1041,
+        "any_depth_share": 0.4002326932980707,
+        "vehicle_threshold_share": 0.38065571544947197,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 313.11,
+            "vehicle_threshold_km": 298.79,
+            "any_depth_share": 0.46292099720831537
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 5.02,
+            "vehicle_threshold_km": 5.02,
+            "any_depth_share": 0.120442072533886
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 3.1,
+            "vehicle_threshold_km": 3.05,
+            "any_depth_share": 0.6720175463581216
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.24,
+            "vehicle_threshold_km": 0.24,
+            "any_depth_share": 0.6661840761176822
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 561.11,
+            "vehicle_threshold_km": 530.81,
+            "any_depth_share": 0.38129164215499767
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 36.38,
+            "vehicle_threshold_km": 36.11,
+            "any_depth_share": 0.35966142516315
+          }
+        }
+      },
+      "rcp85_500yr": {
+        "sampled_length_km": 2296.06,
+        "any_depth_km": 993.97,
+        "at_or_above_vehicle_threshold_km": 943.25,
+        "bands_km": {
+          "0-25": 42.67,
+          "25-50": 43.34,
+          "50-100": 78.29,
+          "100-200": 148.19,
+          "200+": 681.48
+        },
+        "roads_with_any_depth": 1173,
+        "roads_with_vehicle_threshold_depth": 1129,
+        "any_depth_share": 0.4329016389804598,
+        "vehicle_threshold_share": 0.41081166531013885,
+        "by_class": {
+          "Major District Road (MDR)": {
+            "sampled_length_km": 676.39,
+            "any_depth_km": 332.73,
+            "vehicle_threshold_km": 316.85,
+            "any_depth_share": 0.4919269034837592
+          },
+          "National Highway": {
+            "sampled_length_km": 41.66,
+            "any_depth_km": 5.5,
+            "vehicle_threshold_km": 5.5,
+            "any_depth_share": 0.13201133344583305
+          },
+          "OT": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.4
+          },
+          "Rural Road (ODR)": {
+            "sampled_length_km": 4.61,
+            "any_depth_km": 3.1,
+            "vehicle_threshold_km": 3.1,
+            "any_depth_share": 0.6720175463581216
+          },
+          "Rural Road (TRACK)": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.36,
+            "vehicle_threshold_km": 0.36,
+            "any_depth_share": 0.9992761141765232
+          },
+          "Rural Road (Village Road)": {
+            "sampled_length_km": 1471.62,
+            "any_depth_km": 615.07,
+            "vehicle_threshold_km": 580.53,
+            "any_depth_share": 0.41795330313643875
+          },
+          "State Highway": {
+            "sampled_length_km": 101.16,
+            "any_depth_km": 37.11,
+            "vehicle_threshold_km": 36.8,
+            "any_depth_share": 0.36681215601450146
+          }
+        }
+      }
+    },
+    "osm": {
+      "historical_10yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 1651.85,
+        "at_or_above_vehicle_threshold_km": 1624.18,
+        "bands_km": {
+          "0-25": 15.84,
+          "25-50": 98.5,
+          "50-100": 249.03,
+          "100-200": 621.97,
+          "200+": 666.52
+        },
+        "roads_with_any_depth": 7394,
+        "roads_with_vehicle_threshold_depth": 7207,
+        "any_depth_share": 0.20718193058579235,
+        "vehicle_threshold_share": 0.20371144354440915,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 5.93,
+            "vehicle_threshold_km": 5.93,
+            "any_depth_share": 0.10065160894810798
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.02,
+            "vehicle_threshold_km": 2.91,
+            "any_depth_share": 0.25796393997575817
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 9.17,
+            "vehicle_threshold_km": 8.66,
+            "any_depth_share": 0.22292566138319797
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 56.4,
+            "vehicle_threshold_km": 56.03,
+            "any_depth_share": 0.23345229914678034
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 87.51,
+            "vehicle_threshold_km": 85.9,
+            "any_depth_share": 0.30160343913239096
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.58,
+            "vehicle_threshold_km": 0.44,
+            "any_depth_share": 0.31699237753452153
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.39,
+            "vehicle_threshold_km": 0.39,
+            "any_depth_share": 0.514588179978311
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 32.13,
+            "vehicle_threshold_km": 31.15,
+            "any_depth_share": 0.19281170563836963
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.04,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.040232487524817666
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 687.63,
+            "vehicle_threshold_km": 677.25,
+            "any_depth_share": 0.19918938855974125
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 267.11,
+            "vehicle_threshold_km": 262.52,
+            "any_depth_share": 0.2284939531264301
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 21.51,
+            "vehicle_threshold_km": 20.56,
+            "any_depth_share": 0.16834294428731955
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.04,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.12230039362855533
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 85.05,
+            "vehicle_threshold_km": 82.12,
+            "any_depth_share": 0.17707778398476773
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.06,
+            "vehicle_threshold_km": 0.06,
+            "any_depth_share": 0.20877138069365078
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 100.53,
+            "vehicle_threshold_km": 100.36,
+            "any_depth_share": 0.7308999536422802
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 6.07,
+            "vehicle_threshold_km": 6.07,
+            "any_depth_share": 0.03524987575008455
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.01,
+            "vehicle_threshold_km": 0.01,
+            "any_depth_share": 0.002903455537036447
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 288.15,
+            "vehicle_threshold_km": 283.24,
+            "any_depth_share": 0.17876117856649826
+          }
+        }
+      },
+      "historical_25yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 1800.19,
+        "at_or_above_vehicle_threshold_km": 1672.11,
+        "bands_km": {
+          "0-25": 108.96,
+          "25-50": 113.59,
+          "50-100": 232.03,
+          "100-200": 538.74,
+          "200+": 806.87
+        },
+        "roads_with_any_depth": 8116,
+        "roads_with_vehicle_threshold_depth": 7510,
+        "any_depth_share": 0.22578735334397043,
+        "vehicle_threshold_share": 0.2097230244585218,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 5.93,
+            "vehicle_threshold_km": 5.93,
+            "any_depth_share": 0.10065160894810798
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.13,
+            "vehicle_threshold_km": 2.91,
+            "any_depth_share": 0.2675279465123337
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 9.93,
+            "vehicle_threshold_km": 9.26,
+            "any_depth_share": 0.2412967540146592
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 63.42,
+            "vehicle_threshold_km": 56.96,
+            "any_depth_share": 0.2624899682976163
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 94.9,
+            "vehicle_threshold_km": 89.49,
+            "any_depth_share": 0.3270690289208019
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.59,
+            "vehicle_threshold_km": 0.48,
+            "any_depth_share": 0.3204492757551187
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 34.19,
+            "vehicle_threshold_km": 31.65,
+            "any_depth_share": 0.20519785290669282
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.04,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.040232487524817666
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 753.92,
+            "vehicle_threshold_km": 697.81,
+            "any_depth_share": 0.21839111888876558
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 290.56,
+            "vehicle_threshold_km": 267.92,
+            "any_depth_share": 0.24855500496927174
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 24.0,
+            "vehicle_threshold_km": 21.65,
+            "any_depth_share": 0.187888226742805
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.05,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.14891325419605295
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 93.05,
+            "vehicle_threshold_km": 84.21,
+            "any_depth_share": 0.1937340181908026
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.06,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 103.52,
+            "vehicle_threshold_km": 102.45,
+            "any_depth_share": 0.7526470192165153
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 6.73,
+            "vehicle_threshold_km": 6.31,
+            "any_depth_share": 0.039082802908165966
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.01,
+            "vehicle_threshold_km": 0.01,
+            "any_depth_share": 0.002903455537036447
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 315.17,
+            "vehicle_threshold_km": 293.97,
+            "any_depth_share": 0.19552262670544293
+          }
+        }
+      },
+      "historical_50yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 1905.1,
+        "at_or_above_vehicle_threshold_km": 1779.33,
+        "bands_km": {
+          "0-25": 111.11,
+          "25-50": 107.4,
+          "50-100": 221.93,
+          "100-200": 516.99,
+          "200+": 947.68
+        },
+        "roads_with_any_depth": 8612,
+        "roads_with_vehicle_threshold_depth": 8041,
+        "any_depth_share": 0.23894560399491058,
+        "vehicle_threshold_share": 0.22317100496365766,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 5.93,
+            "vehicle_threshold_km": 5.93,
+            "any_depth_share": 0.10065160894810798
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.15,
+            "vehicle_threshold_km": 3.02,
+            "any_depth_share": 0.2690554536640927
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 10.49,
+            "vehicle_threshold_km": 9.77,
+            "any_depth_share": 0.25498453363657875
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 68.62,
+            "vehicle_threshold_km": 62.97,
+            "any_depth_share": 0.2840254844385323
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 97.76,
+            "vehicle_threshold_km": 93.75,
+            "any_depth_share": 0.33690413417472537
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.66,
+            "vehicle_threshold_km": 0.48,
+            "any_depth_share": 0.3575486797416361
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 36.55,
+            "vehicle_threshold_km": 34.22,
+            "any_depth_share": 0.21933656101761292
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.04,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.040232487524817666
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 801.0,
+            "vehicle_threshold_km": 747.05,
+            "any_depth_share": 0.23203015045852846
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 306.08,
+            "vehicle_threshold_km": 283.69,
+            "any_depth_share": 0.26183285085175906
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 26.01,
+            "vehicle_threshold_km": 23.3,
+            "any_depth_share": 0.20362808693175785
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.05,
+            "vehicle_threshold_km": 0.05,
+            "any_depth_share": 0.14891325419605295
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 99.63,
+            "vehicle_threshold_km": 90.32,
+            "any_depth_share": 0.20743368454593933
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 105.48,
+            "vehicle_threshold_km": 104.03,
+            "any_depth_share": 0.7668938732878032
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 7.34,
+            "vehicle_threshold_km": 6.68,
+            "any_depth_share": 0.042634943820707615
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.01,
+            "vehicle_threshold_km": 0.01,
+            "any_depth_share": 0.002903455537036447
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 335.26,
+            "vehicle_threshold_km": 312.98,
+            "any_depth_share": 0.20798248264310307
+          }
+        }
+      },
+      "historical_100yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 2071.56,
+        "at_or_above_vehicle_threshold_km": 1942.58,
+        "bands_km": {
+          "0-25": 112.85,
+          "25-50": 109.4,
+          "50-100": 224.47,
+          "100-200": 477.9,
+          "200+": 1146.94
+        },
+        "roads_with_any_depth": 9494,
+        "roads_with_vehicle_threshold_depth": 8857,
+        "any_depth_share": 0.2598237128821043,
+        "vehicle_threshold_share": 0.24364650223528075,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 6.21,
+            "vehicle_threshold_km": 6.09,
+            "any_depth_share": 0.10538969132372203
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.24,
+            "vehicle_threshold_km": 3.11,
+            "any_depth_share": 0.27642735477738795
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 11.91,
+            "vehicle_threshold_km": 10.83,
+            "any_depth_share": 0.2893931854506995
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 75.44,
+            "vehicle_threshold_km": 71.28,
+            "any_depth_share": 0.3122614560953996
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 103.22,
+            "vehicle_threshold_km": 97.89,
+            "any_depth_share": 0.3557411816601409
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.88,
+            "vehicle_threshold_km": 0.71,
+            "any_depth_share": 0.47590365718800476
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 38.26,
+            "vehicle_threshold_km": 35.84,
+            "any_depth_share": 0.2296214054395606
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.12465851418466833
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 883.87,
+            "vehicle_threshold_km": 820.7,
+            "any_depth_share": 0.25603369132977244
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 330.05,
+            "vehicle_threshold_km": 310.08,
+            "any_depth_share": 0.28233616066571615
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 27.71,
+            "vehicle_threshold_km": 25.31,
+            "any_depth_share": 0.21691397799338083
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.05,
+            "vehicle_threshold_km": 0.05,
+            "any_depth_share": 0.14891325419605295
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 107.06,
+            "vehicle_threshold_km": 100.33,
+            "any_depth_share": 0.22290835383897703
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 106.44,
+            "vehicle_threshold_km": 105.93,
+            "any_depth_share": 0.7738718610115504
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 8.44,
+            "vehicle_threshold_km": 7.27,
+            "any_depth_share": 0.04900353031638268
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.01,
+            "vehicle_threshold_km": 0.01,
+            "any_depth_share": 0.002903455537036447
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 367.62,
+            "vehicle_threshold_km": 345.98,
+            "any_depth_share": 0.22805848954672508
+          }
+        }
+      },
+      "historical_200yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 2232.98,
+        "at_or_above_vehicle_threshold_km": 2094.31,
+        "bands_km": {
+          "0-25": 117.4,
+          "25-50": 121.41,
+          "50-100": 222.02,
+          "100-200": 454.07,
+          "200+": 1318.09
+        },
+        "roads_with_any_depth": 10214,
+        "roads_with_vehicle_threshold_depth": 9612,
+        "any_depth_share": 0.28006968390559833,
+        "vehicle_threshold_share": 0.26267711296130447,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 6.21,
+            "vehicle_threshold_km": 6.21,
+            "any_depth_share": 0.10538969132372203
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.24,
+            "vehicle_threshold_km": 3.14,
+            "any_depth_share": 0.27642735477738795
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 13.44,
+            "vehicle_threshold_km": 12.5,
+            "any_depth_share": 0.32665582846769464
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 80.41,
+            "vehicle_threshold_km": 77.06,
+            "any_depth_share": 0.33281931790124664
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 106.46,
+            "vehicle_threshold_km": 102.52,
+            "any_depth_share": 0.366900353661685
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.83,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 40.41,
+            "vehicle_threshold_km": 37.98,
+            "any_depth_share": 0.24247775768221608
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.17,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.1926232889002488
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 964.54,
+            "vehicle_threshold_km": 899.83,
+            "any_depth_share": 0.27940158731025216
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 352.64,
+            "vehicle_threshold_km": 331.06,
+            "any_depth_share": 0.30165941519962086
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 31.3,
+            "vehicle_threshold_km": 28.37,
+            "any_depth_share": 0.24503759744089001
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.07,
+            "vehicle_threshold_km": 0.05,
+            "any_depth_share": 0.205621062932283
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 117.49,
+            "vehicle_threshold_km": 106.84,
+            "any_depth_share": 0.24462000545114104
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 106.93,
+            "vehicle_threshold_km": 106.59,
+            "any_depth_share": 0.77749262509252
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 10.33,
+            "vehicle_threshold_km": 8.78,
+            "any_depth_share": 0.059971973540386365
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.01,
+            "vehicle_threshold_km": 0.01,
+            "any_depth_share": 0.002903455537036447
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 397.32,
+            "vehicle_threshold_km": 371.38,
+            "any_depth_share": 0.24648144106600103
+          }
+        }
+      },
+      "historical_500yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 2383.03,
+        "at_or_above_vehicle_threshold_km": 2247.82,
+        "bands_km": {
+          "0-25": 114.16,
+          "25-50": 118.57,
+          "50-100": 239.86,
+          "100-200": 445.84,
+          "200+": 1464.6
+        },
+        "roads_with_any_depth": 10948,
+        "roads_with_vehicle_threshold_depth": 10326,
+        "any_depth_share": 0.29888958201038884,
+        "vehicle_threshold_share": 0.28193097872649203,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 6.42,
+            "vehicle_threshold_km": 6.22,
+            "any_depth_share": 0.10890479982293634
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.35,
+            "vehicle_threshold_km": 3.17,
+            "any_depth_share": 0.2857944792864061
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 16.06,
+            "vehicle_threshold_km": 15.29,
+            "any_depth_share": 0.3901710575908743
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 84.17,
+            "vehicle_threshold_km": 81.56,
+            "any_depth_share": 0.3484043393243916
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 111.39,
+            "vehicle_threshold_km": 108.82,
+            "any_depth_share": 0.383881930630515
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.94,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 42.9,
+            "vehicle_threshold_km": 40.07,
+            "any_depth_share": 0.25742903121517713
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.17,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.1926232889002488
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1032.05,
+            "vehicle_threshold_km": 971.01,
+            "any_depth_share": 0.29895922938027264
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 375.18,
+            "vehicle_threshold_km": 352.08,
+            "any_depth_share": 0.3209400681605166
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 33.22,
+            "vehicle_threshold_km": 30.63,
+            "any_depth_share": 0.2600795559025013
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.07,
+            "vehicle_threshold_km": 0.07,
+            "any_depth_share": 0.205621062932283
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 126.15,
+            "vehicle_threshold_km": 117.22,
+            "any_depth_share": 0.2626466658560136
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 108.0,
+            "vehicle_threshold_km": 107.14,
+            "any_depth_share": 0.7852147811099511
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 13.81,
+            "vehicle_threshold_km": 10.94,
+            "any_depth_share": 0.08017977348852103
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.01,
+            "vehicle_threshold_km": 0.01,
+            "any_depth_share": 0.002903455537036447
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 428.07,
+            "vehicle_threshold_km": 401.5,
+            "any_depth_share": 0.2655584742150295
+          }
+        }
+      },
+      "rcp85_10yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 2338.72,
+        "at_or_above_vehicle_threshold_km": 2213.14,
+        "bands_km": {
+          "0-25": 101.41,
+          "25-50": 107.0,
+          "50-100": 206.06,
+          "100-200": 471.25,
+          "200+": 1453.0
+        },
+        "roads_with_any_depth": 10291,
+        "roads_with_vehicle_threshold_depth": 9628,
+        "any_depth_share": 0.29333203662536206,
+        "vehicle_threshold_share": 0.2775812681881772,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 6.1,
+            "vehicle_threshold_km": 6.06,
+            "any_depth_share": 0.10340614069094044
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.19,
+            "vehicle_threshold_km": 3.12,
+            "any_depth_share": 0.2726416455393697
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 14.21,
+            "vehicle_threshold_km": 12.77,
+            "any_depth_share": 0.34517310751950914
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 79.14,
+            "vehicle_threshold_km": 74.92,
+            "any_depth_share": 0.327566121328485
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 105.61,
+            "vehicle_threshold_km": 102.02,
+            "any_depth_share": 0.3639723894251625
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.71,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 44.01,
+            "vehicle_threshold_km": 41.21,
+            "any_depth_share": 0.2641223156626346
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.12465851418466833
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1007.09,
+            "vehicle_threshold_km": 946.03,
+            "any_depth_share": 0.291728104042815
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 387.26,
+            "vehicle_threshold_km": 369.07,
+            "any_depth_share": 0.3312806572136666
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 31.25,
+            "vehicle_threshold_km": 28.8,
+            "any_depth_share": 0.24463462917563947
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.07,
+            "vehicle_threshold_km": 0.06,
+            "any_depth_share": 0.205621062932283
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 121.74,
+            "vehicle_threshold_km": 116.17,
+            "any_depth_share": 0.25347025804443624
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 107.84,
+            "vehicle_threshold_km": 106.8,
+            "any_depth_share": 0.7840451994079491
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 13.1,
+            "vehicle_threshold_km": 11.25,
+            "any_depth_share": 0.0761112016887951
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.03,
+            "vehicle_threshold_km": 0.03,
+            "any_depth_share": 0.010935060246080056
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 415.94,
+            "vehicle_threshold_km": 393.05,
+            "any_depth_share": 0.25803424896369287
+          }
+        }
+      },
+      "rcp85_25yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 2338.72,
+        "at_or_above_vehicle_threshold_km": 2231.46,
+        "bands_km": {
+          "0-25": 95.09,
+          "25-50": 97.05,
+          "50-100": 182.96,
+          "100-200": 413.52,
+          "200+": 1550.1
+        },
+        "roads_with_any_depth": 10291,
+        "roads_with_vehicle_threshold_depth": 9730,
+        "any_depth_share": 0.29333203662536206,
+        "vehicle_threshold_share": 0.279879039153054,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 6.1,
+            "vehicle_threshold_km": 6.06,
+            "any_depth_share": 0.10340614069094044
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.19,
+            "vehicle_threshold_km": 3.12,
+            "any_depth_share": 0.2726416455393697
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 14.21,
+            "vehicle_threshold_km": 12.91,
+            "any_depth_share": 0.34517310751950914
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 79.14,
+            "vehicle_threshold_km": 75.61,
+            "any_depth_share": 0.327566121328485
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 105.61,
+            "vehicle_threshold_km": 102.65,
+            "any_depth_share": 0.3639723894251625
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.71,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.45,
+            "vehicle_threshold_km": 0.45,
+            "any_depth_share": 0.5932266326406239
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 44.01,
+            "vehicle_threshold_km": 41.72,
+            "any_depth_share": 0.2641223156626346
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.04,
+            "any_depth_share": 0.12465851418466833
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1007.09,
+            "vehicle_threshold_km": 955.38,
+            "any_depth_share": 0.291728104042815
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 387.26,
+            "vehicle_threshold_km": 371.36,
+            "any_depth_share": 0.3312806572136666
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 31.25,
+            "vehicle_threshold_km": 29.08,
+            "any_depth_share": 0.24463462917563947
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.07,
+            "vehicle_threshold_km": 0.07,
+            "any_depth_share": 0.205621062932283
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 121.74,
+            "vehicle_threshold_km": 116.99,
+            "any_depth_share": 0.25347025804443624
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 107.84,
+            "vehicle_threshold_km": 106.89,
+            "any_depth_share": 0.7840451994079491
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 13.1,
+            "vehicle_threshold_km": 11.48,
+            "any_depth_share": 0.0761112016887951
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.03,
+            "vehicle_threshold_km": 0.03,
+            "any_depth_share": 0.010935060246080056
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 415.94,
+            "vehicle_threshold_km": 396.33,
+            "any_depth_share": 0.25803424896369287
+          }
+        }
+      },
+      "rcp85_50yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 2903.18,
+        "at_or_above_vehicle_threshold_km": 2741.78,
+        "bands_km": {
+          "0-25": 138.64,
+          "25-50": 135.31,
+          "50-100": 247.87,
+          "100-200": 448.09,
+          "200+": 1933.29
+        },
+        "roads_with_any_depth": 12753,
+        "roads_with_vehicle_threshold_depth": 12047,
+        "any_depth_share": 0.3641289688761453,
+        "vehicle_threshold_share": 0.34388550633623743,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 8.17,
+            "vehicle_threshold_km": 8.05,
+            "any_depth_share": 0.13852874505456636
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 3.7,
+            "vehicle_threshold_km": 3.63,
+            "any_depth_share": 0.31594782582156994
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 17.53,
+            "vehicle_threshold_km": 16.72,
+            "any_depth_share": 0.425978855278683
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 96.38,
+            "vehicle_threshold_km": 91.3,
+            "any_depth_share": 0.3989438201776431
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 115.2,
+            "vehicle_threshold_km": 111.73,
+            "any_depth_share": 0.39702256045660994
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.87,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.5,
+            "vehicle_threshold_km": 0.5,
+            "any_depth_share": 0.6581945953901681
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 57.74,
+            "vehicle_threshold_km": 53.35,
+            "any_depth_share": 0.3464662359943569
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.12465851418466833
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1266.22,
+            "vehicle_threshold_km": 1192.7,
+            "any_depth_share": 0.3667923465828381
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 475.29,
+            "vehicle_threshold_km": 451.43,
+            "any_depth_share": 0.40658125487980534
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 41.58,
+            "vehicle_threshold_km": 37.94,
+            "any_depth_share": 0.32545373516496234
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.12,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.32068446504458326
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 150.63,
+            "vehicle_threshold_km": 141.29,
+            "any_depth_share": 0.31361932487178396
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 110.1,
+            "vehicle_threshold_km": 109.71,
+            "any_depth_share": 0.8005137130255513
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 22.76,
+            "vehicle_threshold_km": 19.18,
+            "any_depth_share": 0.13217306359716904
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.47,
+            "vehicle_threshold_km": 0.47,
+            "any_depth_share": 0.16342916017845432
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 535.13,
+            "vehicle_threshold_km": 502.11,
+            "any_depth_share": 0.3319744707223701
+          }
+        }
+      },
+      "rcp85_100yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 3055.6,
+        "at_or_above_vehicle_threshold_km": 2890.97,
+        "bands_km": {
+          "0-25": 140.66,
+          "25-50": 131.29,
+          "50-100": 265.59,
+          "100-200": 464.73,
+          "200+": 2053.32
+        },
+        "roads_with_any_depth": 13432,
+        "roads_with_vehicle_threshold_depth": 12757,
+        "any_depth_share": 0.38324612228588983,
+        "vehicle_threshold_share": 0.3625975396468251,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 8.2,
+            "vehicle_threshold_km": 8.06,
+            "any_depth_share": 0.1390941198489327
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.1125251976236731
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 4.12,
+            "vehicle_threshold_km": 3.93,
+            "any_depth_share": 0.35159636611013184
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 19.12,
+            "vehicle_threshold_km": 18.48,
+            "any_depth_share": 0.4644943253864105
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 102.27,
+            "vehicle_threshold_km": 96.74,
+            "any_depth_share": 0.42330325504585337
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 121.44,
+            "vehicle_threshold_km": 118.07,
+            "any_depth_share": 0.41852429014944736
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.87,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.5,
+            "vehicle_threshold_km": 0.5,
+            "any_depth_share": 0.6581945953901681
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 60.35,
+            "vehicle_threshold_km": 56.06,
+            "any_depth_share": 0.36215948992295166
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.17,
+            "vehicle_threshold_km": 0.17,
+            "any_depth_share": 0.1926232889002488
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1336.52,
+            "vehicle_threshold_km": 1263.19,
+            "any_depth_share": 0.3871545353656276
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 494.51,
+            "vehicle_threshold_km": 471.55,
+            "any_depth_share": 0.42302488532249144
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 43.36,
+            "vehicle_threshold_km": 40.49,
+            "any_depth_share": 0.33939731202085704
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.12,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.32068446504458326
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 157.31,
+            "vehicle_threshold_km": 147.96,
+            "any_depth_share": 0.3275233426223046
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 111.15,
+            "vehicle_threshold_km": 110.71,
+            "any_depth_share": 0.808119587048219
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 25.36,
+            "vehicle_threshold_km": 20.86,
+            "any_depth_share": 0.14729111295011127
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.47,
+            "vehicle_threshold_km": 0.47,
+            "any_depth_share": 0.16342916017845432
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 569.08,
+            "vehicle_threshold_km": 532.15,
+            "any_depth_share": 0.3530356477899932
+          }
+        }
+      },
+      "rcp85_200yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 3136.03,
+        "at_or_above_vehicle_threshold_km": 2962.16,
+        "bands_km": {
+          "0-25": 148.09,
+          "25-50": 134.33,
+          "50-100": 257.14,
+          "100-200": 461.82,
+          "200+": 2134.64
+        },
+        "roads_with_any_depth": 13814,
+        "roads_with_vehicle_threshold_depth": 13085,
+        "any_depth_share": 0.39333398902743133,
+        "vehicle_threshold_share": 0.3715264869715838,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 8.26,
+            "vehicle_threshold_km": 8.06,
+            "any_depth_share": 0.14015954547223214
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.09,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.13643000891971682
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 4.77,
+            "vehicle_threshold_km": 4.6,
+            "any_depth_share": 0.4076281046013739
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 19.79,
+            "vehicle_threshold_km": 19.02,
+            "any_depth_share": 0.4808811154874063
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 104.94,
+            "vehicle_threshold_km": 99.81,
+            "any_depth_share": 0.43436694057796266
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 123.31,
+            "vehicle_threshold_km": 119.58,
+            "any_depth_share": 0.42496915764107723
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.87,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.5,
+            "vehicle_threshold_km": 0.5,
+            "any_depth_share": 0.6581945953901681
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 61.37,
+            "vehicle_threshold_km": 57.93,
+            "any_depth_share": 0.36827030365249086
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.17,
+            "vehicle_threshold_km": 0.17,
+            "any_depth_share": 0.1926232889002488
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1375.43,
+            "vehicle_threshold_km": 1298.33,
+            "any_depth_share": 0.3984278110821127
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.32,
+            "vehicle_threshold_km": 0.32,
+            "any_depth_share": 0.08731927225749975
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 504.27,
+            "vehicle_threshold_km": 480.78,
+            "any_depth_share": 0.4313686238751336
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 44.34,
+            "vehicle_threshold_km": 41.59,
+            "any_depth_share": 0.347116417892729
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.12,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.32068446504458326
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 161.24,
+            "vehicle_threshold_km": 151.15,
+            "any_depth_share": 0.33571180526460326
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 111.31,
+            "vehicle_threshold_km": 110.92,
+            "any_depth_share": 0.8093158825201461
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 27.22,
+            "vehicle_threshold_km": 22.05,
+            "any_depth_share": 0.15811510882979202
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.47,
+            "vehicle_threshold_km": 0.47,
+            "any_depth_share": 0.16342916017845432
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 586.92,
+            "vehicle_threshold_km": 545.63,
+            "any_depth_share": 0.36410635314187156
+          }
+        }
+      },
+      "rcp85_500yr": {
+        "sampled_length_km": 7972.94,
+        "any_depth_km": 3344.64,
+        "at_or_above_vehicle_threshold_km": 3174.32,
+        "bands_km": {
+          "0-25": 144.18,
+          "25-50": 150.82,
+          "50-100": 267.84,
+          "100-200": 478.49,
+          "200+": 2303.31
+        },
+        "roads_with_any_depth": 14784,
+        "roads_with_vehicle_threshold_depth": 14078,
+        "any_depth_share": 0.4194987270723519,
+        "vehicle_threshold_share": 0.398136480853039,
+        "by_class": {
+          "bridleway": {
+            "sampled_length_km": 0.11,
+            "any_depth_km": 0.11,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 1.0
+          },
+          "construction": {
+            "sampled_length_km": 58.96,
+            "any_depth_km": 8.58,
+            "vehicle_threshold_km": 8.12,
+            "any_depth_share": 0.14550234552370478
+          },
+          "corridor": {
+            "sampled_length_km": 0.69,
+            "any_depth_km": 0.09,
+            "vehicle_threshold_km": 0.09,
+            "any_depth_share": 0.13643000891971682
+          },
+          "cycleway": {
+            "sampled_length_km": 11.71,
+            "any_depth_km": 4.99,
+            "vehicle_threshold_km": 4.83,
+            "any_depth_share": 0.42571082762855644
+          },
+          "footway": {
+            "sampled_length_km": 41.15,
+            "any_depth_km": 20.13,
+            "vehicle_threshold_km": 19.89,
+            "any_depth_share": 0.4892052024191011
+          },
+          "living_street": {
+            "sampled_length_km": 241.6,
+            "any_depth_km": 113.03,
+            "vehicle_threshold_km": 107.65,
+            "any_depth_share": 0.46783260511897184
+          },
+          "path": {
+            "sampled_length_km": 290.16,
+            "any_depth_km": 129.5,
+            "vehicle_threshold_km": 125.03,
+            "any_depth_share": 0.4462981866713242
+          },
+          "pedestrian": {
+            "sampled_length_km": 1.84,
+            "any_depth_km": 0.98,
+            "vehicle_threshold_km": 0.94,
+            "any_depth_share": 0.5297446863361664
+          },
+          "planned": {
+            "sampled_length_km": 0.76,
+            "any_depth_km": 0.5,
+            "vehicle_threshold_km": 0.5,
+            "any_depth_share": 0.6581945953901681
+          },
+          "primary": {
+            "sampled_length_km": 166.64,
+            "any_depth_km": 63.11,
+            "vehicle_threshold_km": 60.05,
+            "any_depth_share": 0.3787334647262645
+          },
+          "primary_link": {
+            "sampled_length_km": 0.1,
+            "any_depth_km": 0.0,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.0
+          },
+          "proposed": {
+            "sampled_length_km": 0.91,
+            "any_depth_km": 0.17,
+            "vehicle_threshold_km": 0.17,
+            "any_depth_share": 0.1926232889002488
+          },
+          "residential": {
+            "sampled_length_km": 3452.15,
+            "any_depth_km": 1468.32,
+            "vehicle_threshold_km": 1394.42,
+            "any_depth_share": 0.42533535227389774
+          },
+          "road": {
+            "sampled_length_km": 3.72,
+            "any_depth_km": 0.52,
+            "vehicle_threshold_km": 0.36,
+            "any_depth_share": 0.13977740859214693
+          },
+          "secondary": {
+            "sampled_length_km": 1168.99,
+            "any_depth_km": 534.66,
+            "vehicle_threshold_km": 510.08,
+            "any_depth_share": 0.45737225905577544
+          },
+          "secondary_link": {
+            "sampled_length_km": 0.23,
+            "any_depth_km": 0.03,
+            "vehicle_threshold_km": 0.0,
+            "any_depth_share": 0.13228314445994352
+          },
+          "service": {
+            "sampled_length_km": 127.75,
+            "any_depth_km": 46.86,
+            "vehicle_threshold_km": 44.26,
+            "any_depth_share": 0.36685571495273195
+          },
+          "steps": {
+            "sampled_length_km": 0.36,
+            "any_depth_km": 0.12,
+            "vehicle_threshold_km": 0.11,
+            "any_depth_share": 0.3338593416012724
+          },
+          "tertiary": {
+            "sampled_length_km": 480.29,
+            "any_depth_km": 173.69,
+            "vehicle_threshold_km": 163.79,
+            "any_depth_share": 0.3616321439916346
+          },
+          "tertiary_link": {
+            "sampled_length_km": 0.28,
+            "any_depth_km": 0.08,
+            "vehicle_threshold_km": 0.08,
+            "any_depth_share": 0.2783618409248677
+          },
+          "track": {
+            "sampled_length_km": 137.54,
+            "any_depth_km": 112.43,
+            "vehicle_threshold_km": 112.0,
+            "any_depth_share": 0.8174758832108122
+          },
+          "trunk": {
+            "sampled_length_km": 172.18,
+            "any_depth_km": 30.75,
+            "vehicle_threshold_km": 26.5,
+            "any_depth_share": 0.17856958847154752
+          },
+          "trunk_link": {
+            "sampled_length_km": 2.89,
+            "any_depth_km": 0.47,
+            "vehicle_threshold_km": 0.47,
+            "any_depth_share": 0.16342916017845432
+          },
+          "unclassified": {
+            "sampled_length_km": 1611.95,
+            "any_depth_km": 635.51,
+            "vehicle_threshold_km": 594.85,
+            "any_depth_share": 0.3942517262756794
+          }
+        }
+      }
+    }
+  },
+  "points": {
+    "osm_health": {
+      "historical_10yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 45,
+        "records_vehicle_threshold": 42,
+        "share_any_depth": 0.10588235294117647,
+        "share_vehicle_threshold": 0.0988235294117647
+      },
+      "historical_25yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 47,
+        "records_vehicle_threshold": 43,
+        "share_any_depth": 0.11058823529411765,
+        "share_vehicle_threshold": 0.1011764705882353
+      },
+      "historical_50yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 54,
+        "records_vehicle_threshold": 45,
+        "share_any_depth": 0.12705882352941175,
+        "share_vehicle_threshold": 0.10588235294117647
+      },
+      "historical_100yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 63,
+        "records_vehicle_threshold": 55,
+        "share_any_depth": 0.14823529411764705,
+        "share_vehicle_threshold": 0.12941176470588237
+      },
+      "historical_200yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 71,
+        "records_vehicle_threshold": 64,
+        "share_any_depth": 0.16705882352941176,
+        "share_vehicle_threshold": 0.15058823529411763
+      },
+      "historical_500yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 81,
+        "records_vehicle_threshold": 72,
+        "share_any_depth": 0.19058823529411764,
+        "share_vehicle_threshold": 0.16941176470588235
+      },
+      "rcp85_10yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 85,
+        "records_vehicle_threshold": 74,
+        "share_any_depth": 0.2,
+        "share_vehicle_threshold": 0.17411764705882352
+      },
+      "rcp85_25yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 85,
+        "records_vehicle_threshold": 76,
+        "share_any_depth": 0.2,
+        "share_vehicle_threshold": 0.17882352941176471
+      },
+      "rcp85_50yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 130,
+        "records_vehicle_threshold": 114,
+        "share_any_depth": 0.3058823529411765,
+        "share_vehicle_threshold": 0.26823529411764707
+      },
+      "rcp85_100yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 139,
+        "records_vehicle_threshold": 121,
+        "share_any_depth": 0.3270588235294118,
+        "share_vehicle_threshold": 0.2847058823529412
+      },
+      "rcp85_200yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 143,
+        "records_vehicle_threshold": 125,
+        "share_any_depth": 0.33647058823529413,
+        "share_vehicle_threshold": 0.29411764705882354
+      },
+      "rcp85_500yr": {
+        "records": 425,
+        "records_in_raster": 425,
+        "records_any_depth": 162,
+        "records_vehicle_threshold": 147,
+        "share_any_depth": 0.3811764705882353,
+        "share_vehicle_threshold": 0.3458823529411765
+      }
+    },
+    "osm_school": {
+      "historical_10yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 104,
+        "records_vehicle_threshold": 97,
+        "share_any_depth": 0.104,
+        "share_vehicle_threshold": 0.097
+      },
+      "historical_25yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 129,
+        "records_vehicle_threshold": 107,
+        "share_any_depth": 0.129,
+        "share_vehicle_threshold": 0.107
+      },
+      "historical_50yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 141,
+        "records_vehicle_threshold": 125,
+        "share_any_depth": 0.141,
+        "share_vehicle_threshold": 0.125
+      },
+      "historical_100yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 159,
+        "records_vehicle_threshold": 142,
+        "share_any_depth": 0.159,
+        "share_vehicle_threshold": 0.142
+      },
+      "historical_200yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 178,
+        "records_vehicle_threshold": 162,
+        "share_any_depth": 0.178,
+        "share_vehicle_threshold": 0.162
+      },
+      "historical_500yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 192,
+        "records_vehicle_threshold": 174,
+        "share_any_depth": 0.192,
+        "share_vehicle_threshold": 0.174
+      },
+      "rcp85_10yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 201,
+        "records_vehicle_threshold": 183,
+        "share_any_depth": 0.201,
+        "share_vehicle_threshold": 0.183
+      },
+      "rcp85_25yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 201,
+        "records_vehicle_threshold": 186,
+        "share_any_depth": 0.201,
+        "share_vehicle_threshold": 0.186
+      },
+      "rcp85_50yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 284,
+        "records_vehicle_threshold": 259,
+        "share_any_depth": 0.284,
+        "share_vehicle_threshold": 0.259
+      },
+      "rcp85_100yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 299,
+        "records_vehicle_threshold": 274,
+        "share_any_depth": 0.299,
+        "share_vehicle_threshold": 0.274
+      },
+      "rcp85_200yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 308,
+        "records_vehicle_threshold": 279,
+        "share_any_depth": 0.308,
+        "share_vehicle_threshold": 0.279
+      },
+      "rcp85_500yr": {
+        "records": 1000,
+        "records_in_raster": 1000,
+        "records_any_depth": 329,
+        "records_vehicle_threshold": 303,
+        "share_any_depth": 0.329,
+        "share_vehicle_threshold": 0.303
+      }
+    },
+    "pmgsy_habitation": {
+      "historical_10yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 457,
+        "records_vehicle_threshold": 454,
+        "share_any_depth": 0.23069156991418477,
+        "share_vehicle_threshold": 0.22917718324078748,
+        "population_any_depth": 489612,
+        "population_vehicle_threshold": 487698,
+        "population_total": 2169418
+      },
+      "historical_25yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 505,
+        "records_vehicle_threshold": 463,
+        "share_any_depth": 0.25492175668854117,
+        "share_vehicle_threshold": 0.2337203432609793,
+        "population_any_depth": 537821,
+        "population_vehicle_threshold": 495755,
+        "population_total": 2169418
+      },
+      "historical_50yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 532,
+        "records_vehicle_threshold": 500,
+        "share_any_depth": 0.26855123674911663,
+        "share_vehicle_threshold": 0.2523977788995457,
+        "population_any_depth": 566597,
+        "population_vehicle_threshold": 533731,
+        "population_total": 2169418
+      },
+      "historical_100yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 575,
+        "records_vehicle_threshold": 535,
+        "share_any_depth": 0.29025744573447754,
+        "share_vehicle_threshold": 0.2700656234225139,
+        "population_any_depth": 616328,
+        "population_vehicle_threshold": 573052,
+        "population_total": 2169418
+      },
+      "historical_200yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 620,
+        "records_vehicle_threshold": 576,
+        "share_any_depth": 0.3129732458354367,
+        "share_vehicle_threshold": 0.2907622412922766,
+        "population_any_depth": 666360,
+        "population_vehicle_threshold": 619355,
+        "population_total": 2169418
+      },
+      "historical_500yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 658,
+        "records_vehicle_threshold": 622,
+        "share_any_depth": 0.3321554770318021,
+        "share_vehicle_threshold": 0.31398283695103485,
+        "population_any_depth": 727477,
+        "population_vehicle_threshold": 667529,
+        "population_total": 2169418
+      },
+      "rcp85_10yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 684,
+        "records_vehicle_threshold": 641,
+        "share_any_depth": 0.3452801615345785,
+        "share_vehicle_threshold": 0.32357395254921756,
+        "population_any_depth": 719690,
+        "population_vehicle_threshold": 675083,
+        "population_total": 2169418
+      },
+      "rcp85_25yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 684,
+        "records_vehicle_threshold": 646,
+        "share_any_depth": 0.3452801615345785,
+        "share_vehicle_threshold": 0.32609793033821305,
+        "population_any_depth": 719690,
+        "population_vehicle_threshold": 681617,
+        "population_total": 2169418
+      },
+      "rcp85_50yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 812,
+        "records_vehicle_threshold": 789,
+        "share_any_depth": 0.4098939929328622,
+        "share_vehicle_threshold": 0.3982836951034831,
+        "population_any_depth": 876233,
+        "population_vehicle_threshold": 852322,
+        "population_total": 2169418
+      },
+      "rcp85_100yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 845,
+        "records_vehicle_threshold": 816,
+        "share_any_depth": 0.4265522463402322,
+        "share_vehicle_threshold": 0.41191317516405856,
+        "population_any_depth": 913897,
+        "population_vehicle_threshold": 882478,
+        "population_total": 2169418
+      },
+      "rcp85_200yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 862,
+        "records_vehicle_threshold": 832,
+        "share_any_depth": 0.43513377082281673,
+        "share_vehicle_threshold": 0.419989904088844,
+        "population_any_depth": 928633,
+        "population_vehicle_threshold": 899751,
+        "population_total": 2169418
+      },
+      "rcp85_500yr": {
+        "records": 1981,
+        "records_in_raster": 1981,
+        "records_any_depth": 916,
+        "records_vehicle_threshold": 882,
+        "share_any_depth": 0.4623927309439677,
+        "share_vehicle_threshold": 0.4452296819787986,
+        "population_any_depth": 975753,
+        "population_vehicle_threshold": 943417,
+        "population_total": 2169418
+      }
+    },
+    "osm_place": {
+      "historical_10yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 27,
+        "records_vehicle_threshold": 26,
+        "share_any_depth": 0.16071428571428573,
+        "share_vehicle_threshold": 0.15476190476190477
+      },
+      "historical_25yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 29,
+        "records_vehicle_threshold": 26,
+        "share_any_depth": 0.17261904761904762,
+        "share_vehicle_threshold": 0.15476190476190477
+      },
+      "historical_50yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 30,
+        "records_vehicle_threshold": 29,
+        "share_any_depth": 0.17857142857142858,
+        "share_vehicle_threshold": 0.17261904761904762
+      },
+      "historical_100yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 36,
+        "records_vehicle_threshold": 32,
+        "share_any_depth": 0.21428571428571427,
+        "share_vehicle_threshold": 0.19047619047619047
+      },
+      "historical_200yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 38,
+        "records_vehicle_threshold": 36,
+        "share_any_depth": 0.2261904761904762,
+        "share_vehicle_threshold": 0.21428571428571427
+      },
+      "historical_500yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 40,
+        "records_vehicle_threshold": 38,
+        "share_any_depth": 0.23809523809523808,
+        "share_vehicle_threshold": 0.2261904761904762
+      },
+      "rcp85_10yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 43,
+        "records_vehicle_threshold": 41,
+        "share_any_depth": 0.25595238095238093,
+        "share_vehicle_threshold": 0.24404761904761904
+      },
+      "rcp85_25yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 43,
+        "records_vehicle_threshold": 41,
+        "share_any_depth": 0.25595238095238093,
+        "share_vehicle_threshold": 0.24404761904761904
+      },
+      "rcp85_50yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 59,
+        "records_vehicle_threshold": 54,
+        "share_any_depth": 0.35119047619047616,
+        "share_vehicle_threshold": 0.32142857142857145
+      },
+      "rcp85_100yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 63,
+        "records_vehicle_threshold": 58,
+        "share_any_depth": 0.375,
+        "share_vehicle_threshold": 0.34523809523809523
+      },
+      "rcp85_200yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 64,
+        "records_vehicle_threshold": 62,
+        "share_any_depth": 0.38095238095238093,
+        "share_vehicle_threshold": 0.36904761904761907
+      },
+      "rcp85_500yr": {
+        "records": 168,
+        "records_in_raster": 168,
+        "records_any_depth": 69,
+        "records_vehicle_threshold": 66,
+        "share_any_depth": 0.4107142857142857,
+        "share_vehicle_threshold": 0.39285714285714285
+      }
+    },
+    "census_village_located": {
+      "historical_10yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 10,
+        "records_vehicle_threshold": 10,
+        "share_any_depth": 0.45454545454545453,
+        "share_vehicle_threshold": 0.45454545454545453,
+        "population_any_depth": 156057,
+        "population_vehicle_threshold": 156057,
+        "population_total": 437682
+      },
+      "historical_25yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 10,
+        "records_vehicle_threshold": 10,
+        "share_any_depth": 0.45454545454545453,
+        "share_vehicle_threshold": 0.45454545454545453,
+        "population_any_depth": 156057,
+        "population_vehicle_threshold": 156057,
+        "population_total": 437682
+      },
+      "historical_50yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 10,
+        "records_vehicle_threshold": 10,
+        "share_any_depth": 0.45454545454545453,
+        "share_vehicle_threshold": 0.45454545454545453,
+        "population_any_depth": 156057,
+        "population_vehicle_threshold": 156057,
+        "population_total": 437682
+      },
+      "historical_100yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 11,
+        "records_vehicle_threshold": 10,
+        "share_any_depth": 0.5,
+        "share_vehicle_threshold": 0.45454545454545453,
+        "population_any_depth": 170812,
+        "population_vehicle_threshold": 156057,
+        "population_total": 437682
+      },
+      "historical_200yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 12,
+        "records_vehicle_threshold": 12,
+        "share_any_depth": 0.5454545454545454,
+        "share_vehicle_threshold": 0.5454545454545454,
+        "population_any_depth": 200594,
+        "population_vehicle_threshold": 200594,
+        "population_total": 437682
+      },
+      "historical_500yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 13,
+        "records_vehicle_threshold": 12,
+        "share_any_depth": 0.5909090909090909,
+        "share_vehicle_threshold": 0.5454545454545454,
+        "population_any_depth": 213683,
+        "population_vehicle_threshold": 200594,
+        "population_total": 437682
+      },
+      "rcp85_10yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 12,
+        "records_vehicle_threshold": 11,
+        "share_any_depth": 0.5454545454545454,
+        "share_vehicle_threshold": 0.5,
+        "population_any_depth": 200076,
+        "population_vehicle_threshold": 170812,
+        "population_total": 437682
+      },
+      "rcp85_25yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 12,
+        "records_vehicle_threshold": 12,
+        "share_any_depth": 0.5454545454545454,
+        "share_vehicle_threshold": 0.5454545454545454,
+        "population_any_depth": 200076,
+        "population_vehicle_threshold": 200076,
+        "population_total": 437682
+      },
+      "rcp85_50yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 14,
+        "records_vehicle_threshold": 14,
+        "share_any_depth": 0.6363636363636364,
+        "share_vehicle_threshold": 0.6363636363636364,
+        "population_any_depth": 242947,
+        "population_vehicle_threshold": 242947,
+        "population_total": 437682
+      },
+      "rcp85_100yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 14,
+        "records_vehicle_threshold": 14,
+        "share_any_depth": 0.6363636363636364,
+        "share_vehicle_threshold": 0.6363636363636364,
+        "population_any_depth": 242947,
+        "population_vehicle_threshold": 242947,
+        "population_total": 437682
+      },
+      "rcp85_200yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 14,
+        "records_vehicle_threshold": 14,
+        "share_any_depth": 0.6363636363636364,
+        "share_vehicle_threshold": 0.6363636363636364,
+        "population_any_depth": 242947,
+        "population_vehicle_threshold": 242947,
+        "population_total": 437682
+      },
+      "rcp85_500yr": {
+        "records": 22,
+        "records_in_raster": 22,
+        "records_any_depth": 14,
+        "records_vehicle_threshold": 14,
+        "share_any_depth": 0.6363636363636364,
+        "share_vehicle_threshold": 0.6363636363636364,
+        "population_any_depth": 242947,
+        "population_vehicle_threshold": 242947,
+        "population_total": 437682
+      }
+    },
+    "crossing_candidate": {
+      "historical_10yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1263,
+        "records_vehicle_threshold": 1241,
+        "share_any_depth": 0.3272868618813164,
+        "share_vehicle_threshold": 0.32158590308370044
+      },
+      "historical_25yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1371,
+        "records_vehicle_threshold": 1273,
+        "share_any_depth": 0.35527338688779475,
+        "share_vehicle_threshold": 0.32987820678932367
+      },
+      "historical_50yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1423,
+        "records_vehicle_threshold": 1351,
+        "share_any_depth": 0.3687483804094325,
+        "share_vehicle_threshold": 0.35009069707178025
+      },
+      "historical_100yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1544,
+        "records_vehicle_threshold": 1457,
+        "share_any_depth": 0.4001036537963203,
+        "share_vehicle_threshold": 0.37755895309665716
+      },
+      "historical_200yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1617,
+        "records_vehicle_threshold": 1533,
+        "share_any_depth": 0.41902047162477324,
+        "share_vehicle_threshold": 0.3972531743975123
+      },
+      "historical_500yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1716,
+        "records_vehicle_threshold": 1622,
+        "share_any_depth": 0.4446747862140451,
+        "share_vehicle_threshold": 0.4203161440787769
+      },
+      "rcp85_10yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1697,
+        "records_vehicle_threshold": 1632,
+        "share_any_depth": 0.4397512308888313,
+        "share_vehicle_threshold": 0.42290748898678415
+      },
+      "rcp85_25yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1697,
+        "records_vehicle_threshold": 1642,
+        "share_any_depth": 0.4397512308888313,
+        "share_vehicle_threshold": 0.4254988338947914
+      },
+      "rcp85_50yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1918,
+        "records_vehicle_threshold": 1844,
+        "share_any_depth": 0.49701995335579163,
+        "share_vehicle_threshold": 0.47784400103653796
+      },
+      "rcp85_100yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 1992,
+        "records_vehicle_threshold": 1936,
+        "share_any_depth": 0.5161959056750454,
+        "share_vehicle_threshold": 0.5016843741902047
+      },
+      "rcp85_200yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 2038,
+        "records_vehicle_threshold": 1971,
+        "share_any_depth": 0.5281160922518787,
+        "share_vehicle_threshold": 0.5107540813682301
+      },
+      "rcp85_500yr": {
+        "records": 3859,
+        "records_in_raster": 3859,
+        "records_any_depth": 2138,
+        "records_vehicle_threshold": 2071,
+        "share_any_depth": 0.5540295413319513,
+        "share_vehicle_threshold": 0.5366675304483026
+      }
+    }
+  },
+  "caveats": [
+    "KSDMA rasters are modelled return-period flood depth, not observed inundation, road closure or damage.",
+    "Cells are ~90 m; depth is a cell value, not a measurement at a bridge, culvert or road edge.",
+    "A road sampled in a deep cell is exposed in the model; this does not establish that it was impassable, and no closure or repair cost is implied.",
+    "Crossing candidates are unverified geometric road/water intersections, not a bridge or culvert inventory.",
+    "PMGSY population fields and Census 2011 populations are separate sources and must not be added.",
+    "Census villages without a defensible coordinate are excluded from point exposure rather than placed arbitrarily.",
+    "No observed flood damage, maintenance cost or condition record supports a maintenance recommendation from these numbers."
+  ],
+  "water_proximity": {
+    "historical_10yr": {
+      "positive_cells": 59805,
+      "bands": {
+        "on_or_touching_mapped_water": {
+          "cells": 1746,
+          "share": 0.029194883370955604,
+          "median_depth_cm": 198.0
+        },
+        "within_100m": {
+          "cells": 28679,
+          "share": 0.4795418443273974,
+          "median_depth_cm": 210.59999084472656
+        },
+        "100_to_250m": {
+          "cells": 20574,
+          "share": 0.3440180586907449,
+          "median_depth_cm": 207.0
+        },
+        "farther_than_250m": {
+          "cells": 8806,
+          "share": 0.1472452136109021,
+          "median_depth_cm": 194.39999389648438
+        }
+      }
+    },
+    "rcp85_100yr": {
+      "positive_cells": 84513,
+      "bands": {
+        "on_or_touching_mapped_water": {
+          "cells": 2522,
+          "share": 0.029841562836486694,
+          "median_depth_cm": 378.0
+        },
+        "within_100m": {
+          "cells": 38867,
+          "share": 0.45989374415770357,
+          "median_depth_cm": 394.1999816894531
+        },
+        "100_to_250m": {
+          "cells": 29758,
+          "share": 0.35211150947191555,
+          "median_depth_cm": 391.5
+        },
+        "farther_than_250m": {
+          "cells": 13366,
+          "share": 0.15815318353389418,
+          "median_depth_cm": 407.0
+        }
+      }
+    }
+  },
+  "outputs": {
+    "pmgsy_road_depth.csv": "per-road maximum sampled depth for each of the 12 return-period layers",
+    "osm_road_depth.csv": "per-OSM-way maximum sampled depth for each layer",
+    "point_depth.csv": "per-point sampled depth by layer (separate files per point layer)"
+  }
+}

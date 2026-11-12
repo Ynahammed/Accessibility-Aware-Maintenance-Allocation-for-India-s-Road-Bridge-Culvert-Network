@@ -10,6 +10,7 @@ import numpy as np
 
 from rra.assumptions import AssumptionRegister
 from rra.consequence.accessibility import AccessibilityModel
+from rra.cost.interventions import effects_from_register
 from rra.cost.sor import ScheduleOfRates
 from rra.deterioration import markov
 from rra.fragility.fragility import FragilityParams
@@ -32,10 +33,11 @@ def accessibility_model(district: District, register: AssumptionRegister) -> Acc
 
 
 def default_transition(seed: int = 0, acceleration: float = 1.0) -> np.ndarray:
-    """A worsening-biased transition matrix (stands in for an NBI-fitted M0).
+    """A worsening-biased transition matrix (stand-in for a register-fitted M0).
 
     ``acceleration`` multiplies the *worsening* transition counts only, implementing the
-    register's Indian-vs-NBI acceleration axis.
+    register's acceleration axis for Indian climate, load and maintenance conditions. No
+    observed Indian inspection history is available to fit this matrix.
     """
     counts = np.zeros((4, 4))
     for i in range(3):
@@ -55,7 +57,18 @@ def outage_days_by_type(register: AssumptionRegister) -> dict:
     }
 
 
-def build_models(district: District, register: AssumptionRegister, seed: int = 0):
+def build_models(
+    district: District,
+    register: AssumptionRegister,
+    seed: int = 0,
+    sor: ScheduleOfRates | None = None,
+):
+    """Simulation models from a register, with an optional measured schedule of rates.
+
+    ``sor`` carries PWD/RTI prices when a reply has been ingested; without it the
+    placeholder schedule stays in force. Intervention effects are resolved here so the
+    simulator does not fall back to the hard-coded defaults.
+    """
     from rra.simulator.step import SimModels
 
     outage_by_type = outage_days_by_type(register)
@@ -64,9 +77,10 @@ def build_models(district: District, register: AssumptionRegister, seed: int = 0
         acc=accessibility_model(district, register),
         transition=default_transition(seed, register["deterioration_acceleration"].default),
         fragility=FragilityParams.from_register(register),
-        sor=ScheduleOfRates(),
+        sor=sor if sor is not None else ScheduleOfRates(),
         outage_days=outage,
         premium=register["emergency_premium"].default,
+        effects=effects_from_register(register),
     )
 
 

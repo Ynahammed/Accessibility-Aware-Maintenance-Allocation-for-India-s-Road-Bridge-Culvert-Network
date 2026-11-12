@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from rra.cost.interventions import Intervention, apply_condition, effect_of
+from rra.cost.interventions import Intervention, apply_effect
 from rra.fragility.fragility import failure_probability
 
 OPTION_LIST: tuple[Intervention, ...] = (
@@ -43,10 +43,11 @@ def _option_arrays(assets, models, solo):
     factor = np.ones((na, N_OPTIONS))
     for i, a in enumerate(assets):
         for j, opt in enumerate(OPTION_LIST):
+            effect = models.effect(opt)
             cost[i, j] = models.sor.cost(a.structure_type, opt)
             labour[i, j] = models.sor.labour(a.structure_type, opt)
-            cond[i, j] = apply_condition(a.condition, opt)
-            factor[i, j] = effect_of(opt).fragility_factor
+            cond[i, j] = apply_effect(a.condition, effect)
+            factor[i, j] = effect.fragility_factor
     return cost, labour, cond, factor
 
 
@@ -107,30 +108,41 @@ def failure_indicators(assets, models, rain_samples, crn_u) -> np.ndarray:
 
 
 def network_aware_objective(assets, models, rain_samples, crn_u, budget, crew, penalty=1e6):
-    """Sample-average set-based loss with budget/crew penalties, for local search."""
+    """Sample-average set-based loss with budget/crew penalties, for local search.
+
+    Set losses are memoised by the failing asset set: the same joint failure recurs
+    across scenarios and across candidate selections, and each ``AccessibilityModel.loss``
+    call is a Dijkstra pass, so this is the dominant saving during local search.
+    """
     assets = list(assets)
     na = len(assets)
     rain = np.asarray(rain_samples, dtype=float)
     S = rain.shape[0]
-    solo = solo_losses(assets, models)  # not used for loss, kept for parity
-    cost, labour, cond, factor = _option_arrays(assets, models, solo)
+    cost, labour, cond, factor = _option_arrays(assets, models, None)
     ind = failure_indicators(assets, models, rain_samples, crn_u)  # (na, N_OPTIONS, S)
+    outages = np.array([models.outage(a) for a in assets])
+    nodes = [a.node for a in assets]
+    loss_cache: dict = {}
+    rows = np.arange(na)
+
+    def set_loss(keys: tuple) -> float:
+        cached = loss_cache.get(keys)
+        if cached is None:
+            cached = models.acc.loss(failed_nodes=[nodes[i] for i in keys])
+            loss_cache[keys] = cached
+        return cached
 
     def objective(x) -> float:
         x = np.asarray(x, dtype=float)
-        sel = np.zeros(na, dtype=int)
-        for i in range(na):
-            block = x[i * N_OPTIONS:(i + 1) * N_OPTIONS]
-            sel[i] = int(np.argmax(block))
+        sel = np.argmax(x.reshape(na, N_OPTIONS), axis=1)
         total = 0.0
         for w in range(S):
-            failed = [assets[i] for i in range(na) if ind[i, sel[i], w]]
+            failed = tuple(np.flatnonzero(ind[rows, sel, w]))
             if failed:
-                outage = float(np.mean([models.outage(a) for a in failed]))
-                total += outage * models.acc.loss(failed_nodes=[a.node for a in failed])
+                total += float(outages[list(failed)].mean()) * set_loss(failed)
         val = total / S
-        spent = float(cost[np.arange(na), sel].sum())
-        used = float(labour[np.arange(na), sel].sum())
+        spent = float(cost[rows, sel].sum())
+        used = float(labour[rows, sel].sum())
         val += penalty * max(0.0, spent - budget)
         val += penalty * max(0.0, used - crew)
         return val

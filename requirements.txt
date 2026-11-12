@@ -1,4 +1,6 @@
 fastapi>=0.115
 networkx>=3.2
 numpy>=1.26
+pydantic>=2.6
 scipy>=1.12
+openpyxl>=3.1

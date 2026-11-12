@@ -56,10 +56,27 @@ def graph_from_osm_nx(g, class_speeds: dict | None = None) -> nx.Graph:
     """
     out = nx.Graph()
     for n, data in g.nodes(data=True):
-        out.add_node(n, x=data.get("x"), y=data.get("y"), kind="junction")
+        node_attrs = {"x": data.get("x"), "y": data.get("y"), "kind": data.get("kind", "junction")}
+        for key in ("source_id", "snap_dist_m"):
+            if data.get(key) is not None:
+                node_attrs[key] = float(data[key]) if key == "snap_dist_m" else data[key]
+        out.add_node(n, **node_attrs)
     for u, v, data in g.edges(data=True):
-        length = float(data.get("length", 0.0) or 0.0)
         highway = _first(data.get("highway"))
+        # Processed accessibility graphs store modeled weights explicitly. Preserve
+        # them (for roads and connectors) rather than re-reading absent raw OSM length.
+        if data.get("length_m") is not None and data.get("travel_time_min") is not None:
+            length = float(data["length_m"])
+            sp = float(data.get("speed_kph", speed_for(highway, class_speeds)))
+            tt = float(data["travel_time_min"])
+            out.add_edge(
+                u, v, length_m=length, highway=highway, speed_kph=sp,
+                travel_time_min=tt,
+                is_bridge=str(data.get("is_bridge", "false")).lower() in {"true", "1", "yes"},
+                is_culvert=str(data.get("is_culvert", "false")).lower() in {"true", "1", "yes"},
+            )
+            continue
+        length = float(data.get("length", 0.0) or 0.0)
         sp = speed_for(highway, class_speeds)
         tt = (length / 1000.0) / sp * 60.0 if sp > 0 else float("inf")
         tunnel = _first(data.get("tunnel"))
@@ -171,6 +188,20 @@ def infer_crossings(edges, water) -> list:
                 hits.append(idx)
                 break
     return hits
+
+
+def load_graphml_plain(path: str | Path) -> nx.Graph:
+    """Load an OSMnx-written GraphML using networkx only (no osmnx / geopandas).
+
+    Read-only network views must work on the base install, so this avoids the geo extra.
+    GraphML stores node coordinates as strings, so they are coerced to floats here.
+    """
+    raw = nx.read_graphml(Path(path))
+    for _, data in raw.nodes(data=True):
+        for key in ("x", "y"):
+            if data.get(key) is not None:
+                data[key] = float(data[key])
+    return graph_from_osm_nx(raw)
 
 
 def load_osm_graphml(path: str | Path) -> nx.Graph:
