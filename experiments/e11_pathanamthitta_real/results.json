@@ -1,0 +1,2524 @@
+{
+  "district": "pathanamthitta",
+  "district_name": "Pathanamthitta",
+  "config": {
+    "demand": "pmgsy",
+    "seed": 0,
+    "scenarios": 8,
+    "years": 2,
+    "optimizer_samples": 8,
+    "budget_crore": 0.5,
+    "crew_days": 150.0,
+    "cvar_alpha": 0.1,
+    "frontier_budgets": [
+      0.1,
+      0.25,
+      0.5,
+      1.0
+    ]
+  },
+  "instance": {
+    "demand": "pmgsy",
+    "n_habitations": 2129,
+    "n_structures": 30,
+    "n_health_facilities": 304,
+    "population": 1098743.0,
+    "structure_types": {
+      "culvert": 30
+    },
+    "health_cap_minutes": 60.0,
+    "habitations_beyond_health_cap_baseline": 22,
+    "provenance": {
+      "road_graph": "Geofabrik/OSM extract clipped to the 2011 Pathanamthitta boundary; 270,455 junction nodes and 275,281 road edges",
+      "demand_pmgsy": "PMGSY GeoSadak habitation points (1,098,743 in the source population field; not Census population)",
+      "demand_census": "Census 2011 village totals at exact-name matched PMGSY-weighted centroids (2 of 52 villages have a defensible point)",
+      "destinations": "304 OSM ``amenity=hospital`` points attached within 500 m",
+      "structures": "3,299 unverified road/water intersection candidates; the allocation uses the 30 highest measured solo-loss candidates"
+    },
+    "assumed": {
+      "condition": "Uniform{1,2,3} = Fair/Poor/Severe per structure, drawn from the build seed",
+      "age_years": "Uniform{5..40} per structure, drawn from the build seed",
+      "structure_type": "mapped from the unverified candidate class (see TYPE_FROM_CANDIDATE_CLASS)",
+      "outage_days": "placeholder register defaults by structure type",
+      "repair_effects": "placeholder register defaults (no Indian inspection history)",
+      "costs": "placeholder Schedule of Rates until a PWD reply is ingested",
+      "rainfall": "lognormal monsoon ratio, mean 0.0 and sigma 0.4 on the daily loss model"
+    },
+    "selection_rule": "30 highest measured solo-loss route-carrying crossing candidates (population_hours_lost measured on PMGSY habitations, in crossing_solo_criticality.csv), one candidate per road edge"
+  },
+  "baselines_equivalent": false,
+  "baseline_equivalence": {
+    "equivalent": false,
+    "equivalent_at_every_budget": false,
+    "reporting_budget_crore": 0.5,
+    "policies_compared": [
+      "worst_first",
+      "criticality_weighted",
+      "siloed"
+    ],
+    "structure_types": [
+      "culvert"
+    ],
+    "all_culvert": true,
+    "by_budget": [
+      {
+        "budget_crore": 0.1,
+        "equivalent": true,
+        "n_funded": {
+          "worst_first": 5,
+          "criticality_weighted": 5,
+          "siloed": 5
+        },
+        "same_interventions": true
+      },
+      {
+        "budget_crore": 0.25,
+        "equivalent": true,
+        "n_funded": {
+          "worst_first": 10,
+          "criticality_weighted": 10,
+          "siloed": 10
+        },
+        "same_interventions": true
+      },
+      {
+        "budget_crore": 0.5,
+        "equivalent": false,
+        "n_funded": {
+          "worst_first": 13,
+          "criticality_weighted": 13,
+          "siloed": 13
+        },
+        "same_interventions": false
+      },
+      {
+        "budget_crore": 1.0,
+        "equivalent": true,
+        "n_funded": {
+          "worst_first": 18,
+          "criticality_weighted": 18,
+          "siloed": 18
+        },
+        "same_interventions": true
+      }
+    ],
+    "note": "Identical at some budgets but not all: the comparators' identity is budget-specific, so the panel reports worst-first only at its own budget and the per-budget record is kept in `by_budget`."
+  },
+  "policies": [
+    {
+      "policy": "additive_milp",
+      "mean_person_days": 39631.345459958524,
+      "mean_planned_crore": 1.0,
+      "mean_emergency_crore": 2.232000000000001,
+      "mean_spend_crore": 3.232000000000001,
+      "person_days_per_crore": 12262.173719046568,
+      "cvar_person_days": 48574.73400566402,
+      "n_funded_year1": 16
+    },
+    {
+      "policy": "benefit_cost",
+      "mean_person_days": 45998.195670130575,
+      "mean_planned_crore": 1.0000000000000004,
+      "mean_emergency_crore": 2.340000000000001,
+      "mean_spend_crore": 3.3400000000000016,
+      "person_days_per_crore": 13771.914871296573,
+      "cvar_person_days": 56711.31647342952,
+      "n_funded_year1": 25
+    },
+    {
+      "policy": "random",
+      "mean_person_days": 47398.73788243371,
+      "mean_planned_crore": 1.0000000000000004,
+      "mean_emergency_crore": 2.340000000000001,
+      "mean_spend_crore": 3.3400000000000016,
+      "person_days_per_crore": 14191.238886956193,
+      "cvar_person_days": 59388.67093609299,
+      "n_funded_year1": 25
+    },
+    {
+      "policy": "worst_first",
+      "mean_person_days": 45229.14771625014,
+      "mean_planned_crore": 0.795,
+      "mean_emergency_crore": 2.340000000000001,
+      "mean_spend_crore": 3.135000000000001,
+      "person_days_per_crore": 14427.160356060645,
+      "cvar_person_days": 59423.519849039105,
+      "n_funded_year1": 13
+    },
+    {
+      "policy": "do_nothing",
+      "mean_person_days": 64640.437379400726,
+      "mean_planned_crore": 0.0,
+      "mean_emergency_crore": 3.330000000000002,
+      "mean_spend_crore": 3.330000000000002,
+      "person_days_per_crore": 19411.542756576782,
+      "cvar_person_days": 74191.1687179163,
+      "n_funded_year1": 0
+    }
+  ],
+  "comparisons": {
+    "additive_vs_worst_first": {
+      "comparison": "additive_milp - worst_first",
+      "mean_person_days": -5597.802256291614,
+      "ci_lo": -8894.887867225048,
+      "ci_hi": -1951.110839881907,
+      "n_scenarios": 8,
+      "share_a_better": 0.875,
+      "share_b_better": 0.125,
+      "positive_means_a_worse": true
+    },
+    "additive_vs_do_nothing": {
+      "comparison": "additive_milp - do_nothing",
+      "mean_person_days": -25009.091919442206,
+      "ci_lo": -30401.278027688622,
+      "ci_hi": -19585.586314001383,
+      "n_scenarios": 8,
+      "share_a_better": 1.0,
+      "share_b_better": 0.0,
+      "positive_means_a_worse": true
+    },
+    "worst_first_vs_random": {
+      "comparison": "worst_first - random",
+      "mean_person_days": -2169.590166183567,
+      "ci_lo": -7403.159229989792,
+      "ci_hi": 3394.931757337804,
+      "n_scenarios": 8,
+      "share_a_better": 0.625,
+      "share_b_better": 0.375,
+      "positive_means_a_worse": true
+    },
+    "scenario_win_rate": {
+      "do_nothing": 0.0,
+      "worst_first": 0.125,
+      "benefit_cost": 0.0,
+      "random": 0.125,
+      "additive_milp": 0.75
+    }
+  },
+  "practice_vs_chance": {
+    "worst_first_mean_person_days": 45229.14771625014,
+    "random_mean_person_days": 47398.73788243371,
+    "worst_first_spend_crore": 3.135000000000001,
+    "random_spend_crore": 3.3400000000000016,
+    "worst_first_per_crore": 14427.160356060645,
+    "random_per_crore": 14191.238886956193,
+    "absolute_gap_person_days": -2169.590166183567,
+    "ratio_gap_person_days_per_crore": 235.92146910445263,
+    "paired": {
+      "comparison": "worst_first - random",
+      "mean_person_days": -2169.590166183567,
+      "ci_lo": -7403.159229989792,
+      "ci_hi": 3394.931757337804,
+      "n_scenarios": 8,
+      "share_a_better": 0.625,
+      "share_b_better": 0.375,
+      "positive_means_a_worse": true
+    },
+    "share_of_scenarios_worst_first_better": 0.625,
+    "additive_gain_vs_worst_first_person_days": 5597.802256291614,
+    "gap_as_share_of_additive_gain": 0.38757892237888003,
+    "note": "Condition-first beats random by a small absolute margin while spending less, and is nominally worse per crore because of that lower spend. Either reading leaves the practice baseline close to chance relative to the additive policy's gain."
+  },
+  "year1_plans": {
+    "do_nothing": {},
+    "worst_first": {
+      "X003": "minor",
+      "X004": "minor",
+      "X005": "minor",
+      "X011": "minor",
+      "X017": "minor",
+      "X018": "minor",
+      "X019": "minor",
+      "X022": "minor",
+      "X023": "minor",
+      "X025": "minor",
+      "X002": "major",
+      "X006": "major",
+      "X007": "major"
+    },
+    "benefit_cost": {
+      "X001": "minor",
+      "X002": "minor",
+      "X003": "minor",
+      "X004": "minor",
+      "X010": "minor",
+      "X011": "minor",
+      "X005": "minor",
+      "X006": "minor",
+      "X007": "minor",
+      "X008": "minor",
+      "X009": "minor",
+      "X012": "minor",
+      "X013": "minor",
+      "X017": "minor",
+      "X018": "minor",
+      "X020": "minor",
+      "X014": "minor",
+      "X015": "minor",
+      "X016": "minor",
+      "X019": "minor",
+      "X024": "minor",
+      "X025": "minor",
+      "X021": "minor",
+      "X022": "minor",
+      "X023": "minor"
+    },
+    "random": {
+      "X003": "minor",
+      "X012": "minor",
+      "X027": "minor",
+      "X022": "minor",
+      "X011": "minor",
+      "X005": "minor",
+      "X029": "minor",
+      "X017": "minor",
+      "X024": "minor",
+      "X007": "minor",
+      "X019": "minor",
+      "X026": "minor",
+      "X004": "minor",
+      "X030": "minor",
+      "X009": "minor",
+      "X001": "minor",
+      "X020": "minor",
+      "X013": "minor",
+      "X021": "minor",
+      "X014": "minor",
+      "X008": "minor",
+      "X006": "minor",
+      "X018": "minor",
+      "X015": "minor",
+      "X023": "minor"
+    },
+    "additive_milp": {
+      "X001": "major",
+      "X002": "major",
+      "X003": "minor",
+      "X004": "minor",
+      "X005": "minor",
+      "X008": "minor",
+      "X011": "minor",
+      "X012": "minor",
+      "X013": "major",
+      "X015": "minor",
+      "X016": "minor",
+      "X017": "minor",
+      "X019": "minor",
+      "X026": "minor",
+      "X028": "minor",
+      "X030": "minor"
+    }
+  },
+  "inspection_value": {
+    "base_objective": 18884.161736358416,
+    "note": "Expected gain is the mean objective improvement over the three condition states when that one structure's condition is known; an upper bound because structures are resolved one at a time and the other 29 stay at their assumed state.",
+    "structures": [
+      {
+        "id": "X003",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "minor",
+        "expected_gain": 659.2361600598015,
+        "min_gain": 0.0,
+        "max_gain": 1013.7526192312907,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X011",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "minor",
+        "expected_gain": 659.2069047913574,
+        "min_gain": 0.0,
+        "max_gain": 1013.1739113567455,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X004",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "minor",
+        "expected_gain": 642.3706411715757,
+        "min_gain": 0.0,
+        "max_gain": 993.8732238575867,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X005",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "minor",
+        "expected_gain": 609.5714588190713,
+        "min_gain": 0.0,
+        "max_gain": 948.4621858534811,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X017",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "minor",
+        "expected_gain": 570.2076216238602,
+        "min_gain": 0.0,
+        "max_gain": 893.2911099817611,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X019",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "minor",
+        "expected_gain": 466.64201616122955,
+        "min_gain": 0.0,
+        "max_gain": 754.8920769843608,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X023",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "none",
+        "expected_gain": 424.6491580821057,
+        "min_gain": 0.0,
+        "max_gain": 727.3803742611453,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X018",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "none",
+        "expected_gain": 406.13258386201414,
+        "min_gain": 0.0,
+        "max_gain": 703.0109115700652,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X025",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "none",
+        "expected_gain": 379.3652310494872,
+        "min_gain": 0.0,
+        "max_gain": 668.303242239479,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X022",
+        "type": "culvert",
+        "assumed_condition": 1,
+        "base_option": "none",
+        "expected_gain": 371.614466725754,
+        "min_gain": 0.0,
+        "max_gain": 658.9286363623905,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X029",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -53.03557499952876,
+        "min_gain": -381.6023956029203,
+        "max_gain": 222.49567060434129,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X027",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -73.26932541890346,
+        "min_gain": -425.08141217580123,
+        "max_gain": 205.27343591909084,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X020",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -101.59663476534115,
+        "min_gain": -501.4167264166499,
+        "max_gain": 196.62682212062282,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X024",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -122.30670100891803,
+        "min_gain": -538.8335753652354,
+        "max_gain": 171.91347233847773,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X006",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -156.2021956794306,
+        "min_gain": -631.450836277887,
+        "max_gain": 162.8442492395916,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X021",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -169.27912272116373,
+        "min_gain": -653.7319842910292,
+        "max_gain": 145.89461612754167,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X007",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -169.4751325358484,
+        "min_gain": -655.9217905520272,
+        "max_gain": 147.4963929444857,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X014",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -177.19146640201143,
+        "min_gain": -675.7251457136044,
+        "max_gain": 144.15074650755923,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X009",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -181.82850448504905,
+        "min_gain": -687.9863858912831,
+        "max_gain": 142.50087243613962,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X002",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "major",
+        "expected_gain": -198.20469473569028,
+        "min_gain": -847.4997574772533,
+        "max_gain": 252.88567327018973,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X013",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "major",
+        "expected_gain": -227.0200546393571,
+        "min_gain": -839.5551625808257,
+        "max_gain": 158.49499866275073,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X028",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -235.02164301715675,
+        "min_gain": -521.7988315168877,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X026",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -243.21789959576563,
+        "min_gain": -559.6938986141067,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X030",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -243.7423326688513,
+        "min_gain": -550.3294926246454,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X010",
+        "type": "culvert",
+        "assumed_condition": 2,
+        "base_option": "none",
+        "expected_gain": -249.25607269558532,
+        "min_gain": -858.0341445321137,
+        "max_gain": 110.26592644535413,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X012",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -265.6304415994491,
+        "min_gain": -663.5524308360255,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 2
+      },
+      {
+        "id": "X008",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -295.0663231997278,
+        "min_gain": -780.7778535861726,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X015",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -303.9447190732026,
+        "min_gain": -821.6661153282366,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X016",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "minor",
+        "expected_gain": -309.6634787733383,
+        "min_gain": -838.5814666907172,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 1
+      },
+      {
+        "id": "X001",
+        "type": "culvert",
+        "assumed_condition": 3,
+        "base_option": "major",
+        "expected_gain": -452.83830846005367,
+        "min_gain": -1102.7276945974882,
+        "max_gain": 0.0,
+        "plan_changes_in_states": 1
+      }
+    ],
+    "sum_positive_gain": 5188.996242346257
+  },
+  "islanding": [
+    {
+      "id": "X001",
+      "type": "culvert",
+      "solo_loss": 722.9718338609565,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 15.787196546044356
+    },
+    {
+      "id": "X002",
+      "type": "culvert",
+      "solo_loss": 554.7437784701502,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 7.584586930011596
+    },
+    {
+      "id": "X003",
+      "type": "culvert",
+      "solo_loss": 488.7846398394603,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 2.5990034692205897
+    },
+    {
+      "id": "X004",
+      "type": "culvert",
+      "solo_loss": 450.9613473111582,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 5.419426195729674
+    },
+    {
+      "id": "X005",
+      "type": "culvert",
+      "solo_loss": 334.0155066037033,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 6.507786479642891
+    },
+    {
+      "id": "X006",
+      "type": "culvert",
+      "solo_loss": 332.84963429864285,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 4.958749539573434
+    },
+    {
+      "id": "X007",
+      "type": "culvert",
+      "solo_loss": 312.3619774253406,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.036385281260109
+    },
+    {
+      "id": "X008",
+      "type": "culvert",
+      "solo_loss": 307.07473768515905,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 5.256257862668296
+    },
+    {
+      "id": "X009",
+      "type": "culvert",
+      "solo_loss": 302.6491193227764,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 2.091124124303473
+    },
+    {
+      "id": "X010",
+      "type": "culvert",
+      "solo_loss": 354.29637630206577,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.3038611228424455
+    },
+    {
+      "id": "X011",
+      "type": "culvert",
+      "solo_loss": 334.15540763040633,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.5459566910672304
+    },
+    {
+      "id": "X012",
+      "type": "culvert",
+      "solo_loss": 293.58742984900755,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 1.738024115547736
+    },
+    {
+      "id": "X013",
+      "type": "culvert",
+      "solo_loss": 290.0883791659891,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 6.612009611350814
+    },
+    {
+      "id": "X014",
+      "type": "culvert",
+      "solo_loss": 270.8780345520673,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 6.695786462885177
+    },
+    {
+      "id": "X015",
+      "type": "culvert",
+      "solo_loss": 267.7354462663473,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 6.695786462885177
+    },
+    {
+      "id": "X016",
+      "type": "culvert",
+      "solo_loss": 267.7354462663473,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 6.695786462885177
+    },
+    {
+      "id": "X017",
+      "type": "culvert",
+      "solo_loss": 275.57447955885664,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 17.55058037025131
+    },
+    {
+      "id": "X018",
+      "type": "culvert",
+      "solo_loss": 275.57447955885664,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 17.55058037025131
+    },
+    {
+      "id": "X019",
+      "type": "culvert",
+      "solo_loss": 262.0261775813609,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 4.781821352046277
+    },
+    {
+      "id": "X020",
+      "type": "culvert",
+      "solo_loss": 275.30119307581793,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 4.471442657215123
+    },
+    {
+      "id": "X021",
+      "type": "culvert",
+      "solo_loss": 249.200118438214,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 5.7845602454837834
+    },
+    {
+      "id": "X022",
+      "type": "culvert",
+      "solo_loss": 247.03801175769613,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.7682049384216767
+    },
+    {
+      "id": "X023",
+      "type": "culvert",
+      "solo_loss": 243.56420206939026,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.2093584476484787
+    },
+    {
+      "id": "X024",
+      "type": "culvert",
+      "solo_loss": 252.8740176827504,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 7.44505136233013
+    },
+    {
+      "id": "X025",
+      "type": "culvert",
+      "solo_loss": 252.8740176827504,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 7.44505136233013
+    },
+    {
+      "id": "X026",
+      "type": "culvert",
+      "solo_loss": 187.91065026911917,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 6.3209236770937824
+    },
+    {
+      "id": "X027",
+      "type": "culvert",
+      "solo_loss": 185.8205509396992,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 2.4573212642727857
+    },
+    {
+      "id": "X028",
+      "type": "culvert",
+      "solo_loss": 179.2256582614764,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 5.9970756041661195
+    },
+    {
+      "id": "X029",
+      "type": "culvert",
+      "solo_loss": 178.94345071006632,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.9276668161401505
+    },
+    {
+      "id": "X030",
+      "type": "culvert",
+      "solo_loss": 180.69409904344138,
+      "outage_days": 10.0,
+      "isolated_habitations": 0,
+      "isolated_population": 0.0,
+      "max_extra_one_way_minutes": 3.1652107944359917
+    }
+  ],
+  "n_single_points_of_failure": 0,
+  "equity": {
+    "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+    "n_habitations_reached": 118,
+    "share_of_population_reached": 0.06772921420204725,
+    "gini_of_benefit_per_person": 0.5440390418988115,
+    "top_1pct_share_of_benefit": 6.348936924610388e-05
+  },
+  "budget_frontier": [
+    {
+      "budget_crore": 0.1,
+      "objective": 27439.885764920076,
+      "planned_loss_per_crore": 274398.85764920077,
+      "n_funded": 5,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 27439.885764920076
+    },
+    {
+      "budget_crore": 0.25,
+      "objective": 23930.945369460424,
+      "planned_loss_per_crore": 95723.7814778417,
+      "n_funded": 9,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 23930.945369460424
+    },
+    {
+      "budget_crore": 0.5,
+      "objective": 18884.161736358416,
+      "planned_loss_per_crore": 37768.32347271683,
+      "n_funded": 16,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 18884.161736358416
+    },
+    {
+      "budget_crore": 1.0,
+      "objective": 14254.066559116833,
+      "planned_loss_per_crore": 14254.066559116833,
+      "n_funded": 15,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 14254.066559116833
+    }
+  ],
+  "destination_sensitivity": [
+    {
+      "destination": "health",
+      "n_facilities": 304,
+      "cap_minutes": 60.0,
+      "weight": 1.0,
+      "baseline_median_minutes": 3.2991806988732293,
+      "baseline_share_within_cap": 0.9864608921285505,
+      "baseline_habitations_beyond_cap": 22,
+      "islanding": [
+        {
+          "id": "X001",
+          "type": "culvert",
+          "solo_loss": 722.9718338609565,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 15.787196546044356
+        },
+        {
+          "id": "X002",
+          "type": "culvert",
+          "solo_loss": 554.7437784701502,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 7.584586930011596
+        },
+        {
+          "id": "X003",
+          "type": "culvert",
+          "solo_loss": 488.7846398394603,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 2.5990034692205897
+        },
+        {
+          "id": "X004",
+          "type": "culvert",
+          "solo_loss": 450.9613473111582,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 5.419426195729674
+        },
+        {
+          "id": "X005",
+          "type": "culvert",
+          "solo_loss": 334.0155066037033,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 6.507786479642891
+        },
+        {
+          "id": "X006",
+          "type": "culvert",
+          "solo_loss": 332.84963429864285,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 4.958749539573434
+        },
+        {
+          "id": "X007",
+          "type": "culvert",
+          "solo_loss": 312.3619774253406,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.036385281260109
+        },
+        {
+          "id": "X008",
+          "type": "culvert",
+          "solo_loss": 307.07473768515905,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 5.256257862668296
+        },
+        {
+          "id": "X009",
+          "type": "culvert",
+          "solo_loss": 302.6491193227764,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 2.091124124303473
+        },
+        {
+          "id": "X010",
+          "type": "culvert",
+          "solo_loss": 354.29637630206577,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.3038611228424455
+        },
+        {
+          "id": "X011",
+          "type": "culvert",
+          "solo_loss": 334.15540763040633,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.5459566910672304
+        },
+        {
+          "id": "X012",
+          "type": "culvert",
+          "solo_loss": 293.58742984900755,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 1.738024115547736
+        },
+        {
+          "id": "X013",
+          "type": "culvert",
+          "solo_loss": 290.0883791659891,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 6.612009611350814
+        },
+        {
+          "id": "X014",
+          "type": "culvert",
+          "solo_loss": 270.8780345520673,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 6.695786462885177
+        },
+        {
+          "id": "X015",
+          "type": "culvert",
+          "solo_loss": 267.7354462663473,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 6.695786462885177
+        },
+        {
+          "id": "X016",
+          "type": "culvert",
+          "solo_loss": 267.7354462663473,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 6.695786462885177
+        },
+        {
+          "id": "X017",
+          "type": "culvert",
+          "solo_loss": 275.57447955885664,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 17.55058037025131
+        },
+        {
+          "id": "X018",
+          "type": "culvert",
+          "solo_loss": 275.57447955885664,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 17.55058037025131
+        },
+        {
+          "id": "X019",
+          "type": "culvert",
+          "solo_loss": 262.0261775813609,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 4.781821352046277
+        },
+        {
+          "id": "X020",
+          "type": "culvert",
+          "solo_loss": 275.30119307581793,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 4.471442657215123
+        },
+        {
+          "id": "X021",
+          "type": "culvert",
+          "solo_loss": 249.200118438214,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 5.7845602454837834
+        },
+        {
+          "id": "X022",
+          "type": "culvert",
+          "solo_loss": 247.03801175769613,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.7682049384216767
+        },
+        {
+          "id": "X023",
+          "type": "culvert",
+          "solo_loss": 243.56420206939026,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.2093584476484787
+        },
+        {
+          "id": "X024",
+          "type": "culvert",
+          "solo_loss": 252.8740176827504,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 7.44505136233013
+        },
+        {
+          "id": "X025",
+          "type": "culvert",
+          "solo_loss": 252.8740176827504,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 7.44505136233013
+        },
+        {
+          "id": "X026",
+          "type": "culvert",
+          "solo_loss": 187.91065026911917,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 6.3209236770937824
+        },
+        {
+          "id": "X027",
+          "type": "culvert",
+          "solo_loss": 185.8205509396992,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 2.4573212642727857
+        },
+        {
+          "id": "X028",
+          "type": "culvert",
+          "solo_loss": 179.2256582614764,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 5.9970756041661195
+        },
+        {
+          "id": "X029",
+          "type": "culvert",
+          "solo_loss": 178.94345071006632,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.9276668161401505
+        },
+        {
+          "id": "X030",
+          "type": "culvert",
+          "solo_loss": 180.69409904344138,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 3.1652107944359917
+        }
+      ],
+      "n_single_points_of_failure": 0,
+      "equity": {
+        "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+        "n_habitations_reached": 118,
+        "share_of_population_reached": 0.06772921420204725,
+        "gini_of_benefit_per_person": 0.5440390418988115,
+        "top_1pct_share_of_benefit": 6.348936924610388e-05
+      },
+      "plan_funded": 16
+    },
+    {
+      "destination": "school",
+      "n_facilities": 987,
+      "cap_minutes": 45.0,
+      "weight": 1.0,
+      "baseline_median_minutes": 1.9791502341752574,
+      "baseline_share_within_cap": 0.9953055446087029,
+      "baseline_habitations_beyond_cap": 11,
+      "islanding": [
+        {
+          "id": "X010",
+          "type": "culvert",
+          "solo_loss": 1303.0165668845107,
+          "outage_days": 10.0,
+          "isolated_habitations": 4,
+          "isolated_population": 1452.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X001",
+          "type": "culvert",
+          "solo_loss": 881.5279814431894,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 14.760757457302276
+        },
+        {
+          "id": "X002",
+          "type": "culvert",
+          "solo_loss": 1.9103228400018737,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.14423578489947042
+        },
+        {
+          "id": "X003",
+          "type": "culvert",
+          "solo_loss": 0.08285326956012334,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0664789111789974
+        },
+        {
+          "id": "X004",
+          "type": "culvert",
+          "solo_loss": 1.9103228400018737,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.14423578489947042
+        },
+        {
+          "id": "X005",
+          "type": "culvert",
+          "solo_loss": 142.71685751553414,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 4.6826931005795736
+        },
+        {
+          "id": "X006",
+          "type": "culvert",
+          "solo_loss": 20.972968792663888,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.8366875848137192
+        },
+        {
+          "id": "X007",
+          "type": "culvert",
+          "solo_loss": 6.5188736625202885,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.45130663817448124
+        },
+        {
+          "id": "X008",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X009",
+          "type": "culvert",
+          "solo_loss": 24.834818463012024,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 1.7140595564962284
+        },
+        {
+          "id": "X011",
+          "type": "culvert",
+          "solo_loss": 54.18214939002577,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 2.3563747695662434
+        },
+        {
+          "id": "X012",
+          "type": "culvert",
+          "solo_loss": 1.0476680613854146,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.06440582344582468
+        },
+        {
+          "id": "X013",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X014",
+          "type": "culvert",
+          "solo_loss": 19.574977965802862,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 1.4678146373776721
+        },
+        {
+          "id": "X015",
+          "type": "culvert",
+          "solo_loss": 14.160372859031895,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.4046750346588053
+        },
+        {
+          "id": "X016",
+          "type": "culvert",
+          "solo_loss": 14.160372859031895,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.4046750346588053
+        },
+        {
+          "id": "X017",
+          "type": "culvert",
+          "solo_loss": 186.31525992312046,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 9.737731354866924
+        },
+        {
+          "id": "X018",
+          "type": "culvert",
+          "solo_loss": 186.31525992312046,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 9.737731354866924
+        },
+        {
+          "id": "X019",
+          "type": "culvert",
+          "solo_loss": 36.819608357981416,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.827200387473372
+        },
+        {
+          "id": "X020",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X021",
+          "type": "culvert",
+          "solo_loss": 318.7943653151609,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 5.633671914299077
+        },
+        {
+          "id": "X022",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X023",
+          "type": "culvert",
+          "solo_loss": 17.011546084339294,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.4344605980676888
+        },
+        {
+          "id": "X024",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X025",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        },
+        {
+          "id": "X026",
+          "type": "culvert",
+          "solo_loss": 20.785548654572818,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.40596774715962525
+        },
+        {
+          "id": "X027",
+          "type": "culvert",
+          "solo_loss": 35.782922034082695,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 1.4224659819202485
+        },
+        {
+          "id": "X028",
+          "type": "culvert",
+          "solo_loss": 303.2395916641062,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 7.284602205946691
+        },
+        {
+          "id": "X029",
+          "type": "culvert",
+          "solo_loss": 26.53674254000972,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.4182399568424796
+        },
+        {
+          "id": "X030",
+          "type": "culvert",
+          "solo_loss": 0.0,
+          "outage_days": 10.0,
+          "isolated_habitations": 0,
+          "isolated_population": 0.0,
+          "max_extra_one_way_minutes": 0.0
+        }
+      ],
+      "n_single_points_of_failure": 1,
+      "equity": {
+        "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+        "n_habitations_reached": 28,
+        "share_of_population_reached": 0.016806477947982377,
+        "gini_of_benefit_per_person": 0.5925161509943258,
+        "top_1pct_share_of_benefit": 0.0006579704792621673
+      },
+      "plan_funded": 16
+    }
+  ],
+  "robustness": {
+    "budgets_crore_per_year": [
+      0.25,
+      0.3975,
+      0.5
+    ],
+    "spend_matched": {
+      "budgets_crore_per_year": [
+        0.25,
+        0.3975,
+        0.5
+      ],
+      "rows": [
+        {
+          "budget_crore_per_year": 0.25,
+          "planned_budget_total_crore": 0.5,
+          "policy": "worst_first",
+          "mean_person_days": 53453.079391860236,
+          "mean_planned_crore": 0.3875,
+          "mean_emergency_crore": 2.6640000000000015,
+          "mean_spend_crore": 3.0515000000000017,
+          "n_funded_year1": 10
+        },
+        {
+          "budget_crore_per_year": 0.25,
+          "planned_budget_total_crore": 0.5,
+          "policy": "random",
+          "mean_person_days": 55880.52421696036,
+          "mean_planned_crore": 0.48000000000000015,
+          "mean_emergency_crore": 2.7540000000000013,
+          "mean_spend_crore": 3.2340000000000018,
+          "n_funded_year1": 12
+        },
+        {
+          "budget_crore_per_year": 0.25,
+          "planned_budget_total_crore": 0.5,
+          "policy": "benefit_cost",
+          "mean_person_days": 54035.601038945984,
+          "mean_planned_crore": 0.48000000000000015,
+          "mean_emergency_crore": 2.9160000000000017,
+          "mean_spend_crore": 3.3960000000000017,
+          "n_funded_year1": 12
+        },
+        {
+          "budget_crore_per_year": 0.25,
+          "planned_budget_total_crore": 0.5,
+          "policy": "additive_milp",
+          "mean_person_days": 56437.71164159522,
+          "mean_planned_crore": 0.4800000000000001,
+          "mean_emergency_crore": 2.9880000000000018,
+          "mean_spend_crore": 3.4680000000000017,
+          "n_funded_year1": 9
+        },
+        {
+          "budget_crore_per_year": 0.3975,
+          "planned_budget_total_crore": 0.795,
+          "policy": "worst_first",
+          "mean_person_days": 46716.5976536986,
+          "mean_planned_crore": 0.6425000000000001,
+          "mean_emergency_crore": 2.4300000000000015,
+          "mean_spend_crore": 3.0725000000000016,
+          "n_funded_year1": 12
+        },
+        {
+          "budget_crore_per_year": 0.3975,
+          "planned_budget_total_crore": 0.795,
+          "policy": "random",
+          "mean_person_days": 50484.010946709466,
+          "mean_planned_crore": 0.7600000000000003,
+          "mean_emergency_crore": 2.5560000000000014,
+          "mean_spend_crore": 3.3160000000000016,
+          "n_funded_year1": 19
+        },
+        {
+          "budget_crore_per_year": 0.3975,
+          "planned_budget_total_crore": 0.795,
+          "policy": "benefit_cost",
+          "mean_person_days": 50409.305133363334,
+          "mean_planned_crore": 0.7600000000000003,
+          "mean_emergency_crore": 2.610000000000001,
+          "mean_spend_crore": 3.370000000000002,
+          "n_funded_year1": 19
+        },
+        {
+          "budget_crore_per_year": 0.3975,
+          "planned_budget_total_crore": 0.795,
+          "policy": "additive_milp",
+          "mean_person_days": 44097.89448711656,
+          "mean_planned_crore": 0.7600000000000001,
+          "mean_emergency_crore": 2.5200000000000014,
+          "mean_spend_crore": 3.280000000000001,
+          "n_funded_year1": 13
+        },
+        {
+          "budget_crore_per_year": 0.5,
+          "planned_budget_total_crore": 1.0,
+          "policy": "worst_first",
+          "mean_person_days": 45229.14771625014,
+          "mean_planned_crore": 0.795,
+          "mean_emergency_crore": 2.340000000000001,
+          "mean_spend_crore": 3.135000000000001,
+          "n_funded_year1": 13
+        },
+        {
+          "budget_crore_per_year": 0.5,
+          "planned_budget_total_crore": 1.0,
+          "policy": "random",
+          "mean_person_days": 47398.73788243371,
+          "mean_planned_crore": 1.0000000000000004,
+          "mean_emergency_crore": 2.340000000000001,
+          "mean_spend_crore": 3.3400000000000016,
+          "n_funded_year1": 25
+        },
+        {
+          "budget_crore_per_year": 0.5,
+          "planned_budget_total_crore": 1.0,
+          "policy": "benefit_cost",
+          "mean_person_days": 45998.195670130575,
+          "mean_planned_crore": 1.0000000000000004,
+          "mean_emergency_crore": 2.340000000000001,
+          "mean_spend_crore": 3.3400000000000016,
+          "n_funded_year1": 25
+        },
+        {
+          "budget_crore_per_year": 0.5,
+          "planned_budget_total_crore": 1.0,
+          "policy": "additive_milp",
+          "mean_person_days": 39631.345459958524,
+          "mean_planned_crore": 1.0,
+          "mean_emergency_crore": 2.232000000000001,
+          "mean_spend_crore": 3.232000000000001,
+          "n_funded_year1": 16
+        }
+      ],
+      "comparisons": [
+        {
+          "comparison": "worst_first - random",
+          "mean_person_days": -2427.444825100126,
+          "ci_lo": -5436.2367396463505,
+          "ci_hi": 386.31183116748963,
+          "n_scenarios": 8,
+          "share_a_better": 0.625,
+          "share_b_better": 0.375,
+          "positive_means_a_worse": true,
+          "budget_crore_per_year": 0.25
+        },
+        {
+          "comparison": "additive_milp - worst_first",
+          "mean_person_days": 2984.632249734983,
+          "ci_lo": 1493.6661413454779,
+          "ci_hi": 4290.70884283617,
+          "n_scenarios": 8,
+          "share_a_better": 0.125,
+          "share_b_better": 0.875,
+          "positive_means_a_worse": true,
+          "budget_crore_per_year": 0.25
+        },
+        {
+          "comparison": "worst_first - random",
+          "mean_person_days": -3767.4132930108653,
+          "ci_lo": -8641.127163022791,
+          "ci_hi": 1203.4035811631456,
+          "n_scenarios": 8,
+          "share_a_better": 0.625,
+          "share_b_better": 0.375,
+          "positive_means_a_worse": true,
+          "budget_crore_per_year": 0.3975
+        },
+        {
+          "comparison": "additive_milp - worst_first",
+          "mean_person_days": -2618.7031665820423,
+          "ci_lo": -4823.554673343606,
+          "ci_hi": -76.53815737641186,
+          "n_scenarios": 8,
+          "share_a_better": 0.75,
+          "share_b_better": 0.25,
+          "positive_means_a_worse": true,
+          "budget_crore_per_year": 0.3975
+        },
+        {
+          "comparison": "worst_first - random",
+          "mean_person_days": -2169.590166183567,
+          "ci_lo": -7403.159229989792,
+          "ci_hi": 3394.931757337804,
+          "n_scenarios": 8,
+          "share_a_better": 0.625,
+          "share_b_better": 0.375,
+          "positive_means_a_worse": true,
+          "budget_crore_per_year": 0.5
+        },
+        {
+          "comparison": "additive_milp - worst_first",
+          "mean_person_days": -5597.802256291614,
+          "ci_lo": -8894.887867225048,
+          "ci_hi": -1951.110839881907,
+          "n_scenarios": 8,
+          "share_a_better": 0.875,
+          "share_b_better": 0.125,
+          "positive_means_a_worse": true,
+          "budget_crore_per_year": 0.5
+        }
+      ],
+      "matched": [
+        {
+          "budget_crore_per_year": 0.25,
+          "worst_first_planned_crore": 0.3875,
+          "random_planned_crore": 0.48000000000000015,
+          "planned_spend_gap_crore": -0.09250000000000014,
+          "paired": {
+            "comparison": "worst_first - random",
+            "mean_person_days": -2427.444825100126,
+            "ci_lo": -5436.2367396463505,
+            "ci_hi": 386.31183116748963,
+            "n_scenarios": 8,
+            "share_a_better": 0.625,
+            "share_b_better": 0.375,
+            "positive_means_a_worse": true,
+            "budget_crore_per_year": 0.25
+          }
+        },
+        {
+          "budget_crore_per_year": 0.3975,
+          "worst_first_planned_crore": 0.6425000000000001,
+          "random_planned_crore": 0.7600000000000003,
+          "planned_spend_gap_crore": -0.11750000000000027,
+          "paired": {
+            "comparison": "worst_first - random",
+            "mean_person_days": -3767.4132930108653,
+            "ci_lo": -8641.127163022791,
+            "ci_hi": 1203.4035811631456,
+            "n_scenarios": 8,
+            "share_a_better": 0.625,
+            "share_b_better": 0.375,
+            "positive_means_a_worse": true,
+            "budget_crore_per_year": 0.3975
+          }
+        },
+        {
+          "budget_crore_per_year": 0.5,
+          "worst_first_planned_crore": 0.795,
+          "random_planned_crore": 1.0000000000000004,
+          "planned_spend_gap_crore": -0.2050000000000004,
+          "paired": {
+            "comparison": "worst_first - random",
+            "mean_person_days": -2169.590166183567,
+            "ci_lo": -7403.159229989792,
+            "ci_hi": 3394.931757337804,
+            "n_scenarios": 8,
+            "share_a_better": 0.625,
+            "share_b_better": 0.375,
+            "positive_means_a_worse": true,
+            "budget_crore_per_year": 0.5
+          }
+        }
+      ],
+      "note": "Budgets are per simulated year; the two-year horizon makes the planned total twice the per-year figure. Emergency restoration is reported but not equalised: it is a consequence of failure, not an allocation choice."
+    },
+    "precision": {
+      "rows": [
+        {
+          "n_scenarios": 8,
+          "additive_gain_vs_worst_first_person_days": 5597.802256291616,
+          "worst_first_minus_random_person_days": -2169.590166183567,
+          "sd_of_paired_difference": 8470.055298902545,
+          "share_scenarios_worst_first_better": 0.625,
+          "equivalence": [
+            {
+              "mean": -2169.590166183567,
+              "sd": 8470.055298902545,
+              "n": 8,
+              "margin": 279.8901128145808,
+              "alpha": 0.05,
+              "se": 2994.6167694395194,
+              "ci_lo": -9250.733603426692,
+              "ci_hi": 4911.553271059557,
+              "p_lower": 0.7259691562118552,
+              "p_upper": 0.22016495814767473,
+              "p_tost": 0.7259691562118552,
+              "equivalent": false,
+              "min_detectable_difference": 7081.143437243124,
+              "required_n": 5662,
+              "power": 0.8,
+              "margin_share_of_additive_gain": 0.05
+            },
+            {
+              "mean": -2169.590166183567,
+              "sd": 8470.055298902545,
+              "n": 8,
+              "margin": 559.7802256291616,
+              "alpha": 0.05,
+              "se": 2994.6167694395194,
+              "ci_lo": -9250.733603426692,
+              "ci_hi": 4911.553271059557,
+              "p_lower": 0.6962333124034388,
+              "p_upper": 0.1961880155086516,
+              "p_tost": 0.6962333124034388,
+              "equivalent": false,
+              "min_detectable_difference": 7081.143437243124,
+              "required_n": 1416,
+              "power": 0.8,
+              "margin_share_of_additive_gain": 0.1
+            }
+          ]
+        },
+        {
+          "n_scenarios": 40,
+          "additive_gain_vs_worst_first_person_days": 980.9768389336386,
+          "worst_first_minus_random_person_days": -4335.309908718688,
+          "sd_of_paired_difference": 7410.6499510547765,
+          "share_scenarios_worst_first_better": 0.75,
+          "equivalence": [
+            {
+              "mean": -4335.309908718688,
+              "sd": 7410.6499510547765,
+              "n": 40,
+              "margin": 49.04884194668193,
+              "alpha": 0.05,
+              "se": 1171.7266393774205,
+              "ci_lo": -6705.350742952585,
+              "ci_hi": -1965.2690744847919,
+              "p_lower": 0.9996251411819879,
+              "p_upper": 0.00029381445738800447,
+              "p_tost": 0.9996251411819879,
+              "equivalent": false,
+              "min_detectable_difference": 2370.0408342338965,
+              "required_n": 141132,
+              "power": 0.8,
+              "margin_share_of_additive_gain": 0.05
+            },
+            {
+              "mean": -4335.309908718688,
+              "sd": 7410.6499510547765,
+              "n": 40,
+              "margin": 98.09768389336386,
+              "alpha": 0.05,
+              "se": 1171.7266393774205,
+              "ci_lo": -6705.350742952585,
+              "ci_hi": -1965.2690744847919,
+              "p_lower": 0.9995769182866595,
+              "p_upper": 0.0002599240199599265,
+              "p_tost": 0.9995769182866595,
+              "equivalent": false,
+              "min_detectable_difference": 2370.0408342338965,
+              "required_n": 35283,
+              "power": 0.8,
+              "margin_share_of_additive_gain": 0.1
+            }
+          ]
+        }
+      ],
+      "note": "The 8-scenario row reproduces the reporting panel. TOST rejects equivalence only when both one-sided tests reject; otherwise the reading is 'not distinguishable, and underpowered to claim equivalence at this margin'. required_n is the paired scenario count a TOST at that margin would need at 80% power, so it is a design statement about this estimator."
+    },
+    "heuristics": {
+      "rows": [
+        {
+          "policy": "type_first",
+          "mean_person_days": 53266.59246926628,
+          "mean_planned_crore": 1.0,
+          "mean_emergency_crore": 2.9880000000000018,
+          "mean_spend_crore": 3.9880000000000018,
+          "person_days_per_crore": 13356.718272132963,
+          "cvar_person_days": 64025.57608081664,
+          "n_funded_year1": 3
+        },
+        {
+          "policy": "random",
+          "mean_person_days": 47398.73788243371,
+          "mean_planned_crore": 1.0000000000000004,
+          "mean_emergency_crore": 2.340000000000001,
+          "mean_spend_crore": 3.3400000000000016,
+          "person_days_per_crore": 14191.238886956193,
+          "cvar_person_days": 59388.67093609299,
+          "n_funded_year1": 25
+        },
+        {
+          "policy": "worst_first",
+          "mean_person_days": 45229.14771625014,
+          "mean_planned_crore": 0.795,
+          "mean_emergency_crore": 2.340000000000001,
+          "mean_spend_crore": 3.135000000000001,
+          "person_days_per_crore": 14427.160356060645,
+          "cvar_person_days": 59423.519849039105,
+          "n_funded_year1": 13
+        },
+        {
+          "policy": "cheapest_first",
+          "mean_person_days": 45229.14771625014,
+          "mean_planned_crore": 0.795,
+          "mean_emergency_crore": 2.340000000000001,
+          "mean_spend_crore": 3.135000000000001,
+          "person_days_per_crore": 14427.160356060645,
+          "cvar_person_days": 59423.519849039105,
+          "n_funded_year1": 13
+        },
+        {
+          "policy": "road_class_first",
+          "mean_person_days": 55830.84458489281,
+          "mean_planned_crore": 0.9924999999999999,
+          "mean_emergency_crore": 2.8080000000000016,
+          "mean_spend_crore": 3.8005000000000013,
+          "person_days_per_crore": 14690.394575685512,
+          "cvar_person_days": 65368.422040776524,
+          "n_funded_year1": 3
+        },
+        {
+          "policy": "age_first",
+          "mean_person_days": 55740.78386394876,
+          "mean_planned_crore": 0.9924999999999999,
+          "mean_emergency_crore": 2.7180000000000017,
+          "mean_spend_crore": 3.7105000000000015,
+          "person_days_per_crore": 15022.445455854666,
+          "cvar_person_days": 68106.64032636886,
+          "n_funded_year1": 5
+        },
+        {
+          "policy": "do_nothing",
+          "mean_person_days": 64640.437379400726,
+          "mean_planned_crore": 0.0,
+          "mean_emergency_crore": 3.330000000000002,
+          "mean_spend_crore": 3.330000000000002,
+          "person_days_per_crore": 19411.542756576782,
+          "cvar_person_days": 74191.1687179163,
+          "n_funded_year1": 0
+        }
+      ],
+      "comparisons": {
+        "age_first_vs_random": {
+          "comparison": "age_first - random",
+          "mean_person_days": 8342.04598151506,
+          "ci_lo": 5185.6259308899,
+          "ci_hi": 12123.115422544508,
+          "n_scenarios": 8,
+          "share_a_better": 0.0,
+          "share_b_better": 1.0,
+          "positive_means_a_worse": true
+        },
+        "cheapest_first_vs_random": {
+          "comparison": "cheapest_first - random",
+          "mean_person_days": -2169.590166183567,
+          "ci_lo": -7403.159229989792,
+          "ci_hi": 3394.931757337804,
+          "n_scenarios": 8,
+          "share_a_better": 0.625,
+          "share_b_better": 0.375,
+          "positive_means_a_worse": true
+        },
+        "type_first_vs_random": {
+          "comparison": "type_first - random",
+          "mean_person_days": 5867.854586832577,
+          "ci_lo": 2446.551622183093,
+          "ci_hi": 9223.342825545786,
+          "n_scenarios": 8,
+          "share_a_better": 0.125,
+          "share_b_better": 0.875,
+          "positive_means_a_worse": true
+        },
+        "road_class_first_vs_random": {
+          "comparison": "road_class_first - random",
+          "mean_person_days": 8432.10670245911,
+          "ci_lo": 6696.158846319517,
+          "ci_hi": 10339.160403283055,
+          "n_scenarios": 8,
+          "share_a_better": 0.0,
+          "share_b_better": 1.0,
+          "positive_means_a_worse": true
+        },
+        "worst_first_vs_random": {
+          "comparison": "worst_first - random",
+          "mean_person_days": -2169.590166183567,
+          "ci_lo": -7403.159229989792,
+          "ci_hi": 3394.931757337804,
+          "n_scenarios": 8,
+          "share_a_better": 0.625,
+          "share_b_better": 0.375,
+          "positive_means_a_worse": true
+        }
+      },
+      "note": "All rules buy the condition-appropriate intervention, so the comparison is about the ranking signal. Road-class priority is a declared ordering of OSM highway classes, not measured traffic: the district has no link counts."
+    },
+    "cap_sweep": [
+      {
+        "destination": "health",
+        "cap_minutes": 30.0,
+        "n_facilities": 304,
+        "baseline_median_minutes": 3.2991806988732293,
+        "baseline_share_within_cap": 0.986091378966692,
+        "baseline_habitations_beyond_cap": 24,
+        "n_single_points_of_failure": 0,
+        "single_points_of_failure": [],
+        "isolated_population_summed_over_structures": 0.0,
+        "max_extra_one_way_minutes": 17.55058037025131,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 118,
+          "share_of_population_reached": 0.06772921420204725,
+          "gini_of_benefit_per_person": 0.5440390418988115,
+          "top_1pct_share_of_benefit": 6.348936924610388e-05
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "health",
+        "cap_minutes": 45.0,
+        "n_facilities": 304,
+        "baseline_median_minutes": 3.2991806988732293,
+        "baseline_share_within_cap": 0.9862779558095023,
+        "baseline_habitations_beyond_cap": 23,
+        "n_single_points_of_failure": 0,
+        "single_points_of_failure": [],
+        "isolated_population_summed_over_structures": 0.0,
+        "max_extra_one_way_minutes": 17.55058037025131,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 118,
+          "share_of_population_reached": 0.06772921420204725,
+          "gini_of_benefit_per_person": 0.5440390418988115,
+          "top_1pct_share_of_benefit": 6.348936924610388e-05
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "health",
+        "cap_minutes": 60.0,
+        "n_facilities": 304,
+        "baseline_median_minutes": 3.2991806988732293,
+        "baseline_share_within_cap": 0.9864608921285505,
+        "baseline_habitations_beyond_cap": 22,
+        "n_single_points_of_failure": 0,
+        "single_points_of_failure": [],
+        "isolated_population_summed_over_structures": 0.0,
+        "max_extra_one_way_minutes": 17.55058037025131,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 118,
+          "share_of_population_reached": 0.06772921420204725,
+          "gini_of_benefit_per_person": 0.5440390418988115,
+          "top_1pct_share_of_benefit": 6.348936924610388e-05
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "health",
+        "cap_minutes": 90.0,
+        "n_facilities": 304,
+        "baseline_median_minutes": 3.2991806988732293,
+        "baseline_share_within_cap": 0.9864608921285505,
+        "baseline_habitations_beyond_cap": 22,
+        "n_single_points_of_failure": 0,
+        "single_points_of_failure": [],
+        "isolated_population_summed_over_structures": 0.0,
+        "max_extra_one_way_minutes": 17.55058037025131,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 118,
+          "share_of_population_reached": 0.06772921420204725,
+          "gini_of_benefit_per_person": 0.5440390418988115,
+          "top_1pct_share_of_benefit": 6.348936924610388e-05
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "school",
+        "cap_minutes": 30.0,
+        "n_facilities": 987,
+        "baseline_median_minutes": 1.9791502341752574,
+        "baseline_share_within_cap": 0.9945947323441423,
+        "baseline_habitations_beyond_cap": 14,
+        "n_single_points_of_failure": 1,
+        "single_points_of_failure": [
+          {
+            "id": "X010",
+            "isolated_habitations": 4,
+            "isolated_population": 1452.0
+          }
+        ],
+        "isolated_population_summed_over_structures": 1452.0,
+        "max_extra_one_way_minutes": 14.760757457302276,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 28,
+          "share_of_population_reached": 0.016806477947982377,
+          "gini_of_benefit_per_person": 0.5925161509943198,
+          "top_1pct_share_of_benefit": 0.000657970479262139
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "school",
+        "cap_minutes": 45.0,
+        "n_facilities": 987,
+        "baseline_median_minutes": 1.9791502341752574,
+        "baseline_share_within_cap": 0.9953055446087029,
+        "baseline_habitations_beyond_cap": 11,
+        "n_single_points_of_failure": 1,
+        "single_points_of_failure": [
+          {
+            "id": "X010",
+            "isolated_habitations": 4,
+            "isolated_population": 1452.0
+          }
+        ],
+        "isolated_population_summed_over_structures": 1452.0,
+        "max_extra_one_way_minutes": 14.760757457302276,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 28,
+          "share_of_population_reached": 0.016806477947982377,
+          "gini_of_benefit_per_person": 0.5925161509943258,
+          "top_1pct_share_of_benefit": 0.0006579704792621673
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "school",
+        "cap_minutes": 60.0,
+        "n_facilities": 987,
+        "baseline_median_minutes": 1.9791502341752574,
+        "baseline_share_within_cap": 0.9954884809277511,
+        "baseline_habitations_beyond_cap": 10,
+        "n_single_points_of_failure": 1,
+        "single_points_of_failure": [
+          {
+            "id": "X010",
+            "isolated_habitations": 4,
+            "isolated_population": 1452.0
+          }
+        ],
+        "isolated_population_summed_over_structures": 1452.0,
+        "max_extra_one_way_minutes": 14.760757457302276,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 28,
+          "share_of_population_reached": 0.016806477947982377,
+          "gini_of_benefit_per_person": 0.5925161509943198,
+          "top_1pct_share_of_benefit": 0.000657970479262139
+        },
+        "plan_funded": 16
+      },
+      {
+        "destination": "school",
+        "cap_minutes": 90.0,
+        "n_facilities": 987,
+        "baseline_median_minutes": 1.9791502341752574,
+        "baseline_share_within_cap": 0.9954884809277511,
+        "baseline_habitations_beyond_cap": 10,
+        "n_single_points_of_failure": 1,
+        "single_points_of_failure": [
+          {
+            "id": "X010",
+            "isolated_habitations": 4,
+            "isolated_population": 1452.0
+          }
+        ],
+        "isolated_population_summed_over_structures": 1452.0,
+        "max_extra_one_way_minutes": 14.760757457302276,
+        "equity": {
+          "note": "Benefit is the plan's expected failure-probability reduction per funded structure, split across habitations by that structure's solo-loss share; a first-order attribution, not a re-solve of the joint network.",
+          "n_habitations_reached": 28,
+          "share_of_population_reached": 0.016806477947982377,
+          "gini_of_benefit_per_person": 0.5925161509943258,
+          "top_1pct_share_of_benefit": 0.0006579704792621673
+        },
+        "plan_funded": 16
+      }
+    ],
+    "portfolios": {
+      "variants": [
+        {
+          "portfolio": "tag_first",
+          "selection": "mapped evidence only: OSM bridge tag, then snapping offset, then measured loss; no consequence measure drives the order",
+          "n_structures": 30,
+          "structure_types": {
+            "culvert": 30
+          },
+          "policies": [
+            {
+              "policy": "benefit_cost",
+              "mean_person_days": 22742.012223772133,
+              "mean_planned_crore": 1.0000000000000004,
+              "mean_emergency_crore": 2.3760000000000012,
+              "mean_spend_crore": 3.3760000000000017,
+              "person_days_per_crore": 6736.37802836852,
+              "cvar_person_days": 29222.05378064071,
+              "n_funded_year1": 25
+            },
+            {
+              "policy": "random",
+              "mean_person_days": 23082.205322051603,
+              "mean_planned_crore": 1.0000000000000004,
+              "mean_emergency_crore": 2.340000000000001,
+              "mean_spend_crore": 3.3400000000000016,
+              "person_days_per_crore": 6910.839916781913,
+              "cvar_person_days": 30426.477506778952,
+              "n_funded_year1": 25
+            },
+            {
+              "policy": "worst_first",
+              "mean_person_days": 21961.027585801312,
+              "mean_planned_crore": 0.795,
+              "mean_emergency_crore": 2.340000000000001,
+              "mean_spend_crore": 3.135000000000001,
+              "person_days_per_crore": 7005.112467560225,
+              "cvar_person_days": 30786.768368396297,
+              "n_funded_year1": 13
+            }
+          ],
+          "worst_first_vs_random": {
+            "comparison": "worst_first - random",
+            "mean_person_days": -1121.1777362502885,
+            "ci_lo": -3988.465917115593,
+            "ci_hi": 1886.7877958294193,
+            "n_scenarios": 8,
+            "share_a_better": 0.625,
+            "share_b_better": 0.375,
+            "positive_means_a_worse": true
+          },
+          "destination_islanding": [
+            {
+              "destination": "health",
+              "cap_minutes": 60.0,
+              "n_single_points_of_failure": 0,
+              "isolated_population_total": 0.0
+            },
+            {
+              "destination": "school",
+              "cap_minutes": 45.0,
+              "n_single_points_of_failure": 1,
+              "isolated_population_total": 311.0
+            }
+          ]
+        },
+        {
+          "portfolio": "bridge_tagged",
+          "selection": "hospital solo-loss ranking restricted to edges that already carry an OSM bridge tag",
+          "n_structures": 30,
+          "structure_types": {
+            "culvert": 30
+          },
+          "policies": [
+            {
+              "policy": "worst_first",
+              "mean_person_days": 31388.33311092123,
+              "mean_planned_crore": 0.795,
+              "mean_emergency_crore": 2.340000000000001,
+              "mean_spend_crore": 3.135000000000001,
+              "person_days_per_crore": 10012.227467598475,
+              "cvar_person_days": 41557.37043046218,
+              "n_funded_year1": 13
+            },
+            {
+              "policy": "benefit_cost",
+              "mean_person_days": 35043.04264939175,
+              "mean_planned_crore": 1.0000000000000004,
+              "mean_emergency_crore": 2.4120000000000013,
+              "mean_spend_crore": 3.4120000000000017,
+              "person_days_per_crore": 10270.528326316451,
+              "cvar_person_days": 46505.32798165834,
+              "n_funded_year1": 25
+            },
+            {
+              "policy": "random",
+              "mean_person_days": 34897.68145971202,
+              "mean_planned_crore": 1.0000000000000004,
+              "mean_emergency_crore": 2.340000000000001,
+              "mean_spend_crore": 3.3400000000000016,
+              "person_days_per_crore": 10448.407622668263,
+              "cvar_person_days": 45972.64704264785,
+              "n_funded_year1": 25
+            }
+          ],
+          "worst_first_vs_random": {
+            "comparison": "worst_first - random",
+            "mean_person_days": -3509.3483487907847,
+            "ci_lo": -8179.406450950421,
+            "ci_hi": 1305.8459468838332,
+            "n_scenarios": 8,
+            "share_a_better": 0.625,
+            "share_b_better": 0.375,
+            "positive_means_a_worse": true
+          },
+          "destination_islanding": [
+            {
+              "destination": "health",
+              "cap_minutes": 60.0,
+              "n_single_points_of_failure": 0,
+              "isolated_population_total": 0.0
+            },
+            {
+              "destination": "school",
+              "cap_minutes": 45.0,
+              "n_single_points_of_failure": 0,
+              "isolated_population_total": 0.0
+            }
+          ]
+        },
+        {
+          "portfolio": "school_loss",
+          "selection": "reordered by measured school solo loss on the same candidate edges",
+          "n_structures": 30,
+          "structure_types": {
+            "culvert": 30
+          },
+          "policies": [
+            {
+              "policy": "benefit_cost",
+              "mean_person_days": 145083.07088774792,
+              "mean_planned_crore": 1.0000000000000004,
+              "mean_emergency_crore": 2.3760000000000012,
+              "mean_spend_crore": 3.3760000000000017,
+              "person_days_per_crore": 42974.84327243716,
+              "cvar_person_days": 176681.98422181958,
+              "n_funded_year1": 25
+            },
+            {
+              "policy": "random",
+              "mean_person_days": 147195.7980223787,
+              "mean_planned_crore": 1.0000000000000004,
+              "mean_emergency_crore": 2.3760000000000012,
+              "mean_spend_crore": 3.3760000000000017,
+              "person_days_per_crore": 43600.65107297945,
+              "cvar_person_days": 180742.41716424958,
+              "n_funded_year1": 25
+            },
+            {
+              "policy": "worst_first",
+              "mean_person_days": 140797.82357069297,
+              "mean_planned_crore": 0.795,
+              "mean_emergency_crore": 2.340000000000001,
+              "mean_spend_crore": 3.135000000000001,
+              "person_days_per_crore": 44911.586465930755,
+              "cvar_person_days": 203121.12594376272,
+              "n_funded_year1": 13
+            }
+          ],
+          "worst_first_vs_random": {
+            "comparison": "worst_first - random",
+            "mean_person_days": -6397.9744516857645,
+            "ci_lo": -23328.054163279914,
+            "ci_hi": 11631.915918527438,
+            "n_scenarios": 8,
+            "share_a_better": 0.625,
+            "share_b_better": 0.375,
+            "positive_means_a_worse": true
+          },
+          "destination_islanding": [
+            {
+              "destination": "health",
+              "cap_minutes": 60.0,
+              "n_single_points_of_failure": 27,
+              "isolated_population_total": 33749.0
+            },
+            {
+              "destination": "school",
+              "cap_minutes": 45.0,
+              "n_single_points_of_failure": 30,
+              "isolated_population_total": 38640.0
+            }
+          ]
+        }
+      ],
+      "school_scores": {
+        "n_edges": 1039,
+        "truncated": false,
+        "cap_minutes": 45.0
+      }
+    },
+    "equity_cost": {
+      "rows": [
+        {
+          "funded": 16,
+          "spend_crore": 0.5,
+          "crew_days": 102.5,
+          "objective": 18884.161736358416,
+          "total_benefit": 14411.826837356028,
+          "min_habitation_benefit": 0.0,
+          "p10_habitation_benefit": 0.0,
+          "n_habitations_with_benefit": 118,
+          "gini_of_benefit_per_person": 0.5749281840803229,
+          "exponent": 0.0,
+          "benefit_lost_vs_efficiency": 0.0,
+          "gini_change_vs_efficiency": 0.0
+        },
+        {
+          "funded": 16,
+          "spend_crore": 0.5,
+          "crew_days": 102.5,
+          "objective": 18946.73282286607,
+          "total_benefit": 14349.255750848371,
+          "min_habitation_benefit": 0.0,
+          "p10_habitation_benefit": 0.0,
+          "n_habitations_with_benefit": 122,
+          "gini_of_benefit_per_person": 0.5520533780458967,
+          "exponent": 0.5,
+          "benefit_lost_vs_efficiency": 62.5710865076544,
+          "gini_change_vs_efficiency": -0.022874806034426154
+        },
+        {
+          "funded": 16,
+          "spend_crore": 0.5,
+          "crew_days": 102.5,
+          "objective": 19487.622203458788,
+          "total_benefit": 13808.366370255653,
+          "min_habitation_benefit": 0.0,
+          "p10_habitation_benefit": 0.0,
+          "n_habitations_with_benefit": 128,
+          "gini_of_benefit_per_person": 0.480818515935437,
+          "exponent": 1.0,
+          "benefit_lost_vs_efficiency": 603.4604671003726,
+          "gini_change_vs_efficiency": -0.09410966814488586
+        },
+        {
+          "funded": 13,
+          "spend_crore": 0.5,
+          "crew_days": 95.0,
+          "objective": 20470.02005487918,
+          "total_benefit": 12825.968518835261,
+          "min_habitation_benefit": 0.0,
+          "p10_habitation_benefit": 0.0,
+          "n_habitations_with_benefit": 111,
+          "gini_of_benefit_per_person": 0.4391037943920566,
+          "exponent": 1.5,
+          "benefit_lost_vs_efficiency": 1585.8583185207644,
+          "gini_change_vs_efficiency": -0.13582438968826627
+        }
+      ],
+      "n_habitations_eligible": 203,
+      "n_habitations_total": 203,
+      "base_objective": 18884.161736358416,
+      "note": "Objective weight is (median population / habitation population) ** exponent. Exponent 0 reproduces the reported population-weighted plan; higher exponents count small habitations more heavily. Benefit per habitation is a first-order attribution of each asset's measured solo loss, not a joint re-solve. The Gini is computed over habitations that receive any benefit, matching the reported equity block."
+    },
+    "schedule": {
+      "plan": {
+        "year0": {
+          "X001": "minor",
+          "X002": "major",
+          "X003": "minor",
+          "X004": "minor",
+          "X005": "minor",
+          "X008": "minor",
+          "X011": "minor",
+          "X012": "minor",
+          "X013": "major",
+          "X015": "minor",
+          "X016": "minor",
+          "X017": "minor",
+          "X018": "minor",
+          "X019": "minor",
+          "X022": "minor",
+          "X023": "minor",
+          "X025": "minor",
+          "X026": "minor",
+          "X030": "minor"
+        },
+        "year1": {
+          "X001": "major",
+          "X002": "minor",
+          "X003": "minor",
+          "X006": "minor",
+          "X007": "minor",
+          "X008": "minor",
+          "X009": "minor",
+          "X010": "minor",
+          "X011": "minor",
+          "X012": "minor",
+          "X013": "minor",
+          "X014": "minor",
+          "X015": "minor",
+          "X016": "minor",
+          "X020": "minor",
+          "X021": "minor",
+          "X024": "minor",
+          "X026": "minor",
+          "X027": "minor",
+          "X028": "minor",
+          "X029": "minor",
+          "X030": "minor"
+        },
+        "objective": 39389.07676461221,
+        "spend_year0_crore": 0.5000000000000001,
+        "spend_total_crore": 1.0000000000000002,
+        "n_paths": 480,
+        "note": "Two-period additive schedule: one path per asset, year-0 spend capped at the annual budget, two-year spend capped at twice it (unspent money carries forward). Deterioration is the rounded expectation of the fitted transition matrix; loss uses the optimizer's mean rainfall sample. Emergency repairs and network coupling are not in the model and are supplied by the simulator when the schedule is replayed."
+      },
+      "mean_person_days": 44962.36171010905,
+      "mean_planned_crore": 1.0000000000000004,
+      "mean_emergency_crore": 2.322000000000001,
+      "myopic_mean_person_days": 39631.345459958524,
+      "paired_difference_vs_myopic": {
+        "mean_person_days": 5331.016250150522,
+        "ci_lo": 3176.3647197827136,
+        "ci_hi": 7420.29313014534,
+        "positive_means_schedule_worse": true
+      },
+      "jaccard_year1_vs_myopic": 0.75,
+      "note": "The receding-horizon additive policy re-solves each year at the state it reached, so it already adapts; what it lacks is lookahead and budget carryover. This comparison isolates those two additions. The schedule is solved on a deterministic expected-deterioration path, so it is a scheduling exercise, not an observed maintenance plan."
+    },
+    "solver": {
+      "n_variables": 120,
+      "n_scenarios": 8,
+      "objective": 18884.161736358416,
+      "mip_gap": 0.0,
+      "mip_dual_bound": 18884.161736358416,
+      "status": 0,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+      "n_funded": 16,
+      "note": "HiGHS is asked for the optimum with no time limit. A zero or absent gap means the additive baseline is solved to optimality for its own linear surrogate; it says nothing about the non-additive objective."
+    }
+  },
+  "elapsed_seconds": 1615.6272208690643
+}

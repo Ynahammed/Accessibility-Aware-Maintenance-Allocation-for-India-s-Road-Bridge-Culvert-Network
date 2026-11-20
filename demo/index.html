@@ -336,7 +336,8 @@
   <div class="badges">
     <span class="badge real">KSDMA flood depth: 12 return-period layers, Alappuzha</span>
     <span class="badge real">Read-only map: Alappuzha district OSM (India)</span>
-    <span class="badge assumed">Allocation districts: synthetic (no verified condition/cost inputs)</span>
+    <span class="badge real">Allocation: real Alappuzha network, PMGSY/Census demand, OSM hospitals</span>
+    <span class="badge assumed">Crossings unverified · condition, outage &amp; cost assumed</span>
     <span class="badge assumed">Costs &amp; fragility: assumed register (swept)</span>
     <span class="badge proposed">Paired evaluation: common random numbers</span>
   </div>
@@ -441,10 +442,12 @@
 <section id="plan">
   <h2>2 · District maintenance plan</h2>
   <p class="note">
-    The product question: <b>what should be repaired this year with ₹X crore?</b> The
-    network-aware optimizer proposes a plan under a hard budget and crew constraint; each row
-    shows the condition change and the failure-risk cut it buys. Every number is computed live
-    by the same <code>src/rra</code> code the experiments use.
+    The product question: <b>what should be repaired this year with ₹X crore?</b> The optimizer
+    proposes a plan under a hard budget and crew constraint; each row shows the condition change
+    and the failure-risk cut it buys. Choose a seeded synthetic testbed (network-aware search),
+    or the <b>real Alappuzha instance</b>: real OSM road graph, real PMGSY or Census demand and
+    mapped OSM hospitals, with 30 unverified crossing candidates and assumed condition/cost.
+    Every number is computed live by the same <code>src/rra</code> code the experiments use.
   </p>
 
   <div class="grid cols2">
@@ -563,6 +566,24 @@
   </div>
 
   <div class="grid cols2" style="margin-top:16px">
+    <div class="card" style="grid-column:1/-1">
+      <h3>E9/E11 · Real-district comparison — 40 paired scenarios</h3>
+      <p style="font-size:12px;color:var(--muted);margin:0 0 10px">
+        Lower loss is better. Negative condition-first − random values favour condition-first;
+        the final column is the additive policy’s estimated extra reduction versus condition-first.
+      </p>
+      <div class="table-scroll-hint">Scroll horizontally to compare both districts</div>
+      <div id="realDistrictResults"></div>
+      <div class="honest">In these frozen runs condition-first beats random on average in both districts;
+        that is the opposite of “practice is near chance.” The estimated additive increment over
+        condition-first is smaller, but this is not evidence of equivalence: draws share one assumed
+        condition/cost setup, crossings are unverified, and the 40-draw comparison does not validate
+        real-world maintenance outcomes. Paired intervals below are reconstructed from the stored
+        paired standard deviation (Student t, 39 degrees of freedom).</div>
+    </div>
+  </div>
+
+  <div class="grid cols2" style="margin-top:16px">
     <div class="card">
       <h3>Data availability (measured from this environment)</h3>
       <div class="table-scroll-hint">Scroll horizontally to see all data columns</div>
@@ -592,7 +613,9 @@
   Reproduce everything: <code>./.venv/Scripts/python.exe demo/server.py</code> ·
   tests: <code>./.venv/Scripts/python.exe -m pytest tests/ -q</code> ·
   experiments: <code>python experiments/e0X_*/run.py</code>.
-  Allocation figures are simulator-only — no real-district or ₹/lives claim (plan gate: IBMS/PMGSY data pending).
+  Allocation figures are simulator outputs. On the real Alappuzha instance the structures are
+  unverified screening candidates and condition, outage and cost are assumed — no result is a
+  condition finding or a spending recommendation.
 </footer>
 
 <script>
@@ -1033,6 +1056,7 @@ async function loadEvidence() {
     ["#e3", () => renderE3(ev.e3_allocation)],
     ["#e4", () => renderE4(ev.e4_network_effects)],
     ["#e8", () => renderE8(ev.e8_robustness)],
+    ["#realDistrictResults", () => renderRealDistrictResults(ev.real_district_comparison)],
     ["#dataMatrix", () => renderDataMatrix(ev.data_matrix)],
     ["#assumpTable", () => renderAssumptions(ev.assumptions, ev.assumption_overrides)],
     ["#assumpRefused", () => renderRefusals(ev.refused, ev.coverage_warnings)],
@@ -1147,6 +1171,27 @@ function renderE8(e) {
      network edge lives in redundancy (E4). Recorded as an open issue, not hidden.</div>`;
 }
 
+function renderRealDistrictResults(comparison) {
+  const districts = comparison && comparison.districts || [];
+  if (!districts.length) {
+    $("#realDistrictResults").innerHTML = "<i>Frozen E9/E11 results unavailable</i>";
+    return;
+  }
+  const rows = districts.map(d => ({
+    _hl: true,
+    c: [d.district,
+        `${fmt(d.condition_first_minus_random_person_days)} [${fmt(d.paired_95_ci_person_days[0])}, ${fmt(d.paired_95_ci_person_days[1])}]`,
+        `${d.condition_first_better_scenarios}/${d.n_scenarios}`,
+        fmt(d.additive_gain_vs_condition_first_person_days)],
+  }));
+  const sources = districts.map(d =>
+    `${d.district}: <code>${d.source.file}</code> · ${d.source.interval_method}`);
+  $("#realDistrictResults").innerHTML = tbl(
+    ["Real district", "Condition-first − random (person-days; 95% paired CI)",
+      "Scenarios condition-first wins", "Additive gain over condition-first (person-days)"], rows) +
+    `<div style="margin-top:8px;font-size:10px;color:var(--muted)">Source: ${sources.join(" · ")}</div>`;
+}
+
 function renderDataMatrix(dm) {
   if (!dm) return;
   const cls = s => s === "real" ? "win" : s === "blocked" ? "loss" : "";
@@ -1222,10 +1267,19 @@ async function loadDistrictOptions() {
     const d = await api("/api/districts");
     state.districts = Object.fromEntries(d.districts.map(x => [x.id, x]));
     const sel = $("#selPlanDistrict");
-    sel.innerHTML = d.districts.map(x =>
-      `<option value="${x.id}">${x.name}` +
-      `${x.status === "ready" ? "" : " — view only"}</option>`).join("");
-    if (d.districts.some(x => x.id === "synth-generic")) sel.value = "synth-generic";
+    sel.innerHTML = d.districts.map(x => {
+      const tag = x.status !== "ready" ? " — view only"
+        : x.provenance === "real-alappuzha" ? " — real network, assumed condition/cost" : "";
+      return `<option value="${x.id}">${x.name}${tag}</option>`;
+    }).join("");
+    // Open on the real Alappuzha PMGSY plan: its default parameters are served from the
+    // persisted offline build, so the page is useful immediately instead of optimizing for
+    // minutes. Synthetic testbeds remain one selection away.
+    if (d.districts.some(x => x.id === "alappuzha-network-pmgsy")) {
+      sel.value = "alappuzha-network-pmgsy";
+    } else if (d.districts.some(x => x.id === "synth-generic")) {
+      sel.value = "synth-generic";
+    }
   } catch (e) {
     $("#planStatus").textContent = "districts failed: " + e.message;
   }
@@ -1238,7 +1292,13 @@ function selectedDistrict() {
 // The real OSM district has no allocation layer, so this panel switches to a read-only
 // network view instead of inventing spend or loss numbers for it.
 function syncPlanMode() {
-  const viewOnly = selectedDistrict().status !== "ready";
+  const district = selectedDistrict();
+  const viewOnly = district.status !== "ready";
+  if (!viewOnly && district.budget_crore != null) {
+    $("#rngPlanBudget").value = district.budget_crore;
+    $("#lblPlanBudget").textContent =
+      "₹" + Number(district.budget_crore).toFixed(2) + " crore";
+  }
   $("#btnPlan").textContent = viewOnly ? "Show road network" : "Build year-1 plan";
   $("#rngPlanBudget").disabled = viewOnly;
   $("#planTableCard").style.display = viewOnly ? "none" : "block";
@@ -1262,7 +1322,10 @@ async function loadPlan() {
   if (state.planLoading) return;
   state.planLoading = true;
   $("#btnPlan").disabled = true;
-  $("#planStatus").innerHTML = '<span class="spin"></span>optimizing…';
+  const heavy = selectedDistrict().provenance === "real-alappuzha";
+  $("#planStatus").innerHTML = '<span class="spin"></span>' + (heavy
+    ? "optimizing the 290k-node district graph (first run can take ~2 minutes)…"
+    : "optimizing…");
   $("#planStatus").classList.remove("err");
   try {
     const id = $("#selPlanDistrict").value;
@@ -1284,7 +1347,8 @@ async function loadPlan() {
     $("#planStatus").textContent =
       `${data.n_funded} of ${data.recommendations.length} structures funded · ` +
       `₹${data.planned_spend_crore.toFixed(2)} of ₹${data.budget_crore.toFixed(2)} crore · ` +
-      `${Math.round(data.crew_days_used)} / ${Math.round(data.crew_days)} crew-days`;
+      `${Math.round(data.crew_days_used)} / ${Math.round(data.crew_days)} crew-days` +
+      (data.cached ? " · persisted build" : "");
   } catch (e) {
     $("#planStatus").textContent = "error: " + e.message;
     $("#planStatus").classList.add("err");
@@ -1326,24 +1390,28 @@ function registerSourceLine(src = {}, noun = "Planning numbers") {
 function renderPlan(d) {
   $("#planDistrictName").textContent = d.district.name;
   const m = d.loss.mean_person_days;
-  const c = d.loss.paired_worst_first_minus_network_aware;
+  const c = d.loss.paired_worst_first_minus_plan || d.loss.paired_worst_first_minus_network_aware;
+  const planLabel = d.policy === "additive_milp" ? "additive plan" : "network-aware plan";
   const cells = [
     {k: "Planned spend", v: "₹" + d.planned_spend_crore.toFixed(2) + " cr", cls: ""},
     {k: "Budget", v: "₹" + d.budget_crore.toFixed(2) + " cr", cls: ""},
     {k: "Crew-days used", v: Math.round(d.crew_days_used), cls: ""},
-    {k: "Expected loss · plan", v: fmt(m.network_aware), cls: "good"},
+    {k: `Expected loss · ${planLabel}`, v: fmt(m[d.policy]), cls: "good"},
     {k: "Expected loss · worst-first", v: fmt(m.worst_first), cls: ""},
     {k: "Expected loss · do nothing", v: fmt(m.do_nothing), cls: ""},
   ];
   $("#planStats").innerHTML = cells.map(x =>
     `<div class="stat"><div class="k">${x.k}</div><div class="v ${x.cls}">${x.v}</div></div>`).join("");
-  const verdict = c.ci_lo > 0 ? "network-aware loses fewer person-days"
+  const verdict = c.ci_lo > 0 ? `${planLabel} loses fewer person-days`
     : c.ci_hi < 0 ? "condition-first wins at this budget" : "CI spans zero at this sample size";
+  const screening = d.screening
+    ? `<br><span class="pill assumed">screened</span> ${d.screening}` : "";
   $("#planHonest").innerHTML = `<b>Read honestly:</b> ${c.n_scenarios} shared scenarios, paired
-    difference worst_first − network_aware = <b>${fmt(c.mean)}</b> [95% CI ${fmt(c.ci_lo)} …
+    difference worst_first − ${d.policy} = <b>${fmt(c.mean)}</b> [95% CI ${fmt(c.ci_lo)} …
     ${fmt(c.ci_hi)}] — ${verdict}. Budget and crew are hard constraints, and an emergency-restoration
     premium is charged for anything that fails. Provenance: <code>${d.provenance.district}</code>
-    district; costs <code>${d.provenance.costs}</code>.`;
+    district; costs <code>${d.provenance.costs}</code>.${screening}
+    <br><small style="color:var(--muted)">${d.provenance.note}</small>`;
   // Say which reply the numbers came from, not just that some values are measured: this
   // plan's own register provenance wins, with the evidence payload's assumptions_source
   // as a fallback, so the line can never describe a different register than the plan.

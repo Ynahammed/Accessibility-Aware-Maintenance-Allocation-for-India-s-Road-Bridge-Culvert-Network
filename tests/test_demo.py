@@ -154,6 +154,22 @@ def test_load_evidence_contains_frozen_results_and_register():
     assert ev["e3_allocation"]["policies"]
     assert ev["e4_network_effects"]["by_redundancy"]
     assert "benefit_cost" in ev["e8_robustness"]["win_rate"]
+    comparison = ev["real_district_comparison"]["districts"]
+    assert [row["district"] for row in comparison] == ["Alappuzha", "Pathanamthitta"]
+    assert [round(row["condition_first_minus_random_person_days"], 1) for row in comparison] == [-4096.3, -4335.3]
+    for row, source in zip(comparison, (
+        "experiments/e09_alappuzha_real/results.json",
+        "experiments/e11_pathanamthitta_real/results.json",
+    )):
+        assert row["n_scenarios"] == 40
+        assert row["source"]["file"] == source
+        assert row["source"]["fields"]["paired_sd_person_days"].startswith("robustness.precision")
+        assert row["source"]["interval_method"].startswith("Student t interval")
+    assert set(comparison[0]) == {
+        "district", "n_scenarios", "condition_first_minus_random_person_days",
+        "paired_sd_person_days", "condition_first_better_scenarios",
+        "additive_gain_vs_condition_first_person_days", "paired_95_ci_person_days", "source",
+    }
     assert len(ev["assumptions"]) == 21
     assert {a["source"] for a in ev["assumptions"].values()} <= {"real", "fitted", "assumed"}
     assert any(r["status"] == "blocked" for r in ev["data_matrix"])

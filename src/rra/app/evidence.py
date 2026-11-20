@@ -83,6 +83,44 @@ def _read_text(rel: str):
         return None
 
 
+def _real_district_comparison(rel: str) -> dict | None:
+    """Project only the E9/E11 fields displayed by the real-district table."""
+    results = _read_json(rel)
+    if not results:
+        return None
+    precision = results.get("robustness", {}).get("precision", {}).get("rows", [])
+    row = next((item for item in precision if item.get("n_scenarios") == 40), None)
+    if row is None:
+        return None
+
+    n = row["n_scenarios"]
+    degrees_of_freedom = n - 1
+    t_critical_95 = 2.02269092  # two-sided 95% Student t critical value for df=39
+    difference = row["worst_first_minus_random_person_days"]
+    standard_deviation = row["sd_of_paired_difference"]
+    half_width = t_critical_95 * standard_deviation / n**0.5
+    return {
+        "district": results["district_name"],
+        "n_scenarios": n,
+        "condition_first_minus_random_person_days": difference,
+        "paired_sd_person_days": standard_deviation,
+        "condition_first_better_scenarios": round(row["share_scenarios_worst_first_better"] * n),
+        "additive_gain_vs_condition_first_person_days": row["additive_gain_vs_worst_first_person_days"],
+        "paired_95_ci_person_days": [difference - half_width, difference + half_width],
+        "source": {
+            "file": rel,
+            "fields": {
+                "n_scenarios": "robustness.precision.rows[n_scenarios=40].n_scenarios",
+                "condition_first_minus_random_person_days": "robustness.precision.rows[n_scenarios=40].worst_first_minus_random_person_days",
+                "paired_sd_person_days": "robustness.precision.rows[n_scenarios=40].sd_of_paired_difference",
+                "condition_first_better_scenarios": "robustness.precision.rows[n_scenarios=40].share_scenarios_worst_first_better",
+                "additive_gain_vs_condition_first_person_days": "robustness.precision.rows[n_scenarios=40].additive_gain_vs_worst_first_person_days",
+            },
+            "interval_method": "Student t interval from paired SD, df=39, 95% two-sided",
+        },
+    }
+
+
 def load_evidence() -> dict:
     """Load the **frozen** result files (they only change when a script is re-run).
 
@@ -99,6 +137,15 @@ def load_evidence() -> dict:
         "e3_allocation": _read_json("experiments/e03_allocation/results.json"),
         "e4_network_effects": _read_json("experiments/e04_network_effects/results.json"),
         "e8_robustness": _read_json("experiments/e08_robustness/results.json"),
+        "real_district_comparison": {
+            "districts": [
+                summary for path in (
+                    "experiments/e09_alappuzha_real/results.json",
+                    "experiments/e11_pathanamthitta_real/results.json",
+                )
+                if (summary := _real_district_comparison(path)) is not None
+            ]
+        },
         "osm_qa": _read_text("data/processed/osm_qa.md"),
         "real_district_qa": _read_text("data/processed/real_district_qa.md"),
         "data_matrix": DATA_MATRIX,

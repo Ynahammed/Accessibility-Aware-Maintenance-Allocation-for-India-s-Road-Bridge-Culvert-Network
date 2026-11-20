@@ -65,9 +65,13 @@ the generated `docs/assumptions.md` is the default register and is not served he
 
 ### `GET /api/evidence`
 Indian evidence only: the Alappuzha KSDMA flood-exposure and network-access summaries, the
-frozen synthetic allocation results (E3/E4/E8), OSM and real-district QA text, the measured
-data-availability matrix and the assumptions register. US National Bridge Inventory results
-are archived and deliberately absent from this payload.
+frozen synthetic allocation results (E3/E4/E8), a compact E9/E11 comparison summary, OSM and
+real-district QA text, the measured data-availability matrix and the assumptions register.
+E9/E11 exposes only the fields used by the dashboard table (40-draw estimate, paired SD,
+scenario win count, additive increment, paired 95% interval and source metadata), not the full
+experiment result files. Each row identifies its frozen `results.json`, source JSON paths and
+Student t interval method. US National Bridge Inventory results are archived and deliberately
+absent from this payload.
 
 The register fields (`assumptions`, `assumption_overrides`, `assumptions_source`,
 `register_markdown`) are re-resolved on every request from the loader output, so the rendered
@@ -76,7 +80,9 @@ markdown always matches the values the planner and simulator use.
 ## Planning
 
 ### `POST /api/districts/{id}/plan`
-Budget-constrained year-1 recommendation from the network-aware optimizer.
+Budget-constrained year-1 recommendation from the planner registered for the district:
+the network-aware search on synthetic testbeds, the additive MILP on the real Alappuzha
+instances (`policy` names which).
 
 ```json
 {"budget_crore": 0.4, "crew_days": 1000, "seed": 0, "scenarios": 8, "years": 1}
@@ -100,17 +106,34 @@ before/after, the fragility multiplier bought by the repair, and a human-readabl
      "state_after": "Good", "fragility_factor": 0.5, "solo_loss": 0.0,
      "funded": true, "reason": "major repair resets condition Poor -> Good and ..."}
   ],
+  "policy": "network_aware",
   "loss": {
     "mean_person_days": {"do_nothing": 52629.0, "worst_first": 37639.0,
                          "additive_milp": 35210.0, "network_aware": 31206.0},
-    "paired_worst_first_minus_network_aware":
-      {"mean": 6432.0, "ci_lo": 1296.0, "ci_hi": 14392.0, "n_scenarios": 8}
+    "paired_worst_first_minus_plan":
+      {"comparison": "worst_first - network_aware",
+       "mean": 6432.0, "ci_lo": 1296.0, "ci_hi": 14392.0, "n_scenarios": 8}
   },
   "provenance": {"district": "synthetic", "costs": "assumed (placeholder ...)", "note": "..."}
 }
 ```
 
-The plan is validated against the budget and crew constraint before it is returned.
+Each row also carries `age` and `outage_days`. The plan is validated against the budget and
+crew constraint before it is returned.
+
+Real-instance responses (`alappuzha-network-pmgsy`, `alappuzha-network-census`) add
+`demand_profile`, `verified_structures: 0`, `screening` (the portfolio rule), `assumed`
+(the condition/outage/cost assumptions) and `scenario_stress`/`scenario_sigma`. Each row
+then carries a `provenance` object naming the candidate crossing, its class and source
+edge, the measured selection loss, its assumed condition/age and the structure-type
+basis.
+
+`scripts/build_alappuzha_allocation.py` persists the instance metadata and plans under
+`data/processed/alappuzha_allocation/`. When `budget_crore`, `crew_days`, `seed`,
+`scenarios`, `years` and the live register fingerprint all match that build, the response
+is the persisted payload with `cached: true` and `cached_from` naming the file. Any other
+parameter set recomputes live on the 290k-node graph (roughly two minutes) and returns
+`cached: false`.
 
 ### `POST /api/districts/{id}/simulate`
 Runs the five-policy paired comparison on the district (shared scenarios, common random
