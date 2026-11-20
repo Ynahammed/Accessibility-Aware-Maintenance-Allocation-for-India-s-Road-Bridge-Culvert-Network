@@ -336,7 +336,7 @@
   <div class="badges">
     <span class="badge real">KSDMA flood depth: 12 return-period layers, Alappuzha</span>
     <span class="badge real">Read-only map: Alappuzha district OSM (India)</span>
-    <span class="badge real">Allocation: real Alappuzha network, PMGSY/Census demand, OSM hospitals</span>
+    <span class="badge assumed" id="badgeAllocation">Allocation: seeded synthetic testbeds</span>
     <span class="badge assumed">Crossings unverified · condition, outage &amp; cost assumed</span>
     <span class="badge assumed">Costs &amp; fragility: assumed register (swept)</span>
     <span class="badge proposed">Paired evaluation: common random numbers</span>
@@ -444,9 +444,10 @@
   <p class="note">
     The product question: <b>what should be repaired this year with ₹X crore?</b> The optimizer
     proposes a plan under a hard budget and crew constraint; each row shows the condition change
-    and the failure-risk cut it buys. Choose a seeded synthetic testbed (network-aware search),
-    or the <b>real Alappuzha instance</b>: real OSM road graph, real PMGSY or Census demand and
-    mapped OSM hospitals, with 30 unverified crossing candidates and assumed condition/cost.
+    and the failure-risk cut it buys. Choose a seeded synthetic testbed (network-aware search).
+    A deployment that ships the Alappuzha layers also lists the <b>real Alappuzha instance</b> — real
+    OSM road graph, PMGSY or Census demand, mapped OSM hospitals, 30 unverified crossing candidates
+    with assumed condition and cost — and the district list below shows what this build serves.
     Every number is computed live by the same <code>src/rra</code> code the experiments use.
   </p>
 
@@ -1266,6 +1267,17 @@ async function loadDistrictOptions() {
   try {
     const d = await api("/api/districts");
     state.districts = Object.fromEntries(d.districts.map(x => [x.id, x]));
+    // The header badge and the plan copy must describe what this build can actually serve:
+    // a host without the Alappuzha layers (or without the compute budget for a 290k-node MILP)
+    // lists only the synthetic testbeds, so claiming a real-network allocation there would be false.
+    const realAllocation = d.districts.find(x => x.provenance === "real-alappuzha");
+    const badge = $("#badgeAllocation");
+    if (badge) {
+      badge.className = "badge " + (realAllocation ? "real" : "assumed");
+      badge.textContent = realAllocation
+        ? "Allocation: real Alappuzha network, PMGSY/Census demand, OSM hospitals"
+        : "Allocation: seeded synthetic testbeds (no real-network instance in this build)";
+    }
     const sel = $("#selPlanDistrict");
     sel.innerHTML = d.districts.map(x => {
       const tag = x.status !== "ready" ? " — view only"
