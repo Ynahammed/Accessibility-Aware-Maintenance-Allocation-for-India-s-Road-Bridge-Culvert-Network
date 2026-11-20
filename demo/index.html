@@ -1298,7 +1298,8 @@ async function loadDistrictOptions() {
     }
     const sel = $("#selPlanDistrict");
     sel.innerHTML = d.districts.map(x => {
-      const tag = x.status !== "ready" ? " — view only"
+      const tag = x.status === "layers-missing" ? " — unavailable in this build"
+        : x.status !== "ready" ? " — view only"
         : x.provenance === "real-alappuzha" ? " — real network, assumed condition/cost" : "";
       return `<option value="${x.id}">${x.name}${tag}</option>`;
     }).join("");
