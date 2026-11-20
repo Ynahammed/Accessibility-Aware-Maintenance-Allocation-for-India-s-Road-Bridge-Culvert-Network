@@ -10,6 +10,8 @@ import json
 import sys
 import threading
 import urllib.request
+
+import pytest
 from http.server import ThreadingHTTPServer
 from pathlib import Path
 
@@ -173,6 +175,33 @@ def test_load_evidence_contains_frozen_results_and_register():
     assert len(ev["assumptions"]) == 21
     assert {a["source"] for a in ev["assumptions"].values()} <= {"real", "fitted", "assumed"}
     assert any(r["status"] == "blocked" for r in ev["data_matrix"])
+
+
+def test_real_district_without_layers_is_not_offered_as_ready(monkeypatch):
+    """A host with the code but not the layers must say so, and answer 400 not 500."""
+    from fastapi.testclient import TestClient
+
+    from app import app
+    from rra.app import districts, planning
+
+    # Simulate the deployment: no processed instance metadata and no parquet layers.
+    monkeypatch.setattr(districts, "layers_present", lambda: False)
+    monkeypatch.setattr(districts, "allocation_metadata", lambda demand=None: None)
+    monkeypatch.setattr(planning, "_persisted_plan", lambda *a, **k: None)
+
+    summary = districts.summarize("alappuzha-network-pmgsy")
+    assert summary["status"] == "layers-missing"
+    assert summary["instance_built"] is False
+    assert "does not include" in summary["note"]
+
+    with pytest.raises(ValueError, match="layers"):
+        planning.build_plan("alappuzha-network-pmgsy")
+
+    response = TestClient(app).post(
+        "/api/districts/alappuzha-network-pmgsy/plan", json={"budget_crore": 0.5}
+    )
+    assert response.status_code == 400
+    assert "layers" in response.json()["detail"]
 
 
 def test_fastapi_app_exposes_demo_routes():

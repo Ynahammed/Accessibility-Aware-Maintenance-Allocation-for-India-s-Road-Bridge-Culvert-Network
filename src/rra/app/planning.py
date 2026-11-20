@@ -24,6 +24,7 @@ from rra.evaluate import stats
 from rra.simulator import policies, step
 from rra.simulator.optimized_policies import AdditiveMilpPolicy, NetworkAwarePolicy
 
+from . import districts
 from .districts import (
     ALLOCATION_ASSUMED,
     SELECTION_NOTE,
@@ -114,6 +115,14 @@ def build_plan(
     )
     if cached is not None:
         return cached
+
+    if spec.provenance == "real-alappuzha" and not districts.layers_present():
+        # Without the layers this raised FileNotFoundError from the parquet reader, which the
+        # API surfaced as a 500 with an HTML/plain-text body the page could not parse.
+        raise ValueError(
+            f"district {district_id!r} needs the Alappuzha network layers, which this build "
+            "does not include; the plan can be rebuilt locally (see REPRODUCE.md)"
+        )
 
     district, models, world = build_world_models(district_id, seed, live=live)
     world.budget_crore = effective_budget

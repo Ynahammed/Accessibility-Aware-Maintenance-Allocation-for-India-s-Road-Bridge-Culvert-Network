@@ -302,6 +302,20 @@ def allocation_metadata(demand: str | None) -> dict | None:
     return allocation_artifact(f"{demand}_meta.json")
 
 
+def layers_present() -> bool:
+    """Whether this installation ships the real-district layer files.
+
+    A deployment can carry the code without the multi-hundred-megabyte processed layers, so
+    the registry must not advertise a real instance as ``ready`` when a plan cannot be built.
+    Kept as one helper so the summary and the planner cannot disagree.
+    """
+    try:
+        from rra.network.alappuzha import layers_available
+    except Exception:  # a partial install must read as unavailable, not crash the listing
+        return False
+    return bool(layers_available())
+
+
 def summarize(district_id: str, seed: int = 0) -> dict:
     """Counts, provenance and defaults for one district."""
     spec = get_spec(district_id)
@@ -329,6 +343,15 @@ def summarize(district_id: str, seed: int = 0) -> dict:
                 "Real Alappuzha allocation instance is not built yet; run "
                 "scripts/build_alappuzha_allocation.py to persist its metadata and plans."
             )
+            if not layers_present():
+                # The deployed app carries the code but not the layers, so reporting "ready"
+                # promised a plan the host cannot compute.
+                out["status"] = "layers-missing"
+                out["note"] = (
+                    "This build does not include the Alappuzha network layers, so no plan can "
+                    "be computed here. The same code builds it locally from the layers "
+                    "listed in REPRODUCE.md."
+                )
         return out
     if spec.status == "ready":
         district = build_district(district_id, seed)

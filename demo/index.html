@@ -651,8 +651,23 @@ async function api(path, body) {
       `cannot reach the API at ${path}. Is the demo server running? Start it with ` +
       "`python demo/server.py` and reload this page.");
   }
-  const j = await r.json();
-  if (!j.ok) throw new Error(j.error || ("HTTP " + r.status));
+  // A host can answer with a plain-text 500 ("Internal Server Error") or a proxy page, so
+  // parsing unconditionally turned every server fault into "Unexpected token" — an error the
+  // reader cannot act on and that hid the status code.
+  const text = await r.text();
+  let j = null;
+  try {
+    j = JSON.parse(text);
+  } catch (e) {
+    const snippet = text.trim().slice(0, 160);
+    throw new Error(
+      `HTTP ${r.status} ${r.statusText}`.trim() + (snippet ? ` — ${snippet}` : ""));
+  }
+  if (!j.ok) {
+    const detail = typeof j.detail === "string" ? j.detail
+      : (j.detail ? JSON.stringify(j.detail) : j.error);
+    throw new Error(detail || ("HTTP " + r.status));
+  }
   return j;
 }
 
@@ -1270,7 +1285,10 @@ async function loadDistrictOptions() {
     // The header badge and the plan copy must describe what this build can actually serve:
     // a host without the Alappuzha layers (or without the compute budget for a 290k-node MILP)
     // lists only the synthetic testbeds, so claiming a real-network allocation there would be false.
-    const realAllocation = d.districts.find(x => x.provenance === "real-alappuzha");
+    // "ready" matters as much as provenance: a build can register the real district while
+    // shipping no layers, in which case no plan can be computed and the badge must not boast.
+    const realAllocation = d.districts.find(
+      x => x.provenance === "real-alappuzha" && x.status === "ready");
     const badge = $("#badgeAllocation");
     if (badge) {
       badge.className = "badge " + (realAllocation ? "real" : "assumed");
@@ -1305,21 +1323,27 @@ function selectedDistrict() {
 // network view instead of inventing spend or loss numbers for it.
 function syncPlanMode() {
   const district = selectedDistrict();
-  const viewOnly = district.status !== "ready";
-  if (!viewOnly && district.budget_crore != null) {
+  // "layers-missing" cannot even show the portfolio map, so it gets its own message instead
+  // of the read-only branch that would request geometry this build does not have.
+  const layersMissing = district.status === "layers-missing";
+  const viewOnly = district.status !== "ready" && !layersMissing;
+  if (!viewOnly && !layersMissing && district.budget_crore != null) {
     $("#rngPlanBudget").value = district.budget_crore;
     $("#lblPlanBudget").textContent =
       "₹" + Number(district.budget_crore).toFixed(2) + " crore";
   }
-  $("#btnPlan").textContent = viewOnly ? "Show road network" : "Build year-1 plan";
-  $("#rngPlanBudget").disabled = viewOnly;
-  $("#planTableCard").style.display = viewOnly ? "none" : "block";
+  $("#btnPlan").textContent = layersMissing ? "Plan not available in this build"
+    : viewOnly ? "Show road network" : "Build year-1 plan";
+  $("#btnPlan").disabled = layersMissing;
+  $("#rngPlanBudget").disabled = viewOnly || layersMissing;
+  $("#planTableCard").style.display = viewOnly || layersMissing ? "none" : "block";
   $("#planNetworkCard").style.display = viewOnly ? "block" : "none";
   $("#planStats").innerHTML = "";
   $("#planHonest").innerHTML = "";
   $("#planProvenance").innerHTML = "";
-  $("#planStatus").textContent = viewOnly
-    ? "read-only network view — no allocation numbers" : "";
+  $("#planStatus").textContent = layersMissing
+    ? (district.note || "this build does not include the Alappuzha network layers")
+    : viewOnly ? "read-only network view — no allocation numbers" : "";
 }
 
 $("#selPlanDistrict").addEventListener("change", syncPlanMode);
@@ -1332,6 +1356,7 @@ $("#btnPlan").addEventListener("click", loadPlan);
 
 async function loadPlan() {
   if (state.planLoading) return;
+  if (selectedDistrict().status === "layers-missing") return;
   state.planLoading = true;
   $("#btnPlan").disabled = true;
   const heavy = selectedDistrict().provenance === "real-alappuzha";
