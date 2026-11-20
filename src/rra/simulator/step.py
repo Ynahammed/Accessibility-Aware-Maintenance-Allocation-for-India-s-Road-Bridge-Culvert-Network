@@ -195,12 +195,20 @@ def _context_for(world: World, models: SimModels, benefit: dict):
         benefit=benefit,
         criticality={a.asset_id: 1.0 + a.condition for a in world.assets.values()},
         rng=np.random.default_rng(0),
+        year=int(world.year),
     )
 
 
-def run(policy, world0: World, scen: ScenarioSet, models: SimModels) -> PolicyOutcome:
-    """Run one policy over all scenarios; paired with other policies on the same set."""
-    benefit = solo_benefit(world0, models)
+def run(policy, world0: World, scen: ScenarioSet, models: SimModels,
+        benefit: dict | None = None) -> PolicyOutcome:
+    """Run one policy over all scenarios; paired with other policies on the same set.
+
+    ``benefit`` lets a caller reuse one solo-loss sweep across policies: on the real
+    Alappuzha graph each solo loss is a Dijkstra pass, so recomputing it per policy costs
+    minutes per policy for an identical answer.
+    """
+    if benefit is None:
+        benefit = solo_benefit(world0, models)
     pd = np.zeros(scen.n)
     pl = np.zeros(scen.n)
     em = np.zeros(scen.n)

@@ -28,7 +28,8 @@ def accessibility_model(district: District, register: AssumptionRegister) -> Acc
         "school": register["facility_weight_school"].default,
     }
     return AccessibilityModel(
-        district.graph, district.habitations, district.facilities, caps, weights
+        district.graph, district.habitations, district.facilities, caps, weights,
+        memoize=district.memoize_accessibility,
     )
 
 
@@ -92,8 +93,8 @@ def build_world(district: District, register: AssumptionRegister, seed: int = 0)
             asset_id=asset_id,
             structure_type=s_type,
             node=node,
-            age=int(rng.integers(0, 40)),
-            condition=int(rng.integers(0, 3)),
+            age=int(district.age_by_asset.get(asset_id, rng.integers(0, 40))),
+            condition=int(district.condition_by_asset.get(asset_id, rng.integers(0, 3))),
         )
     return World(
         assets=assets,

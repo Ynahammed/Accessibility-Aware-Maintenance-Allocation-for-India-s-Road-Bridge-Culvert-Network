@@ -34,6 +34,13 @@ class PolicyContext:
     # socio-economic proxy for the criticality-weighted policy
     criticality: dict | None = None
     rng: np.random.Generator | None = None
+    #: optional per-asset attribute used by the consequence-blind comparators
+    #: (road class, for example). Kept separate from ``criticality`` so a policy that is
+    #: supposed to *ignore* consequence cannot accidentally read a consequence proxy.
+    attributes: dict | None = None
+    #: simulated year, 0-based. Policies that replay a fixed multi-year plan need it;
+    #: single-year policies ignore it, so adding it changes no existing behaviour.
+    year: int = 0
 
 
 OPTIONS = (Intervention.MINOR, Intervention.MAJOR, Intervention.REPLACE)
@@ -67,12 +74,20 @@ def _best_option(asset, ctx: PolicyContext):
     return best, best_ratio
 
 
-def greedy_ranked_select(assets, ctx: PolicyContext, score_fn, option_fn=None) -> dict:
-    """Fund assets in descending score-per-₹ until budget or crew runs out.
+def greedy_ranked_select(
+    assets, ctx: PolicyContext, score_fn, option_fn=None, by_ratio: bool = True
+) -> dict:
+    """Fund assets in descending score until budget or crew runs out.
 
     ``score_fn(asset, ctx)`` ranks assets; ``option_fn(asset)`` chooses the intervention
     (defaults to benefit-per-₹ via :func:`_best_option`). Keeping the two separate lets
     condition-based policies ignore benefit entirely.
+
+    ``by_ratio`` divides the score by the intervention cost, which is what a
+    benefit-per-rupee rule needs. Set it false for a rule whose score *is* the ordering
+    (oldest first, cheapest first, road class first): dividing a cost-derived score by
+    cost would invert the intended order, which is exactly the bug a naive reuse of this
+    helper would introduce into the consequence-blind comparators.
     """
     if option_fn is None:
         option_fn = lambda a: _best_option(a, ctx)[0]  # noqa: E731
@@ -86,7 +101,10 @@ def greedy_ranked_select(assets, ctx: PolicyContext, score_fn, option_fn=None) -
         score = score_fn(a, ctx)
         if cost <= 0 or score <= 0:
             continue
-        ranked.append((score / cost, a.asset_id, opt, cost, labour))
+        key = (score / cost) if by_ratio else score
+        ranked.append((key, a.asset_id, opt, cost, labour))
+    # Stable sort on the score only: ties keep the caller's asset order, which is how the
+    # frozen plans were produced. A secondary key would silently reorder tied assets.
     ranked.sort(key=lambda t: t[0], reverse=True)
 
     chosen: dict = {}
@@ -180,6 +198,89 @@ class SiloedPolicy:
                 )
             )
         return chosen
+
+
+class RankedPolicy:
+    """A rule that ranks assets by one declared score and buys condition-appropriate work.
+
+    This exists to make the consequence-blind claim testable as a *class* of rules rather
+    than against a single baseline. Age-first, cheapest-first, asset-type-first and road-
+    class-first all differ in what they look at, but they share the property the paper is
+    about: none of them carries any information about what a failure does to access.
+
+    The intervention is the condition-appropriate one (severe -> replace, poor -> major,
+    fair -> minor), so these rules spend like practice rather than like a benefit-per-rupee
+    optimiser. That keeps the comparison about the *ranking* signal, not about
+    intervention choice.
+    """
+
+    def __init__(self, name, score_fn, by_ratio: bool = False):
+        self.name = name
+        self._score = score_fn
+        self._by_ratio = bool(by_ratio)
+
+    def propose(self, assets, ctx: PolicyContext) -> dict:
+        return greedy_ranked_select(
+            assets,
+            ctx,
+            lambda a, c: float(self._score(a, c)),
+            option_fn=default_option,
+            by_ratio=self._by_ratio,
+        )
+
+
+def age_first_policy() -> RankedPolicy:
+    """Oldest structure first: the "it has been there longest" rule."""
+    return RankedPolicy("age_first", lambda a, c: float(a.age) + 1.0)
+
+
+def cheapest_first_policy() -> RankedPolicy:
+    """Cheapest repair first: the "do the most items" rule.
+
+    Ranked on the inverse planned cost, so the cheapest structure is funded first; the
+    score is positive by construction and is not divided by cost again.
+    """
+    return RankedPolicy(
+        "cheapest_first",
+        lambda a, c: 1.0 / max(c.sor.cost(a.structure_type, default_option(a)), 1e-9),
+    )
+
+
+def type_first_policy() -> RankedPolicy:
+    """Asset-type first (bridges before culverts), then condition within type."""
+    order = {"major_bridge": 3.0, "minor_bridge": 2.0, "culvert": 1.0, "road_segment": 0.5}
+    return RankedPolicy(
+        "type_first",
+        lambda a, c: 10.0 * order.get(a.structure_type, 1.0) + float(a.condition),
+    )
+
+
+def road_class_first_policy(road_class: dict) -> RankedPolicy:
+    """Busiest mapped road class first, using a supplied per-asset class weight.
+
+    ``road_class`` maps asset id to a numeric priority (motorway high, track low). It is a
+    declared input, not a measurement of traffic: the district has no link counts, which is
+    precisely why a traffic-weighted rule is only a proxy here.
+    """
+    return RankedPolicy(
+        "road_class_first",
+        lambda a, c: float(road_class.get(a.asset_id, 0.0)) + 0.1 * float(a.condition),
+    )
+
+
+#: Road classes ordered by the traffic a class-first rule implicitly assumes. OSM
+#: ``highway`` values, highest assumed importance first; anything unlisted scores 0.
+ROAD_CLASS_PRIORITY: dict[str, float] = {
+    "motorway": 9.0,
+    "trunk": 8.0,
+    "primary": 7.0,
+    "secondary": 6.0,
+    "tertiary": 5.0,
+    "unclassified": 4.0,
+    "residential": 3.0,
+    "service": 2.0,
+    "track": 1.0,
+}
 
 
 BASELINE_POLICIES = (

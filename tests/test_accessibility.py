@@ -114,6 +114,35 @@ def test_affected_habitations_is_targeted():
     assert m.affected_habitations("health", failed_edges=[]) == set()
 
 
+def test_loss_by_habitation_sums_to_loss():
+    g = parallel_routes_graph()
+    m = _model(
+        g,
+        {"h": 100.0, "a1": 40.0},
+        {"health": ["f"]},
+        {"health": 60.0},
+        {"health": 1.0},
+    )
+    for failed in ([], ["m_a"], ["m_a", "m_b"]):
+        split = m.loss_by_habitation(failed_nodes=failed)
+        assert sum(split.values()) == pytest.approx(m.loss(failed_nodes=failed))
+
+
+def test_disruption_counts_only_newly_cut_off_habitations():
+    g = single_bridge_graph()
+    m = _model(g, {"h": 100.0}, {"health": ["f"]}, {"health": 60.0}, {"health": 1.0})
+    cut = m.disruption(failed_nodes=["m"])
+    assert cut["isolated_habitations"] == 1
+    assert cut["isolated_population"] == pytest.approx(100.0)
+    # a redundant route keeps h reachable, so nothing is cut off
+    g2 = parallel_routes_graph()
+    m2 = _model(g2, {"h": 100.0}, {"health": ["f"]}, {"health": 60.0}, {"health": 1.0})
+    assert m2.disruption(failed_nodes=["m_a"])["isolated_habitations"] == 0
+    # a habitation already beyond the cap is not counted as newly isolated
+    m3 = _model(g, {"h": 100.0}, {"health": ["f"]}, {"health": 1.0}, {"health": 1.0})
+    assert m3.disruption(failed_nodes=["m"])["isolated_habitations"] == 0
+
+
 def test_multiple_facility_types_accumulate():
     g = single_bridge_graph()
     m = _model(
@@ -126,6 +155,17 @@ def test_multiple_facility_types_accumulate():
     # tau0 = 2.4 for both: phi_h = 0.04, phi_s = 0.08
     expected = 100.0 * (1.0 * (1 - 0.04) + 0.5 * (1 - 0.08))
     assert m.loss(failed_nodes=["m"]) == pytest.approx(expected)
+
+
+def test_memoised_loss_returns_the_same_value_and_caches_it():
+    g = parallel_routes_graph()
+    m = AccessibilityModel(
+        g, {"h": 100.0}, {"health": ["f"]}, {"health": 60.0}, {"health": 1.0}, memoize=True
+    )
+    first = m.loss(failed_nodes=["m_a", "m_b"])
+    assert m._loss_cache
+    assert m.loss(failed_nodes=["m_b", "m_a"]) == first
+    assert m.loss(failed_nodes=["m_a"]) == 0.0  # a zero loss is cached too
 
 
 def test_societal_cost_scales_with_outage_days():

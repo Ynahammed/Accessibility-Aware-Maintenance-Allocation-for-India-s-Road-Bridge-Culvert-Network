@@ -96,9 +96,15 @@ class AccessibilityModel:
     weights: dict[str, float]
     weight_attr: str = WEIGHT_ATTR
 
+    #: Real-network plans evaluate the same failure sets repeatedly (solo losses, then
+    #: scenario sets across policies). Memoising is opt-in: synthetic testbeds and the
+    #: resilience scripts mutate their graphs, where a cached loss would be wrong.
+    memoize: bool = False
+
     _baseline_dist: dict[str, dict] = field(default_factory=dict, init=False)
     _baseline_parent: dict[str, dict] = field(default_factory=dict, init=False)
     _baseline_phi: dict[str, dict] = field(default_factory=dict, init=False)
+    _loss_cache: dict = field(default_factory=dict, init=False)
 
     def __post_init__(self) -> None:
         for k in self.facilities:
@@ -161,6 +167,13 @@ class AccessibilityModel:
         failed_nodes = frozenset(failed_nodes)
         blocked_edges = frozenset(_edge_key(u, v) for u, v in failed_edges)
 
+        cache_key = None
+        if self.memoize and not validate:
+            cache_key = (failed_nodes, blocked_edges)
+            cached = self._loss_cache.get(cache_key)
+            if cached is not None:
+                return cached
+
         if validate:
             for u, v in failed_edges:
                 if not self.graph.has_edge(u, v):
@@ -185,7 +198,130 @@ class AccessibilityModel:
                 delta = self._phi(tau_f, cap) - phi0[h]
                 if delta > 0.0:
                     total += self.habitations[h] * w * delta
+        if cache_key is not None:
+            self._loss_cache[cache_key] = total
         return total
+
+    def loss_by_habitation(self, failed_edges=(), failed_nodes=()) -> dict:
+        """Split ``L(F)`` by habitation: ``h -> population * w_k * delta_phi`` summed over k.
+
+        Used for distributional analysis (who bears the loss) and for islanding: a
+        habitation whose ``tau^F`` reaches the cap contributes its whole population weight,
+        which the aggregate loss alone cannot show.
+        """
+        failed_edges = tuple(failed_edges)
+        failed_nodes = frozenset(failed_nodes)
+        blocked_edges = frozenset(_edge_key(u, v) for u, v in failed_edges)
+        out: dict = {}
+        for k, srcs in self.facilities.items():
+            cap = self.caps_min[k]
+            w = self.weights[k]
+            phi0 = self._baseline_phi[k]
+            affected = self.affected_habitations(k, failed_edges, failed_nodes)
+            if not affected:
+                continue
+            dist, _ = _multi_source_dijkstra(
+                self.graph, srcs, failed_nodes, blocked_edges, self.weight_attr
+            )
+            for h in affected:
+                delta = self._phi(dist.get(h, INF), cap) - phi0[h]
+                if delta > 0.0:
+                    out[h] = out.get(h, 0.0) + self.habitations[h] * w * delta
+        return out
+
+    def failure_detail(self, failed_edges=(), failed_nodes=(), k: str | None = None) -> dict:
+        """Per-habitation travel time before and after one failure set, in one pass.
+
+        ``loss`` and ``disruption`` each run their own Dijkstra pass, so auditing 30
+        structures against several destinations and caps costs two passes per asset per
+        cell. This returns everything both need — baseline time, failure-set time and the
+        normalised penalty change — from a single pass, and the caller derives the
+        aggregate loss, the isolation count and the benefit share from it.
+
+        Only habitations whose baseline path uses the failure set appear; every other
+        habitation has ``delta == 0`` by monotonicity, so omitting it loses nothing.
+        The result is keyed by habitation and summed over the requested facility types.
+        """
+        failed_edges = tuple(failed_edges)
+        failed_nodes = frozenset(failed_nodes)
+        blocked_edges = frozenset(_edge_key(u, v) for u, v in failed_edges)
+        keys = [k] if k else list(self.facilities)
+        out: dict = {}
+        for key in keys:
+            srcs = self.facilities[key]
+            cap = self.caps_min[key]
+            w = self.weights[key]
+            phi0 = self._baseline_phi[key]
+            tau0 = self._baseline_dist[key]
+            affected = self.affected_habitations(key, failed_edges, failed_nodes)
+            if not affected:
+                continue
+            dist, _ = _multi_source_dijkstra(
+                self.graph, srcs, failed_nodes, blocked_edges, self.weight_attr
+            )
+            for h in affected:
+                tau_f = dist.get(h, INF)
+                before = tau0.get(h, INF)
+                delta = self._phi(tau_f, cap) - phi0[h]
+                if delta <= 0.0:
+                    continue
+                record = out.setdefault(
+                    h,
+                    {
+                        "tau": tau_f,
+                        "tau0": before,
+                        "delta": 0.0,
+                        "loss": 0.0,
+                        "newly_isolated": False,
+                    },
+                )
+                record["delta"] += delta
+                record["loss"] += self.habitations[h] * w * delta
+                if phi0[h] < 1.0 and (phi0[h] + delta) >= 1.0:
+                    record["newly_isolated"] = True
+                if tau_f != INF and before != INF:
+                    record["extra_minutes"] = max(
+                        record.get("extra_minutes", 0.0), tau_f - before
+                    )
+        return out
+
+    def disruption(self, failed_edges=(), failed_nodes=(), k: str | None = None) -> dict:
+        """Count the habitations and people cut off when ``F`` fails.
+
+        ``loss`` weighs degradation continuously; this reports the hard part of it: how
+        many habitations reach the travel-time cap (``phi = 1``) only because of ``F``, and
+        the largest extra one-way travel time suffered. A habitation that already exceeded
+        the cap before the failure is not counted as newly cut off.
+        """
+        failed_edges = tuple(failed_edges)
+        failed_nodes = frozenset(failed_nodes)
+        blocked_edges = frozenset(_edge_key(u, v) for u, v in failed_edges)
+        keys = [k] if k else list(self.facilities)
+        isolated: dict = {}
+        worst_extra = 0.0
+        for key in keys:
+            srcs = self.facilities[key]
+            cap = self.caps_min[key]
+            phi0 = self._baseline_phi[key]
+            tau0 = self._baseline_dist[key]
+            affected = self.affected_habitations(key, failed_edges, failed_nodes)
+            if not affected:
+                continue
+            dist, _ = _multi_source_dijkstra(
+                self.graph, srcs, failed_nodes, blocked_edges, self.weight_attr
+            )
+            for h in affected:
+                tau_f = dist.get(h, INF)
+                if self._phi(tau_f, cap) >= 1.0 and phi0[h] < 1.0:
+                    isolated[h] = max(isolated.get(h, 0.0), self.habitations[h])
+                before = tau0.get(h, INF)
+                if tau_f != INF and before != INF:
+                    worst_extra = max(worst_extra, tau_f - before)
+        return {
+            "isolated_habitations": len(isolated),
+            "isolated_population": float(sum(isolated.values())),
+            "max_extra_one_way_minutes": float(worst_extra),
+        }
 
     def societal_cost(self, outage_days: float, **kwargs) -> float:
         """``C(F) = D * L(F)``."""

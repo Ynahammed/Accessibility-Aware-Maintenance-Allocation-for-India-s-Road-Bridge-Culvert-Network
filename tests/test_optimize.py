@@ -153,6 +153,242 @@ def test_multi_start_keeps_the_best_feasible_start():
     assert val == pytest.approx(5.0)
 
 
+def test_coverage_cut_sets_identify_parallel_corridors():
+    from rra.assumptions import AssumptionRegister
+    from rra.network.synthetic import make_redundant_district
+    from rra.optimize.coverage import corridor_cut_sets
+    from rra.pipeline import build_models, build_world
+
+    district = make_redundant_district(n_corridors=3, redundancy=3, seed=0)
+    models = build_models(district, AssumptionRegister.default())
+    world = build_world(district, AssumptionRegister.default())
+
+    cuts = corridor_cut_sets(models.acc, list(world.assets.values()))
+
+    # one minimum cut per corridor, each containing every parallel route's structure
+    assert [sorted(cut.assets) for cut in cuts] == [
+        ["S0", "S1", "S2"],
+        ["S3", "S4", "S5"],
+        ["S6", "S7", "S8"],
+    ]
+    assert all(cut.weight == 400.0 for cut in cuts)  # population protected
+
+
+def test_cut_sets_ignore_routes_without_structures():
+    """A structure-free road means no structure cut exists; none should be invented."""
+    from types import SimpleNamespace
+
+    import networkx as nx
+
+    from rra.optimize.coverage import CutSet, corridor_cut_sets
+
+    graph = nx.Graph()
+    graph.add_edge("H", "F")  # direct road, no structure on it
+    graph.add_edge("H", "a")
+    graph.add_edge("a", "S0")
+    graph.add_edge("S0", "F")
+    acc = SimpleNamespace(graph=graph, habitations={"H": 1.0}, facilities={"health": ["F"]})
+    assets = [SimpleNamespace(asset_id="S0", node="S0")]
+
+    assert corridor_cut_sets(acc, assets) == []
+
+    graph.remove_edge("H", "F")  # now the single structure is the cut
+    assert corridor_cut_sets(acc, assets) == [CutSet(frozenset({"S0"}), 1.0)]
+
+
+def test_cut_sets_find_alternative_bottlenecks_and_weight_them_by_population():
+    """A series chain has one cut per structure; both must be discovered."""
+    from types import SimpleNamespace
+
+    import networkx as nx
+
+    from rra.optimize.coverage import corridor_cut_sets
+
+    graph = nx.Graph()
+    graph.add_edge("H", "S0")
+    graph.add_edge("S0", "S1")
+    graph.add_edge("S1", "F")
+    acc = SimpleNamespace(graph=graph, habitations={"H": 500.0}, facilities={"health": ["F"]})
+    assets = [SimpleNamespace(asset_id=f"S{i}", node=f"S{i}") for i in range(2)]
+
+    cuts = corridor_cut_sets(acc, assets)
+
+    assert {cut.assets for cut in cuts} == {frozenset({"S0"}), frozenset({"S1"})}
+    assert all(cut.weight == 500.0 for cut in cuts)
+
+
+def test_candidate_ranking_prefers_coverage_over_a_noisier_lower_loss():
+    from rra.optimize.coverage import CutSet
+    from rra.simulator.optimized_policies import _coverage_rank
+
+    cuts = [CutSet(frozenset({"S0", "S1"}), 400.0)]
+    index = {"S0": 0, "S1": 1}
+    partial = [0, 0]  # both NONE: the cut is not covered
+    full = [1, 1]
+
+    # the partial plan scores lower on this validation draw, but that is sampling noise
+    scored = [(10.0, 0.02, partial), (11.0, 0.04, full)]
+    assert _coverage_rank(scored, cuts, index) is full
+
+
+def test_improving_levels_drop_a_dominated_major_repair():
+    from rra.app.register import apply_payload
+    from rra.assumptions import AssumptionRegister
+    from rra.network.synthetic import make_district
+    from rra.pipeline import build_models
+    from rra.simulator.optimized_policies import _improving_levels
+
+    district = make_district(seed=0)
+    default = build_models(district, AssumptionRegister.default())
+    assert _improving_levels(default) == [1, 2, 3]
+
+    live = apply_payload(
+        {
+            "manifest": {"application_ref": "RTI/TEST"},
+            "register": {
+                "repair_effect_minor": {
+                    "value": 2.0, "source": "fitted", "provenance": {"n": 5}
+                }
+            },
+        }
+    )
+    measured = build_models(district, live.register, sor=live.sor)
+    # major costs 4x minor and now resets the same two steps: dominated
+    assert _improving_levels(measured) == [1, 3]
+
+
+def test_cut_sets_are_cached_per_graph_and_asset_nodes(monkeypatch):
+    """Simulation proposes every scenario-year on the same topology: do the flow once."""
+    from rra.assumptions import AssumptionRegister
+    from rra.network.synthetic import make_redundant_district
+    from rra.optimize import coverage
+    from rra.optimize.coverage import corridor_cut_sets
+    from rra.pipeline import build_models, build_world
+
+    calls = {"n": 0}
+    real = coverage.nx.minimum_cut
+
+    def counted(*args, **kwargs):
+        calls["n"] += 1
+        return real(*args, **kwargs)
+
+    monkeypatch.setattr(coverage.nx, "minimum_cut", counted)
+
+    district = make_redundant_district(n_corridors=3, redundancy=3, seed=0)
+    models = build_models(district, AssumptionRegister.default())
+    world = build_world(district, AssumptionRegister.default())
+    assets = list(world.assets.values())
+
+    first = corridor_cut_sets(models.acc, assets)
+    n_first = calls["n"]
+    assert n_first > 0
+
+    assert corridor_cut_sets(models.acc, assets) == first
+    assert calls["n"] == n_first, "the second call must hit the cache"
+
+    # a different structure set is a different key and must be computed
+    corridor_cut_sets(models.acc, assets[:-1])
+    assert calls["n"] > n_first
+
+
+@pytest.mark.parametrize("redundancy, expected_cost", [(2, 0.096), (3, 0.144)])
+def test_network_aware_coverage_starts_fund_every_corridor_across_seeds(redundancy, expected_cost):
+    """Regression: the reply-backed plan left 5,175 person-days on a redundant district.
+
+    Every structure's solo loss is zero there, so the additive MILP and random starts never
+    complete a corridor. The coverage starts must complete every corridor for every seed,
+    not only seed 0: a seed-sensitive search would leave the result one draw away from
+    returning a partial corridor again. The option mix may vary with the validation draw;
+    what must not vary is full coverage within budget.
+    """
+    from rra.app.register import apply_payload
+    from rra.cost.interventions import Intervention
+    from rra.network.synthetic import make_redundant_district
+    from rra.pipeline import build_models, build_world
+    from rra.simulator.optimized_policies import NetworkAwarePolicy
+    from rra.simulator.policies import PolicyContext
+
+    live = apply_payload(
+        {
+            "manifest": {"office": "EE PWD", "application_ref": "RTI/TEST"},
+            "register": {
+                "repair_effect_minor": {
+                    "value": 2.0, "source": "fitted", "provenance": {"n": 5}
+                }
+            },
+            "schedule_of_rates": {
+                "culvert": {"value": 0.016, "source": "fitted"}
+            },
+            "labour_days": {"culvert": {"value": 5.0, "source": "fitted"}},
+        }
+    )
+    district = make_redundant_district(n_corridors=3, redundancy=redundancy, seed=0)
+    models = build_models(district, live.register, sor=live.sor)
+    world = build_world(district, live.register)
+    for asset in world.assets.values():
+        asset.condition = 2  # the monsoon-stress bed the app uses
+
+    n_assets = len(world.assets)
+    ctx = PolicyContext(sor=models.sor, budget_crore=0.4, crew_days=1000.0)
+    for seed in range(10):
+        rain = np.exp(np.random.default_rng(seed + 999).normal(0.9, 0.15, size=(8, n_assets)))
+        plan = NetworkAwarePolicy(models, rain, seed=seed).propose(
+            list(world.assets.values()), ctx
+        )
+        assert set(plan) == {f"S{i}" for i in range(n_assets)}, f"seed {seed}: partial corridor"
+        assert all(opt is not Intervention.NONE for opt in plan.values()), f"seed {seed}: none"
+        # all-minor is the cheapest full coverage; a seed may upgrade a corridor when the
+        # validation sample says the extra fragility reduction is worth the spend
+        spend = sum(models.sor.cost("culvert", opt) for opt in plan.values())
+        assert expected_cost - 1e-9 <= spend <= 0.4 + 1e-9, f"seed {seed}: spend {spend}"
+
+
+def test_full_coverage_appears_exactly_when_the_budget_reaches_its_cost():
+    """Coverage-first must not promise a plan the budget cannot fund."""
+    from rra.app.register import apply_payload
+    from rra.cost.interventions import Intervention
+    from rra.network.synthetic import make_redundant_district
+    from rra.pipeline import build_models, build_world
+    from rra.simulator.optimized_policies import NetworkAwarePolicy
+    from rra.simulator.policies import PolicyContext
+
+    live = apply_payload(
+        {
+            "manifest": {"application_ref": "RTI/TEST"},
+            "register": {
+                "repair_effect_minor": {
+                    "value": 2.0, "source": "fitted", "provenance": {"n": 5}
+                }
+            },
+            "schedule_of_rates": {"culvert": {"value": 0.016, "source": "fitted"}},
+            "labour_days": {"culvert": {"value": 5.0, "source": "fitted"}},
+        }
+    )
+    district = make_redundant_district(n_corridors=3, redundancy=3, seed=0)
+    models = build_models(district, live.register, sor=live.sor)
+    world = build_world(district, live.register)
+    for asset in world.assets.values():
+        asset.condition = 2
+    assets = list(world.assets.values())
+    rain = np.exp(np.random.default_rng(999).normal(0.9, 0.15, size=(8, len(assets))))
+
+    # cheapest full coverage is nine minor repairs at 0.016 = 0.144
+    for budget, expect_full in ((0.10, False), (0.15, True), (0.24, True)):
+        ctx = PolicyContext(sor=models.sor, budget_crore=budget, crew_days=1000.0)
+        plan = NetworkAwarePolicy(models, rain, seed=0).propose(assets, ctx)
+        funded = set(plan)
+        covered = sum(
+            1
+            for c in range(3)
+            if all(f"S{c*3+i}" in funded for i in range(3))
+        )
+        assert (covered == 3) is expect_full, f"budget {budget}: {covered}/3 corridors"
+        spend = sum(models.sor.cost("culvert", opt) for opt in plan.values())
+        assert spend <= budget + 1e-9, f"budget {budget}: spent {spend}"
+        if not expect_full:
+            assert covered == 2  # the most population the budget can protect
+
+
 def test_multi_start_shares_one_evaluation_memo():
     """A repeated start must not repeat any objective evaluation."""
     groups, start, objective, feasible = _budget_trade_problem()

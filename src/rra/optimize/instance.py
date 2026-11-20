@@ -67,15 +67,22 @@ def _failure_probabilities(assets, models, rain_samples, cond, factor) -> np.nda
     return p
 
 
-def build_additive_instance(assets, models, rain_samples):
-    """Additive instance: loss[a,j,w] = p(fail) * outage_a * solo_loss_a."""
+def build_additive_instance(assets, models, rain_samples, solo=None):
+    """Additive instance: loss[a,j,w] = p(fail) * outage_a * solo_loss_a.
+
+    ``solo`` may supply an already-measured ``{asset_id: solo_loss}`` dict. Each solo loss
+    is a Dijkstra pass on the real district graph, so a caller that already holds the
+    dict — the simulator's ``benefit`` argument, or a rolling planner re-solving inside a
+    scenario — can reuse it instead of repeating the sweep. The values must be the same
+    quantity (loss when that asset fails alone).
+    """
     from .milp import AdditiveInstance
 
     assets = list(assets)
     na = len(assets)
     rain = np.asarray(rain_samples, dtype=float)
     S = rain.shape[0]
-    solo = solo_losses(assets, models)
+    solo = dict(solo) if solo is not None else solo_losses(assets, models)
     cost, labour, cond, factor = _option_arrays(assets, models, solo)
     p = _failure_probabilities(assets, models, rain, cond, factor)
 

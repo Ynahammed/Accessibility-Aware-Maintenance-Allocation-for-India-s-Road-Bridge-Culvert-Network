@@ -25,6 +25,21 @@ class District:
     budget_crore: float = 100.0
     crew_days: float = 500.0
 
+    # Real-network builders may carry per-asset provenance and pre-registered
+    # condition/age values. Synthetic districts leave these empty, so their seeded
+    # behaviour is unchanged.
+    asset_provenance: dict = field(default_factory=dict)
+    condition_by_asset: dict = field(default_factory=dict)
+    age_by_asset: dict = field(default_factory=dict)
+
+    #: real-network instances memoise accessibility loss (each call is a Dijkstra pass
+    #: over the district graph); synthetic testbeds do not need it.
+    memoize_accessibility: bool = False
+    #: ``"pmgsy"`` / ``"census"`` for real instances, ``None`` for synthetic ones.
+    demand_profile: str | None = None
+    #: descriptive provenance for real instances (sources, selection rule, assumptions)
+    metadata: dict = field(default_factory=dict)
+
 
 def make_district(
     n_junctions: int = 24,
